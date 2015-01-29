@@ -2,70 +2,69 @@ package com.joshua.lily.spreadsheet;
 
 public class Grid {
 	
+	private int rows = 9, columns = 5; //track number of rows and columns
 	//node class for handling pointers to other nodes and values
-	private class node{
-		node bottom = null;
-		node right = null;
+	private class Node{
+		Node bottom = null;
+		Node right = null;
 		Value val = new Value();
 	}
 	
 	
-	private node head;
+	private Node head;
 	public Grid(){ 
-		head = new node();
+		head = new Node();
 		setUpEmptyGrid();
 	}
 	
-	//set up an empty 5x9 grid
+	//set up an empty 9x5 grid
 	private void setUpEmptyGrid(){
-		node temp = new node();//create a temp node init with with new node to start off
+		Node temp = new Node();//create a temp node init with with new node to start off
 		head.bottom = temp;//set entrance point
-		node top = head; //reference to head of a column
-		node previousTop = null;
-		/*hmmmm
-		node row0, row1, row2, row3, row4, column0, column1, column2, 
-		column3, column4, column5, column6, column7, column8;
-		*/
+		temp.val.sVal="start";
+		Node top = temp;
+		Node prevTop = null;
 		
-		for(int i = 0; i < 5; i++){
-			if(i == 0){//don't make a node if this is the first go though
+		for(int i = 0; i < columns; i++){
+			if(i == 0){
 				//do nothing
 			} else {
-				temp = new node();
-				temp.val.dVal = i*20;
+				prevTop = top;
+				temp = new Node();
+				temp.val.dVal = 10 + i;
 				top = temp;
-				previousTop.right = temp;
+				prevTop.right = temp;
 			}
-			for(int j = 0; j < 9; j++) { 
-				node newNode = new node();//create the new node 
+			for(int j = 0; j < rows -1; j++){
+				Node newNode = new Node();
 				newNode.val.dVal = 10 + j;
-				temp.bottom = newNode; // insert new node below the temp
-				temp = newNode;//advance temp node
+				temp.bottom = newNode;
+				temp = newNode;
 				
-				//System.out.println("Current node value " + temp.val.dVal + 
-				//		" right value " + temp.right + " bottomValue " + temp.bottom);
-				
-				if(previousTop != null){//this means we are adding at least the second column
-					previousTop = previousTop.bottom; //go down 1 node assign
-					//System.out.println("Current node value " + previousTop.val.dVal + 
-					//		" right value " + previousTop.right.val.dVal + " bottomValue " + previousTop.bottom.val.dVal);
-					previousTop.right = newNode;//make new node the right node
+				if(j == 7){
+					newNode.bottom = top;
 				}
 				
-				if(j == 8){//if j == 8 this is the last node in the column
-					temp.bottom=top; //so set pointer to the top of column
-					previousTop = top;
+				if(prevTop != null){
+					prevTop = prevTop.bottom;
+					prevTop.right = newNode;
 				}
 			}
-			
 		}
 		
 	}
 	
-	public void testColumn(){
-		node temp = head;
-		while(temp.bottom != head){
-			System.out.println(temp.bottom.val.dVal);
+	public void displayGrid(){
+		Node t = head.bottom;
+		for(int i = 0; i < 10; i++){
+			System.out.println("Dval " + t.val.dVal + " sval " + t.val.sVal);
+			t = t.bottom;
+		}
+		t = head.bottom;
+		t = t.right;
+		for(int j = 0; j < 10; j++){
+			System.out.println("to the right Dval " + t.val.dVal + " sval " + t.val.sVal);
+			t = t.bottom;
 		}
 	}
 	

@@ -6,7 +6,7 @@ public class driver {
 	
 	public static void main(String [] args){
 		Grid g = new Grid();
-		g.testColumn();
+		g.displayGrid();;
 	}
 
 }
