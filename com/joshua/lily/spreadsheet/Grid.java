@@ -76,8 +76,9 @@ public class Grid {
 		//print the column headers
 	Node currentRow, currentNode;
 	for(int i = 0; i < columns; i++){
-		System.out.print("          Column " + i);
-		
+		String s = "Column" + i;
+		s = String.format("%1$-" + 15 + "s", s);
+		System.out.print(s);
 	}
 	System.out.println();
 	

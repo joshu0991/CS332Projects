@@ -11,11 +11,11 @@ public class Value {
 	public String toString(){
 		String s = null;
 		if(tag == "str"){
-		s = String.format("%10s", sVal);//create a string length 10
+		s = String.format("%1$-" + 15 + "s", s);//create a string length 10
 		}else if(tag == "dbl"){
 			DecimalFormat df = new  DecimalFormat ("0.####");//make a new decimal format
 			s = df.format(dVal);//format the double store in a string
-			s = String.format("%10s", s);
+			s = String.format("%1$-" + 15 + "s", s);
 		}else if(tag == "inv"){
 			s = null;
 		}
