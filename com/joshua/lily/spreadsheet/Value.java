@@ -7,7 +7,14 @@ public class Value {
 	
 	//return a formatted string of double
 	public String toString(){
-		
-		return null;
+		String s = null;
+		if(tag == "str"){
+		s = sVal;
+		}else if(tag == "dbl"){
+			 s = Double.toString(dVal);
+		}else if(tag == "inv"){
+			s = null;
+		}
+		return s;
 	}
 }
