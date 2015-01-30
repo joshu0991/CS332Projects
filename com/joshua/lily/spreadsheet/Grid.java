@@ -71,9 +71,33 @@ public class Grid {
 
 	}
 
+	//traverse the grid and display the values in a grid format
+	public void display(){
+		//print the column headers
+	Node currentRow, currentNode;
+	for(int i = 0; i < columns; i++){
+		System.out.print("          Column " + i);
+		
+	}
+	System.out.println();
 	
+	currentNode = head;
+	currentRow = head.bottom;
+	for(int j = 0; j < rows; j++){
+		currentNode = currentRow;
+		for(int k = 0; k < columns; k++){
+			System.out.print(currentNode.val.toString());
+			currentNode = currentNode.right;
+		}
+		System.out.println();
+		currentRow = currentRow.bottom;
+	}
 	
+	}
 	
+	private Node traverse(int row, int column){
+		return null;
+	}
 	
 	
 	
@@ -154,8 +178,11 @@ public class Grid {
 			System.out.println("forth row " + t.val.dVal);
 			t = t.right;
 		}
+		t.val.dVal = 10.342;
 		System.out.println("From tostring " + t.val.toString());
-
+		System.out.println("---------------------------------------");
+		t = head.bottom.right.right.right.right.bottom;
+		System.out.println("test row " + t.val.dVal);
 	}
 
 }

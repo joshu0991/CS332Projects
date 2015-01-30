@@ -95,6 +95,7 @@ public class driver {
 		buildMenu();
 		Grid g = new Grid();
 		g.displayGrid();
+		g.display();
 	}
 
 }
