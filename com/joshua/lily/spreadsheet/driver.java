@@ -21,11 +21,12 @@ public class driver {
 		parseImport(input);
 		
 	}
-	
+
 	public static void parseImport(String input){
+		Grid g = new Grid();
 		switch(input){
-		case("dis"):
-		
+		case("dis")://dispay the grid
+			g.display();
 			break;
 		case("f"):
 			
@@ -93,9 +94,9 @@ public class driver {
 	
 	public static void main(String [] args){
 		buildMenu();
-		Grid g = new Grid();
-		g.displayGrid();
-		g.display();
+		Grid g = new Grid();//for testing
+		//g.displayGrid();
+		
 	}
 
 }
