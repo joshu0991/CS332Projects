@@ -2,6 +2,7 @@ package com.joshua.lily.spreadsheet;
 import java.util.Scanner;
 public class driver {
 	
+	private static final Grid g = new Grid();
 	
 	private static boolean buildMenu(){
 		Scanner s = new Scanner(System.in);
@@ -24,7 +25,6 @@ public class driver {
 	}
 
 	public static boolean parseImport(String input){
-		Grid g = new Grid();
 		Scanner s = new Scanner(System.in);
 		boolean rVal = false;
 		switch(input){

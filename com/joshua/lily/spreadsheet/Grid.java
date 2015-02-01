@@ -110,6 +110,7 @@ public class Grid {
 	
 	public boolean addCells(String r1, String c1, String r2, String c2, String dRow, String dCol){
 		int row1, row2, col1, col2, destRow, destCol;
+		Node dest, n1, n2;
 		row1 = Integer.parseInt(r1);
 		row2 = Integer.parseInt(r2);
 		col1 = Integer.parseInt(c1);
@@ -118,20 +119,27 @@ public class Grid {
 		destCol = Integer.parseInt(dCol);
 		
 		//get the first cell reference
-		Node n1 = getCell(row1, col1);
+		n1 = getCell(row1, col1);
 		System.out.println("Value " + n1.val.getdVal());
 		
 		//get second cell reference
-		Node n2 = getCell(row2, col2);
+		n2 = getCell(row2, col2);
 		System.out.println("Value " + n2.val.getdVal());
 		
 		//check both tags
-		
-		// if both tags are dbl set up destination and store sum of dVal in dest node
-		//return true if op was possible else return false
-		
-		return true;
+		dest = getCell(destRow, destCol);
+		if(n1.val.getTag() == "dbl" && n2.val.getTag() =="dbl"){
+			// if both tags are dbl set up destination and store sum of dVal in dest node
+			dest.val = n1.val.add(n2.val);
+			System.out.println("Dest val " + dest.val.getdVal());
+			//return true if op was possible else return false
+			return true;
+		}else{
+			dest.val.setTag("inv");
+			return false;
+		}
 	}
+	
 	private Node getCell(int row, int col){
 		Node n1 = head.bottom;
 		for(int k = 0; k < row + 1; k++){//get firsts row

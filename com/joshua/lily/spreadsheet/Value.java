@@ -47,14 +47,16 @@ public class Value {
 	}
 	
 	public Value add(Value n){
-		if(this.tag.equals("dval") && n.tag.equals("dval")) {
-			this.dVal = this.dVal + n.dVal;
+		Value r = new Value();
+		if(this.tag.equals("dbl") && n.tag.equals("dbl")) {
+			r.dVal = this.dVal + n.dVal;
+			r.tag = "dbl";
 			}
 		else
 		{
-			this.tag = "inv";
+			r.tag = "inv";
 		}
-		return this;
+		return r;
 	}
 	
 	public Value subtract(Value n){
