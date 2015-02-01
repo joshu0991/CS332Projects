@@ -3,9 +3,33 @@ package com.joshua.lily.spreadsheet;
 import java.text.DecimalFormat;
 
 public class Value {
-	String sVal = "";
-	double dVal = 0;
-	String tag = "dbl";//can be str dbl or inv
+	private String sVal = "";
+	private double dVal = 0;
+	private String tag = "dbl";//can be str dbl or inv
+	
+	public String getsVal() {
+		return sVal;
+	}
+
+	public void setsVal(String sVal) {
+		this.sVal = sVal;
+	}
+
+	public double getdVal() {
+		return dVal;
+	}
+
+	public void setdVal(double dVal) {
+		this.dVal = dVal;
+	}
+
+	public String getTag() {
+		return tag;
+	}
+
+	public void setTag(String tag) {
+		this.tag = tag;
+	}
 	
 	//return a formatted string of double null if invalad
 	public String toString(){
@@ -20,5 +44,47 @@ public class Value {
 			s = null;
 		}
 		return s;
+	}
+	
+	public Value add(Value n){
+		if(this.tag.equals("dval") && n.tag.equals("dval")) {
+			this.dVal = this.dVal + n.dVal;
+			}
+		else
+		{
+			this.tag = "inv";
+		}
+		return this;
+	}
+	
+	public Value subtract(Value n){
+		if(this.tag.equals("dval") && n.tag.equals("dval")) {
+			this.dVal = this.dVal - n.dVal;
+		}
+		else
+		{
+			this.tag = "inv";
+		}
+		return this;
+	}
+	public Value multiple(Value n){
+		if(this.tag.equals("dval") && n.tag.equals("dval")) {
+			this.dVal = this.dVal * n.dVal;
+		}
+		else
+		{
+			this.tag = "inv";
+		}
+		return this;
+	}
+	public Value divide(Value n){
+		if(this.tag.equals("dval") && n.tag.equals("dval")) {
+			this.dVal = this.dVal / n.dVal;
+		}
+		else
+		{
+			this.tag = "inv";
+		}
+		return this;
 	}
 }

@@ -23,8 +23,8 @@ public class Grid {
 		Node temp = new Node();// create a temp node init with with new node to
 								// start off
 		head.bottom = temp;// set entrance point
-		int t_counter = 1;
-		temp.val.dVal = t_counter;// test value
+		double t_counter = 1;
+		temp.val.setdVal(t_counter);// test value
 		Node top = temp;// set the top value to be the one just created
 		Node prevTop = null;// should init to null since the beginning has no
 							// previous
@@ -36,14 +36,14 @@ public class Grid {
 								// column
 				temp = new Node();
 				t_counter += 1;// test value
-				temp.val.dVal = t_counter;
+				temp.val.setdVal(t_counter);
 				top = temp;
 				prevTop.right = temp; // link to the right
 			}
 			for (int j = 0; j < rows - 1; j++) {
 				Node newNode = new Node();
 				t_counter += 1;
-				newNode.val.dVal = t_counter;
+				newNode.val.setdVal(t_counter);
 				temp.bottom = newNode; // link new node to bottom
 				temp = newNode;
 
@@ -59,6 +59,7 @@ public class Grid {
 				}
 				if (i == 4) {// link the last column back to the beginning
 					Node tmp = head.bottom;
+					top.right = head.bottom;
 					for (int k = 0; k <= j; k++) {// find the node by traversing
 													// downward in the first
 													// column
@@ -69,30 +70,30 @@ public class Grid {
 			}
 		}
 
-	}
+	}//end setup function
 
 	//traverse the grid and display the values in a grid format
 	public void display(){
 		//print the column headers
-	Node currentRow, currentNode;
+	Node currentRow, currentNode;//pointer to current row and current node
 	String s = "";
-	for(int i = 0; i < columns + 1; i++){
-		if(i == 0)
+	for(int i = 0; i < columns + 1; i++){//go to columns plus one
+		if(i == 0)//if the first go print out a blank spot
 		{
 			s = String.format("%1$-" + 10 + "s", s);
 			System.out.print(s);
 		} else 
 		{
-		s = "Column" + (i - 1);
+		s = "Column" + (i - 1);//print counter minus one since first place is blank
 		s = String.format("%1$-" + 10 + "s", s);
 		System.out.print(s);
 		}
 	}
 	System.out.println();
 	
-	currentNode = head;
+	currentNode = head;//set the node
 	currentRow = head.bottom;
-	for(int j = 0; j < rows; j++){
+	for(int j = 0; j < rows; j++){//print rows then columns
 		currentNode = currentRow;
 		s = "row " + j;
 		s = String.format("%1$-" + 10 + "s", s);
@@ -107,10 +108,32 @@ public class Grid {
 	
 	}
 	
-	private Node traverse(int row, int column){
-		return null;
+	public Node addCells(String r1, String c1, String r2, String c2, String dRow, String dCol){
+		int row1, row2, col1, col2, destRow, destCol;
+		row1 = Integer.parseInt(r1);
+		row2 = Integer.parseInt(r2);
+		col1 = Integer.parseInt(c1);
+		col2 = Integer.parseInt(c2);
+		destRow = Integer.parseInt(dRow);
+		destCol = Integer.parseInt(dCol);
+		//get the first cell reference
+		Node zero = head.bottom;
+		Node node1 = zero, node2 = zero, dest = zero;
+		for(int i = 0; i < row1 + 1; i++){//get firsts row
+			if(i == 0){
+				//do nothing
+			}else{
+			node1 = node1.bottom;
+			}
+		}
+		for(int j = 0; j < col1; j++){
+			node1 = node1.right;
+		}
+		System.out.println(node1.val.getdVal());
+		//get the second cell reference
+		//check both tags
+		return zero;
 	}
-	
 	
 	
 	
@@ -129,72 +152,77 @@ public class Grid {
 		Node t = head.bottom;
 
 		for (int a = 0; a < rows + 1; a++) {
-			System.out.println("First column " + t.val.dVal);
+			System.out.println("First column " + t.val.getdVal());
 			t = t.bottom;
 
 		}
 		System.out.println("---------------------------------------");
 		t = head.bottom.right;
 		for (int b = 0; b < rows + 1; b++) {
-			System.out.println("Second col " + t.val.dVal);
+			System.out.println("Second col " + t.val.getdVal());
 			t = t.bottom;
 		}
 		System.out.println("---------------------------------------");
 
 		t = head.bottom.right.right;
 		for (int c = 0; c < rows + 1; c++) {
-			System.out.println("third col " + t.val.dVal);
+			System.out.println("third col " + t.val.getdVal());
 			t = t.bottom;
 		}
 
 		System.out.println("---------------------------------------");
 		t = head.bottom.right.right.right;
 		for (int d = 0; d < rows + 1; d++) {
-			System.out.println("forth col " + t.val.dVal);
+			System.out.println("forth col " + t.val.getdVal());
 			t = t.bottom;
 		}
 
 		System.out.println("---------------------------------------");
 		t = head.bottom.right.right.right.right;
 		for (int e = 0; e < rows + 1; e++) {
-			System.out.println("fifth col " + t.val.dVal);
+			System.out.println("fifth col " + t.val.getdVal());
 			t = t.bottom;
 		}
 		// check a random node
 		t = head.bottom.right.bottom.bottom.right;
-		System.out.println("Random " + t.val.dVal);
+		System.out.println("Random " + t.val.getdVal());
 
 		System.out.println("---------------------------------------");
 		t = head.bottom;
 		for (int e = 0; e < columns; e++) {
-			System.out.println("first row " + t.val.dVal);
+			System.out.println("first row " + t.val.getdVal());
 			t = t.right;
 		}
 
 		System.out.println("---------------------------------------");
 		t = head.bottom.bottom;
 		for (int e = 0; e < columns + 1; e++) {
-			System.out.println("second row " + t.val.dVal);
+			System.out.println("second row " + t.val.getdVal());
 			t = t.right;
 		}
 
 		System.out.println("---------------------------------------");
 		t = head.bottom.bottom.bottom;
 		for (int e = 0; e < columns + 1; e++) {
-			System.out.println("third row " + t.val.dVal);
+			System.out.println("third row " + t.val.getdVal());
 			t = t.right;
 		}
 		System.out.println("---------------------------------------");
 		t = head.bottom.bottom.bottom.bottom;
 		for (int e = 0; e < columns + 1; e++) {
-			System.out.println("forth row " + t.val.dVal);
+			System.out.println("forth row " + t.val.getdVal());
 			t = t.right;
 		}
-		t.val.dVal = 10.342;
+		t.val.setdVal(10.342);
 		System.out.println("From tostring " + t.val.toString());
 		System.out.println("---------------------------------------");
 		t = head.bottom.right.right.right.right.bottom;
-		System.out.println("test row " + t.val.dVal);
+		System.out.println("test row " + t.val.getdVal());
+		
+		t = head.bottom.right.right.right.right;
+				System.out.println("T val " + t.val.getdVal());
+				System.out.println("Node val " + t.right);
+		
 	}
 
 }
