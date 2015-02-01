@@ -46,6 +46,7 @@ public class Value {
 		return s;
 	}
 	
+	//add dvals and return a new value obj
 	public Value add(Value n){
 		Value r = new Value();
 		if(this.tag.equals("dbl") && n.tag.equals("dbl")) {
@@ -59,34 +60,46 @@ public class Value {
 		return r;
 	}
 	
+	//subtract dvals and return a new value obj
 	public Value subtract(Value n){
-		if(this.tag.equals("dval") && n.tag.equals("dval")) {
-			this.dVal = this.dVal - n.dVal;
-		}
+		Value r = new Value();
+		if(this.tag.equals("dbl") && n.tag.equals("dbl")) {
+			r.dVal = this.dVal - n.dVal;
+			r.tag = "dbl";
+			}
 		else
 		{
-			this.tag = "inv";
+			r.tag = "inv";
 		}
-		return this;
+		return r;
 	}
-	public Value multiple(Value n){
-		if(this.tag.equals("dval") && n.tag.equals("dval")) {
-			this.dVal = this.dVal * n.dVal;
-		}
+	
+	//muultiply this value by an input
+	public Value multiply(Value n){
+		Value r = new Value();
+		if(this.tag.equals("dbl") && n.tag.equals("dbl")) {
+			r.dVal = this.dVal * n.dVal;
+			r.tag = "dbl";
+			}
 		else
 		{
-			this.tag = "inv";
+			r.tag = "inv";
 		}
-		return this;
+		return r;
 	}
+	
+	//divide this value by an input
 	public Value divide(Value n){
-		if(this.tag.equals("dval") && n.tag.equals("dval")) {
-			this.dVal = this.dVal / n.dVal;
-		}
+		Value r = new Value();
+		if(this.tag.equals("dbl") && n.tag.equals("dbl")) {
+			r.dVal = this.dVal / n.dVal;
+			r.tag = "dbl";
+			}
 		else
 		{
-			this.tag = "inv";
+			r.tag = "inv";
 		}
-		return this;
+		return r;
 	}
+	
 }

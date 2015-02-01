@@ -108,6 +108,22 @@ public class Grid {
 	
 	}
 	
+	private Node getCell(int row, int col){
+		Node n1 = head.bottom;
+		for(int k = 0; k < row + 1; k++){//get firsts row
+			if(k == 0){
+				//do nothing
+			}else{
+			n1 = n1.bottom;
+			}
+		}
+		for(int j = 0; j < col; j++){//get firsts col
+			n1 = n1.right;
+		}
+		return  n1;
+	}
+	
+	//add two cells
 	public boolean addCells(String r1, String c1, String r2, String c2, String dRow, String dCol){
 		int row1, row2, col1, col2, destRow, destCol;
 		Node dest, n1, n2;
@@ -140,30 +156,112 @@ public class Grid {
 		}
 	}
 	
-	private Node getCell(int row, int col){
-		Node n1 = head.bottom;
-		for(int k = 0; k < row + 1; k++){//get firsts row
-			if(k == 0){
-				//do nothing
-			}else{
-			n1 = n1.bottom;
-			}
+	//sub two cells
+	public boolean subCells(String r1, String c1, String r2, String c2, String dRow, String dCol){
+		int row1, row2, col1, col2, destRow, destCol;
+		Node dest, n1, n2;
+		row1 = Integer.parseInt(r1);
+		row2 = Integer.parseInt(r2);
+		col1 = Integer.parseInt(c1);
+		col2 = Integer.parseInt(c2);
+		destRow = Integer.parseInt(dRow);
+		destCol = Integer.parseInt(dCol);
+		
+		//get the first cell reference
+		n1 = getCell(row1, col1);
+		System.out.println("Value " + n1.val.getdVal());
+		
+		//get second cell reference
+		n2 = getCell(row2, col2);
+		System.out.println("Value " + n2.val.getdVal());
+		
+		//check both tags
+		dest = getCell(destRow, destCol);
+		if(n1.val.getTag() == "dbl" && n2.val.getTag() =="dbl"){
+			// if both tags are dbl set up destination and store difference of dVal in dest node
+			dest.val = n1.val.subtract(n2.val);
+			System.out.println("Dest val " + dest.val.getdVal());
+			//return true if op was possible else return false
+			return true;
+		}else{
+			dest.val.setTag("inv");
+			return false;
 		}
-		for(int j = 0; j < col; j++){//get firsts col
-			n1 = n1.right;
+	}
+	
+	//multiply two cells
+	public boolean multiplyCells(String r1, String c1, String r2, String c2, String dRow, String dCol){
+		int row1, row2, col1, col2, destRow, destCol;
+		Node dest, n1, n2;
+		row1 = Integer.parseInt(r1);
+		row2 = Integer.parseInt(r2);
+		col1 = Integer.parseInt(c1);
+		col2 = Integer.parseInt(c2);
+		destRow = Integer.parseInt(dRow);
+		destCol = Integer.parseInt(dCol);
+		
+		//get the first cell reference
+		n1 = getCell(row1, col1);
+		System.out.println("Value " + n1.val.getdVal());
+		
+		//get second cell reference
+		n2 = getCell(row2, col2);
+		System.out.println("Value " + n2.val.getdVal());
+		
+		//check both tags
+		dest = getCell(destRow, destCol);
+		if(n1.val.getTag() == "dbl" && n2.val.getTag() =="dbl"){
+			// if both tags are dbl set up destination and store multiple of dVal in dest node
+			dest.val = n1.val.multiply(n2.val);
+			System.out.println("Dest val " + dest.val.getdVal());
+			//return true if op was possible else return false
+			return true;
+		}else{
+			dest.val.setTag("inv");
+			return false;
 		}
-		return  n1;
+	}
+	
+	//divide two cells
+	public boolean divideCells(String r1, String c1, String r2, String c2, String dRow, String dCol){
+		int row1, row2, col1, col2, destRow, destCol;
+		Node dest, n1, n2;
+		row1 = Integer.parseInt(r1);
+		row2 = Integer.parseInt(r2);
+		col1 = Integer.parseInt(c1);
+		col2 = Integer.parseInt(c2);
+		destRow = Integer.parseInt(dRow);
+		destCol = Integer.parseInt(dCol);
+		
+		//get the first cell reference
+		n1 = getCell(row1, col1);
+		System.out.println("Value " + n1.val.getdVal());
+		
+		//get second cell reference
+		n2 = getCell(row2, col2);
+		System.out.println("Value " + n2.val.getdVal());
+		
+		//check both tags
+		dest = getCell(destRow, destCol);
+		if(n1.val.getTag() == "dbl" && n2.val.getTag() =="dbl"){
+			// if both tags are dbl set up destination and store difference of dVal in dest node
+			dest.val = n1.val.divide(n2.val);
+			System.out.println("Dest val " + dest.val.getdVal());
+			//return true if op was possible else return false
+			return true;
+		}else{
+			dest.val.setTag("inv");
+			return false;
+		}
 	}
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
+/*
+ * --to do--
+ * handle improper input ie - instead of numbers
+ * do fill and n functions
+ */
 	
 	
 	// ~~~~~~~~~~~~~TEST~~~~~~~~~~~CODE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

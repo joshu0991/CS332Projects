@@ -3,9 +3,8 @@ import java.util.Scanner;
 public class driver {
 	
 	private static final Grid g = new Grid();
-	
+	private static final Scanner s = new Scanner(System.in);
 	private static boolean buildMenu(){
-		Scanner s = new Scanner(System.in);
 		System.out.println("Operations: ");
 		System.out.println("display				dis			assign cell			as");
 		System.out.println("fill				f			number				n");
@@ -20,40 +19,61 @@ public class driver {
 		System.out.println("quit				q");
 		System.out.print("-> ");
 		String input = s.next();
-		return parseImport(input);
+		return parseInput(input);
 		
 	}
 
-	public static boolean parseImport(String input){
+	public static boolean parseInput(String input){
 		Scanner s = new Scanner(System.in);
 		boolean rVal = false;
+		String row1, col1, row2, col2, desRow, desCol;
 		switch(input){
-		case("dis")://dispay the grid
+		case("dis")://display the grid
 			g.display();
 			rVal = false;
 			break;
+			
 		case("f"):
 			rVal = false;
 			break;
+		
+		//add two cells
 		case("a"):
 			System.out.println("Enter first node row");
-			String row1 = s.next();	
+			row1 = s.next();	
 			System.out.println("Enter first node column");
-			String col1 = s.next();
+			col1 = s.next();
 			System.out.println("Enter second node row");
-			String row2 = s.next();
+			row2 = s.next();
 			System.out.println("Enter second node column");
-			String col2 = s.next();
+			col2 = s.next();
 			System.out.println("Enter destination node row");
-			String desRow = s.next();
+			desRow = s.next();
 			System.out.println("Enter destination node column");
-			String desCol = s.next();
+			desCol = s.next();
 			g.addCells(row1, col1, row2, col2, desRow, desCol);
 			rVal = false;
 			break;
+			
+		//multiply cells
 		case("m"):
+			System.out.println("Enter first node row");
+			row1 = s.next();	
+			System.out.println("Enter first node column");
+			col1 = s.next();
+			System.out.println("Enter second node row");
+			row2 = s.next();
+			System.out.println("Enter second node column");
+			col2 = s.next();
+			System.out.println("Enter destination node row");
+			desRow = s.next();
+			System.out.println("Enter destination node column");
+			desCol = s.next();
+			g.multiplyCells(row1, col1, row2, col2, desRow, desCol);
 			rVal = false;
 			break;
+		
+		
 		case("ar"):
 			rVal = false;
 			break;
@@ -73,6 +93,7 @@ public class driver {
 			rVal = false;
 			break;
 		case("q"):
+			s.close();//close the scanner
 			rVal = true;
 			break;
 		case("as"):
@@ -81,12 +102,43 @@ public class driver {
 		case("n"):
 			rVal = false;
 			break;
+		
+		//subtract two cells
 		case("s"):
+			System.out.println("Enter first node row");
+			row1 = s.next();	
+			System.out.println("Enter first node column");
+			col1 = s.next();
+			System.out.println("Enter second node row");
+			row2 = s.next();
+			System.out.println("Enter second node column");
+			col2 = s.next();
+			System.out.println("Enter destination node row");
+			desRow = s.next();
+			System.out.println("Enter destination node column");
+			desCol = s.next();
+			g.subCells(row1, col1, row2, col2, desRow, desCol);
 			rVal = false;
 			break;
+		
+		//divide two cells
 		case("d"):
+			System.out.println("Enter first node row");
+			row1 = s.next();	
+			System.out.println("Enter first node column");
+			col1 = s.next();
+			System.out.println("Enter second node row");
+			row2 = s.next();
+			System.out.println("Enter second node column");
+			col2 = s.next();
+			System.out.println("Enter destination node row");
+			desRow = s.next();
+			System.out.println("Enter destination node column");
+			desCol = s.next();
+			g.divideCells(row1, col1, row2, col2, desRow, desCol);
 			rVal = false;
 			break;
+			
 		case("sr"):
 			rVal = false;
 			break;
