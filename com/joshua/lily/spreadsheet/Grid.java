@@ -75,10 +75,18 @@ public class Grid {
 	public void display(){
 		//print the column headers
 	Node currentRow, currentNode;
-	for(int i = 0; i < columns; i++){
-		String s = "Column" + i;
-		s = String.format("%1$-" + 15 + "s", s);
+	String s = "";
+	for(int i = 0; i < columns + 1; i++){
+		if(i == 0)
+		{
+			s = String.format("%1$-" + 10 + "s", s);
+			System.out.print(s);
+		} else 
+		{
+		s = "Column" + (i - 1);
+		s = String.format("%1$-" + 10 + "s", s);
 		System.out.print(s);
+		}
 	}
 	System.out.println();
 	
@@ -86,6 +94,9 @@ public class Grid {
 	currentRow = head.bottom;
 	for(int j = 0; j < rows; j++){
 		currentNode = currentRow;
+		s = "row " + j;
+		s = String.format("%1$-" + 10 + "s", s);
+		System.out.print(s);
 		for(int k = 0; k < columns; k++){
 			System.out.print(currentNode.val.toString());
 			currentNode = currentNode.right;
