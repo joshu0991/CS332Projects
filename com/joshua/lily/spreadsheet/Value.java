@@ -4,8 +4,8 @@ import java.text.DecimalFormat;
 
 public class Value {
 	private String sVal = "";
-	private double dVal = 0;
-	private String tag = "dbl";//can be str dbl or inv
+	private double dVal;
+	private String tag = "inv";//can be str dbl or inv
 	
 	public String getsVal() {
 		return sVal;
@@ -33,7 +33,7 @@ public class Value {
 	
 	//return a formatted string of double null if invalad
 	public String toString(){
-		String s = null;
+		String s = "";
 		if(tag == "str"){
 		s = String.format("%1$-" + 10 + "s", s);//create a string length 10
 		}else if(tag == "dbl"){
@@ -41,7 +41,7 @@ public class Value {
 			s = df.format(dVal);//format the double store in a string
 			s = String.format("%1$-" + 10 + "s", s);
 		}else if(tag == "inv"){
-			s = null;
+			s = String.format("%1$-" + 10 + "s", s);;
 		}
 		return s;
 	}

@@ -25,6 +25,7 @@ public class driver {
 
 	public static boolean parseInput(String input){
 		Scanner s = new Scanner(System.in);
+		boolean t;
 		boolean rVal = false;
 		String row1, col1, row2, col2, desRow, desCol;
 		switch(input){
@@ -51,7 +52,12 @@ public class driver {
 			desRow = s.next();
 			System.out.println("Enter destination node column");
 			desCol = s.next();
-			g.addCells(row1, col1, row2, col2, desRow, desCol);
+			t = g.addCells(row1, col1, row2, col2, desRow, desCol);
+			if(t == true){
+				System.out.println("Successfully added " + row1 + ", " + col1 + " by " + row2 + ", " + col2);
+			} else {
+				System.out.println("ould not complete operation");
+			}
 			rVal = false;
 			break;
 			
@@ -69,7 +75,12 @@ public class driver {
 			desRow = s.next();
 			System.out.println("Enter destination node column");
 			desCol = s.next();
-			g.multiplyCells(row1, col1, row2, col2, desRow, desCol);
+			t = g.multiplyCells(row1, col1, row2, col2, desRow, desCol);
+			if(t == true){
+				System.out.println("Successfully multiplied " + row1 + ", " + col1 + " by " + row2 + ", " + col2);
+			} else {
+				System.out.println("ould not complete operation");
+			}
 			rVal = false;
 			break;
 		
@@ -100,6 +111,15 @@ public class driver {
 			rVal = false;
 			break;
 		case("n"):
+			System.out.println("Enter first node row");
+			row1 = s.next();	
+			System.out.println("Enter first node column");
+			col1 = s.next();
+			System.out.println("Enter second node row");
+			row2 = s.next();
+			System.out.println("Enter second node column");
+			col2 = s.next();
+			t = g.number(row1, col1, row2, col2);
 			rVal = false;
 			break;
 		
@@ -117,7 +137,12 @@ public class driver {
 			desRow = s.next();
 			System.out.println("Enter destination node column");
 			desCol = s.next();
-			g.subCells(row1, col1, row2, col2, desRow, desCol);
+			t = g.subCells(row1, col1, row2, col2, desRow, desCol);
+			if(t == true){
+				System.out.println("Successfully subtracted " + row1 + ", " + col1 + " by " + row2 + ", " + col2);
+			} else {
+				System.out.println("ould not complete operation");
+			}
 			rVal = false;
 			break;
 		
@@ -135,7 +160,12 @@ public class driver {
 			desRow = s.next();
 			System.out.println("Enter destination node column");
 			desCol = s.next();
-			g.divideCells(row1, col1, row2, col2, desRow, desCol);
+			t = g.divideCells(row1, col1, row2, col2, desRow, desCol);
+			if(t == true){
+				System.out.println("Successfully divided " + row1 + ", " + col1 + " by " + row2 + ", " + col2);
+			} else {
+				System.out.println("ould not complete operation");
+			}
 			rVal = false;
 			break;
 			

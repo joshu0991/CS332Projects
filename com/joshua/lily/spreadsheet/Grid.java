@@ -2,7 +2,7 @@ package com.joshua.lily.spreadsheet;
 
 public class Grid {
 
-	private int rows = 9, columns = 5; // track number of rows and columns
+	private int rows = 10, columns = 6; // track number of rows and columns
 
 	// node class for handling pointers to other nodes and values
 	private class Node {
@@ -23,8 +23,9 @@ public class Grid {
 		Node temp = new Node();// create a temp node init with with new node to
 								// start off
 		head.bottom = temp;// set entrance point
-		double t_counter = 1;
-		temp.val.setdVal(t_counter);// test value
+		//double t_counter = 1;
+		//temp.val.setdVal(t_counter);// test value
+		//temp.val.setTag("dbl");
 		Node top = temp;// set the top value to be the one just created
 		Node prevTop = null;// should init to null since the beginning has no
 							// previous
@@ -35,21 +36,22 @@ public class Grid {
 				prevTop = top; // no longer the first column track previous
 								// column
 				temp = new Node();
-				t_counter += 1;// test value
-				temp.val.setdVal(t_counter);
+				//t_counter += 1;// test value
+				//temp.val.setdVal(t_counter);
+				//temp.val.setTag("dbl");
 				top = temp;
 				prevTop.right = temp; // link to the right
 			}
 			for (int j = 0; j < rows - 1; j++) {
 				Node newNode = new Node();
-				t_counter += 1;
-				newNode.val.setdVal(t_counter);
+				//t_counter += 1;
+				//newNode.val.setdVal(t_counter);
+				//newNode.val.setTag("dbl");
 				temp.bottom = newNode; // link new node to bottom
 				temp = newNode;
 
-				if (j == 7) { // last time though the loop and last node so link
-								// it to the begining
-					newNode.bottom = top;
+				if (j == 8) { // last time though the loop and last node so link
+					newNode.bottom = top;// it to the begining
 				}
 
 				if (prevTop != null) {// if it is null this is the first column
@@ -57,7 +59,7 @@ public class Grid {
 					prevTop = prevTop.bottom;
 					prevTop.right = newNode;
 				}
-				if (i == 4) {// link the last column back to the beginning
+				if (i == 5) {// link the last column back to the beginning
 					Node tmp = head.bottom;
 					top.right = head.bottom;
 					for (int k = 0; k <= j; k++) {// find the node by traversing
@@ -136,18 +138,18 @@ public class Grid {
 		
 		//get the first cell reference
 		n1 = getCell(row1, col1);
-		System.out.println("Value " + n1.val.getdVal());
+		//System.out.println("Value " + n1.val.getdVal());
 		
 		//get second cell reference
 		n2 = getCell(row2, col2);
-		System.out.println("Value " + n2.val.getdVal());
+		//System.out.println("Value " + n2.val.getdVal());
 		
 		//check both tags
 		dest = getCell(destRow, destCol);
 		if(n1.val.getTag() == "dbl" && n2.val.getTag() =="dbl"){
 			// if both tags are dbl set up destination and store sum of dVal in dest node
 			dest.val = n1.val.add(n2.val);
-			System.out.println("Dest val " + dest.val.getdVal());
+			//System.out.println("Dest val " + dest.val.getdVal());
 			//return true if op was possible else return false
 			return true;
 		}else{
@@ -169,18 +171,18 @@ public class Grid {
 		
 		//get the first cell reference
 		n1 = getCell(row1, col1);
-		System.out.println("Value " + n1.val.getdVal());
+		//System.out.println("Value " + n1.val.getdVal());
 		
 		//get second cell reference
 		n2 = getCell(row2, col2);
-		System.out.println("Value " + n2.val.getdVal());
+		//System.out.println("Value " + n2.val.getdVal());
 		
 		//check both tags
 		dest = getCell(destRow, destCol);
 		if(n1.val.getTag() == "dbl" && n2.val.getTag() =="dbl"){
 			// if both tags are dbl set up destination and store difference of dVal in dest node
 			dest.val = n1.val.subtract(n2.val);
-			System.out.println("Dest val " + dest.val.getdVal());
+			//System.out.println("Dest val " + dest.val.getdVal());
 			//return true if op was possible else return false
 			return true;
 		}else{
@@ -202,18 +204,18 @@ public class Grid {
 		
 		//get the first cell reference
 		n1 = getCell(row1, col1);
-		System.out.println("Value " + n1.val.getdVal());
+		//System.out.println("Value " + n1.val.getdVal());
 		
 		//get second cell reference
 		n2 = getCell(row2, col2);
-		System.out.println("Value " + n2.val.getdVal());
+		//System.out.println("Value " + n2.val.getdVal());
 		
 		//check both tags
 		dest = getCell(destRow, destCol);
 		if(n1.val.getTag() == "dbl" && n2.val.getTag() =="dbl"){
 			// if both tags are dbl set up destination and store multiple of dVal in dest node
 			dest.val = n1.val.multiply(n2.val);
-			System.out.println("Dest val " + dest.val.getdVal());
+			//System.out.println("Dest val " + dest.val.getdVal());
 			//return true if op was possible else return false
 			return true;
 		}else{
@@ -235,18 +237,18 @@ public class Grid {
 		
 		//get the first cell reference
 		n1 = getCell(row1, col1);
-		System.out.println("Value " + n1.val.getdVal());
+		//System.out.println("Value " + n1.val.getdVal());
 		
 		//get second cell reference
 		n2 = getCell(row2, col2);
-		System.out.println("Value " + n2.val.getdVal());
+		//System.out.println("Value " + n2.val.getdVal());
 		
 		//check both tags
 		dest = getCell(destRow, destCol);
 		if(n1.val.getTag() == "dbl" && n2.val.getTag() =="dbl"){
 			// if both tags are dbl set up destination and store difference of dVal in dest node
 			dest.val = n1.val.divide(n2.val);
-			System.out.println("Dest val " + dest.val.getdVal());
+			//System.out.println("Dest val " + dest.val.getdVal());
 			//return true if op was possible else return false
 			return true;
 		}else{
@@ -254,6 +256,54 @@ public class Grid {
 			return false;
 		}
 	}
+	
+	public boolean number(String r1, String c1, String r2, String c2){
+		int row1, row2, col1, col2;
+		Node dest, n1, n2;
+		row1 = Integer.parseInt(r1);
+		row2 = Integer.parseInt(r2);
+		col1 = Integer.parseInt(c1);
+		col2 = Integer.parseInt(c2);
+		int counter = 0;
+		//get the first cell reference
+		Node marker = getCell(row1, col1);		
+
+		int[] distance = calculateDistance(row1, col1, row2, col2); 
+		
+		for(int i = 0; i < distance[0] + 1; i++){//for columns
+			n1 = marker;
+			for(int j = 0; j < distance[1] + 1; j++){//for rows
+				n1.val.setTag("dbl");
+				n1.val.setdVal(counter++);
+				n1 = n1.right;
+			}
+			marker = marker.bottom;
+		}
+		return true;
+		
+	}
+	
+	int [] calculateDistance(int row1, int col1, int row2, int col2){
+		int[] rVal = new int[2];
+		rVal[0] = row2 - row1;
+		rVal[1] = col2 - col1;
+		return rVal;
+	}
+ 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
