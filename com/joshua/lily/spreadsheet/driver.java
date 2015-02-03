@@ -79,13 +79,20 @@ public class driver {
 			if(t == true){
 				System.out.println("Successfully multiplied " + row1 + ", " + col1 + " by " + row2 + ", " + col2);
 			} else {
-				System.out.println("ould not complete operation");
+				System.out.println("Could not complete operation");
 			}
 			rVal = false;
 			break;
 		
 		
 		case("ar"):
+			System.out.println("Enter first row");
+			row1 = s.next();
+			System.out.println("Enter second row");
+			row2 = s.next();
+			System.out.println("Enter target row");
+			desRow = s.next();
+			t = g.addRows(row1, row2, desRow);
 			rVal = false;
 			break;
 		case("mr"):

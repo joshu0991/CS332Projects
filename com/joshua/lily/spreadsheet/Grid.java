@@ -259,7 +259,7 @@ public class Grid {
 	
 	public boolean number(String r1, String c1, String r2, String c2){
 		int row1, row2, col1, col2;
-		Node dest, n1, n2;
+		Node n1;
 		row1 = Integer.parseInt(r1);
 		row2 = Integer.parseInt(r2);
 		col1 = Integer.parseInt(c1);
@@ -289,8 +289,36 @@ public class Grid {
 		rVal[1] = col2 - col1;
 		return rVal;
 	}
- 	
 	
+ 	
+	boolean addRows(String r1, String r2, String t){
+		Node n1, n2, tar;
+		int row1 = Integer.parseInt(r1);
+		int row2 = Integer.parseInt(r2);
+		int target = Integer.parseInt(t);
+		boolean rVal = true;
+		//get first node in first row
+		n1 = getCell(row1, 0);
+		
+		//get first node in second row
+		n2 = getCell(row2, 0);
+		
+		//get first node in target row
+		tar = getCell(target, 0);
+		
+		for(int i = 0; i <= columns; i++){
+			if(n1.val.getTag() == "dbl" && n2.val.getTag() == "dbl"){
+			tar.val = n1.val.add(n2.val);
+			tar = tar.right;
+			n1 = n1.right;
+			n2 = n2.right;
+			} else {
+				tar = tar.right;
+				rVal = false;
+			}
+		}
+		return rVal;
+	}
 	
 	
 	
