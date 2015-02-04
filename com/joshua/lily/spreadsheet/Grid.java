@@ -557,7 +557,17 @@ public class Grid {
 		return rVal;
 	}
 	
-	
+	//assign a cell another cells value
+	public void assignCell(String r1, String c1, String r2, String c2){
+		Node n1, n2;
+		int row1 = Integer.parseInt(r1);
+		int col1 = Integer.parseInt(c1);
+		int row2 = Integer.parseInt(r2);
+		int col2 = Integer.parseInt(c2);
+		n1 = getCell(row1, col1);
+		n2 = getCell(row2, col2);
+		n1.val = n2.val;
+	}
 	
 	
 

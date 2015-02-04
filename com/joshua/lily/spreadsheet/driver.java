@@ -163,6 +163,15 @@ public class driver {
 			rVal = true;
 			break;
 		case("as"):
+			System.out.println("Enter first node row");
+			row1 = s.next();	
+			System.out.println("Enter first node column");
+			col1 = s.next();
+			System.out.println("Enter second node row");
+			row2 = s.next();
+			System.out.println("Enter second node column");
+			col2 = s.next();
+			g.assignCell(row1, col1, row2, col2);
 			rVal = false;
 			break;
 		case("n"):
