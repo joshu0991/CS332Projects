@@ -37,11 +37,11 @@ public class Value {
 		if(tag == "str"){
 		s = String.format("%1$-" + 10 + "s", s);//create a string length 10
 		}else if(tag == "dbl"){
-			DecimalFormat df = new  DecimalFormat ("0.####");//make a new decimal format
+			DecimalFormat df = new  DecimalFormat ("0.0000");//make a new decimal format
 			s = df.format(dVal);//format the double store in a string
 			s = String.format("%1$-" + 10 + "s", s);
 		}else if(tag == "inv"){
-			s = String.format("%1$-" + 10 + "s", s);;
+			s = String.format("%1$-" + 10 + "s", s);
 		}
 		return s;
 	}

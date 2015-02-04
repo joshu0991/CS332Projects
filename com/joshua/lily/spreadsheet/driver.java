@@ -56,7 +56,7 @@ public class driver {
 			if(t == true){
 				System.out.println("Successfully added " + row1 + ", " + col1 + " by " + row2 + ", " + col2);
 			} else {
-				System.out.println("ould not complete operation");
+				System.out.println("Some cells not operated on");
 			}
 			rVal = false;
 			break;
@@ -79,12 +79,12 @@ public class driver {
 			if(t == true){
 				System.out.println("Successfully multiplied " + row1 + ", " + col1 + " by " + row2 + ", " + col2);
 			} else {
-				System.out.println("Could not complete operation");
+				System.out.println("Some cells not operated on");
 			}
 			rVal = false;
 			break;
 		
-		
+		//add two rows and store in a row
 		case("ar"):
 			System.out.println("Enter first row");
 			row1 = s.next();
@@ -93,17 +93,65 @@ public class driver {
 			System.out.println("Enter target row");
 			desRow = s.next();
 			t = g.addRows(row1, row2, desRow);
+			if(t == true){
+				System.out.println("Successfully completed row operation");
+			}else{
+				System.out.println("Some values may not have been changed due to invalid tag");
+			}
 			rVal = false;
 			break;
+		
+		//multiple two rows and store in a row
 		case("mr"):
+			System.out.println("Enter first row");
+			row1 = s.next();
+			System.out.println("Enter second row");
+			row2 = s.next();
+			System.out.println("Enter target row");
+			desRow = s.next();
+			t = g.multiplyRows(row1, row2, desRow);
+			if(t == true){
+				System.out.println("Successfully completed row operation");
+			}else{
+				System.out.println("Some values may not have been changed due to invalid tag");
+			}
 			rVal = false;
 			break;
+		
+		//add columns
 		case("ac"):
+			System.out.println("Enter first column");
+			col1 = s.next();
+			System.out.println("Enter second column");
+			col2 = s.next();
+			System.out.println("Enter target column");
+			desRow = s.next();
+			t = g.addColumns(col1, col2, desRow);
+			if(t == true){
+				System.out.println("Successfully completed column operation");
+			}else{
+				System.out.println("Some values may not have been changed due to invalid tag");
+			}
 			rVal = false;
 			break;
+			
+		//multiply columns
 		case("mc"):
+			System.out.println("Enter first column");
+			col1 = s.next();
+			System.out.println("Enter second column");
+			col2 = s.next();
+			System.out.println("Enter target column");
+			desRow = s.next();
+			t = g.multiplyColumns(col1, col2, desRow);
+			if(t == true){
+				System.out.println("Successfully completed column operation");
+			}else{
+				System.out.println("Some values may not have been changed due to invalid tag");
+			}
 			rVal = false;
 			break;
+			
 		case("ir"):
 			rVal = false;
 			break;
@@ -176,18 +224,72 @@ public class driver {
 			rVal = false;
 			break;
 			
+		//subtract two rows
 		case("sr"):
+			System.out.println("Enter first row");
+			row1 = s.next();
+			System.out.println("Enter second row");
+			row2 = s.next();
+			System.out.println("Enter target row");
+			desRow = s.next();
+			t = g.subtractRows(row1, row2, desRow);
+			if(t == true){
+				System.out.println("Successfully completed row operation");
+			}else{
+				System.out.println("Some values may not have been changed due to invalid tag");
+			}
 			rVal = false;
 			break;
+			
+		//divide rows
 		case("dr"):
+			System.out.println("Enter first row");
+			row1 = s.next();
+			System.out.println("Enter second row");
+			row2 = s.next();
+			System.out.println("Enter target row");
+			desRow = s.next();
+			t = g.divideRows(row1, row2, desRow);
+			if(t == true){
+				System.out.println("Successfully completed row operation");
+			}else{
+				System.out.println("Some values may not have been changed due to invalid tag");
+			}
 			rVal = false;
 			break;
+			
 		case("sc"):
+			System.out.println("Enter first column");
+			col1 = s.next();
+			System.out.println("Enter second column");
+			col2 = s.next();
+			System.out.println("Enter target column");
+			desRow = s.next();
+			t = g.subtractColumns(col1, col2, desRow);
+			if(t == true){
+				System.out.println("Successfully completed column operation");
+			}else{
+				System.out.println("Some values may not have been changed due to invalid tag");
+			}
 			rVal = false;
 			break;
+			
 		case("dc"):
+			System.out.println("Enter first column");
+			col1 = s.next();
+			System.out.println("Enter second column");
+			col2 = s.next();
+			System.out.println("Enter target column");
+			desRow = s.next();
+			t = g.divideColumns(col1, col2, desRow);
+			if(t == true){
+				System.out.println("Successfully completed column operation");
+			}else{
+				System.out.println("Some values may not have been changed due to invalid tag");
+			}
 			rVal = false;
 			break;
+			
 		case("ic"):
 			rVal = false;
 			break;

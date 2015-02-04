@@ -135,25 +135,20 @@ public class Grid {
 		col2 = Integer.parseInt(c2);
 		destRow = Integer.parseInt(dRow);
 		destCol = Integer.parseInt(dCol);
+		Value t = new Value();
 		
 		//get the first cell reference
 		n1 = getCell(row1, col1);
-		//System.out.println("Value " + n1.val.getdVal());
 		
 		//get second cell reference
 		n2 = getCell(row2, col2);
-		//System.out.println("Value " + n2.val.getdVal());
 		
-		//check both tags
 		dest = getCell(destRow, destCol);
-		if(n1.val.getTag() == "dbl" && n2.val.getTag() =="dbl"){
-			// if both tags are dbl set up destination and store sum of dVal in dest node
-			dest.val = n1.val.add(n2.val);
-			//System.out.println("Dest val " + dest.val.getdVal());
-			//return true if op was possible else return false
+		t = n1.val.add(n2.val);
+		if(!t.getTag().equals("inv")){
+			dest.val = t;
 			return true;
 		}else{
-			dest.val.setTag("inv");
 			return false;
 		}
 	}
@@ -168,6 +163,7 @@ public class Grid {
 		col2 = Integer.parseInt(c2);
 		destRow = Integer.parseInt(dRow);
 		destCol = Integer.parseInt(dCol);
+		Value t = new Value();
 		
 		//get the first cell reference
 		n1 = getCell(row1, col1);
@@ -179,16 +175,15 @@ public class Grid {
 		
 		//check both tags
 		dest = getCell(destRow, destCol);
-		if(n1.val.getTag() == "dbl" && n2.val.getTag() =="dbl"){
-			// if both tags are dbl set up destination and store difference of dVal in dest node
-			dest.val = n1.val.subtract(n2.val);
-			//System.out.println("Dest val " + dest.val.getdVal());
-			//return true if op was possible else return false
+		t = n1.val.add(n2.val);
+		t = n1.val.subtract(n2.val);
+		if(!t.getTag().equals("inv")){
+			dest.val = t;
 			return true;
 		}else{
-			dest.val.setTag("inv");
 			return false;
 		}
+		
 	}
 	
 	//multiply two cells
@@ -201,6 +196,7 @@ public class Grid {
 		col2 = Integer.parseInt(c2);
 		destRow = Integer.parseInt(dRow);
 		destCol = Integer.parseInt(dCol);
+		Value t = new Value();
 		
 		//get the first cell reference
 		n1 = getCell(row1, col1);
@@ -212,14 +208,11 @@ public class Grid {
 		
 		//check both tags
 		dest = getCell(destRow, destCol);
-		if(n1.val.getTag() == "dbl" && n2.val.getTag() =="dbl"){
-			// if both tags are dbl set up destination and store multiple of dVal in dest node
-			dest.val = n1.val.multiply(n2.val);
-			//System.out.println("Dest val " + dest.val.getdVal());
-			//return true if op was possible else return false
+		t = n1.val.multiply(n2.val);
+		if(!t.getTag().equals("inv")){
+			dest.val = t;
 			return true;
 		}else{
-			dest.val.setTag("inv");
 			return false;
 		}
 	}
@@ -234,6 +227,7 @@ public class Grid {
 		col2 = Integer.parseInt(c2);
 		destRow = Integer.parseInt(dRow);
 		destCol = Integer.parseInt(dCol);
+		Value t = new Value();
 		
 		//get the first cell reference
 		n1 = getCell(row1, col1);
@@ -245,14 +239,11 @@ public class Grid {
 		
 		//check both tags
 		dest = getCell(destRow, destCol);
-		if(n1.val.getTag() == "dbl" && n2.val.getTag() =="dbl"){
-			// if both tags are dbl set up destination and store difference of dVal in dest node
-			dest.val = n1.val.divide(n2.val);
-			//System.out.println("Dest val " + dest.val.getdVal());
-			//return true if op was possible else return false
+		t = n1.val.divide(n2.val);
+		if(!t.getTag().equals("inv")){
+			dest.val = t;
 			return true;
 		}else{
-			dest.val.setTag("inv");
 			return false;
 		}
 	}
@@ -264,7 +255,7 @@ public class Grid {
 		row2 = Integer.parseInt(r2);
 		col1 = Integer.parseInt(c1);
 		col2 = Integer.parseInt(c2);
-		int counter = 0;
+		double counter = 0;
 		//get the first cell reference
 		Node marker = getCell(row1, col1);		
 
@@ -297,6 +288,42 @@ public class Grid {
 		int row2 = Integer.parseInt(r2);
 		int target = Integer.parseInt(t);
 		boolean rVal = true;
+		Value temp = new Value();
+		//get first node in first row
+		n1 = getCell(row1, 0);
+		
+		//get first node in second row
+		n2 = getCell(row2, 0);
+		
+		//get first node in target row
+		tar = getCell(target, 0);
+		
+		for(int i = 0; i < columns; i++){
+			temp = n1.val.add(n2.val);
+			if(temp.getTag() == "dbl"){
+				tar.val = temp;
+				tar = tar.right;
+				n1 = n1.right;
+				n2 = n2.right;
+			} else {
+				n1 = n1.right;
+				n2 = n2.right;
+				tar = tar.right;
+				rVal = false;
+			}
+			
+		}
+		return rVal;
+	}
+	
+	//multiply two rows
+	boolean multiplyRows(String r1, String r2, String t){
+		Node n1, n2, tar;
+		int row1 = Integer.parseInt(r1);
+		int row2 = Integer.parseInt(r2);
+		int target = Integer.parseInt(t);
+		boolean rVal = true;
+		Value temp = new Value();
 		//get first node in first row
 		n1 = getCell(row1, 0);
 		
@@ -307,15 +334,225 @@ public class Grid {
 		tar = getCell(target, 0);
 		
 		for(int i = 0; i <= columns; i++){
-			if(n1.val.getTag() == "dbl" && n2.val.getTag() == "dbl"){
-			tar.val = n1.val.add(n2.val);
-			tar = tar.right;
-			n1 = n1.right;
-			n2 = n2.right;
+			temp = n1.val.multiply(n2.val);
+			if(temp.getTag() == "dbl"){
+				tar.val = temp;
+				tar = tar.right;
+				n1 = n1.right;
+				n2 = n2.right;
 			} else {
+				n1 = n1.right;
+				n2 = n2.right;
 				tar = tar.right;
 				rVal = false;
 			}
+			
+		}
+		return rVal;
+	}
+	
+	//divide two rows
+	boolean divideRows(String r1, String r2, String t){
+		Node n1, n2, tar;
+		int row1 = Integer.parseInt(r1);
+		int row2 = Integer.parseInt(r2);
+		int target = Integer.parseInt(t);
+		boolean rVal = true;
+		Value temp = new Value();
+		//get first node in first row
+		n1 = getCell(row1, 0);
+		
+		//get first node in second row
+		n2 = getCell(row2, 0);
+		
+		//get first node in target row
+		tar = getCell(target, 0);
+		
+		for(int i = 0; i <= columns; i++){
+			temp = n1.val.divide(n2.val);
+			if(temp.getTag() == "dbl"){
+				tar.val = temp;
+				tar = tar.right;
+				n1 = n1.right;
+				n2 = n2.right;
+			} else {
+				n1 = n1.right;
+				n2 = n2.right;
+				tar = tar.right;
+				rVal = false;
+			}
+			
+		}
+		return rVal;
+	}
+	
+	//subtract two rows
+	boolean subtractRows(String r1, String r2, String t){
+		Node n1, n2, tar;
+		int row1 = Integer.parseInt(r1);
+		int row2 = Integer.parseInt(r2);
+		int target = Integer.parseInt(t);
+		boolean rVal = true;
+		Value temp = new Value();
+		//get first node in first row
+		n1 = getCell(row1, 0);
+		
+		//get first node in second row
+		n2 = getCell(row2, 0);
+		
+		//get first node in target row
+		tar = getCell(target, 0);
+		
+		for(int i = 0; i <= columns; i++){
+			temp = n1.val.subtract(n2.val);
+			if(temp.getTag() == "dbl"){
+				tar.val = temp;
+				tar = tar.right;
+				n1 = n1.right;
+				n2 = n2.right;
+			} else {
+				n1 = n1.right;
+				n2 = n2.right;
+				tar = tar.right;
+				rVal = false;
+			}
+			
+		}
+		return rVal;
+	}
+	
+	boolean addColumns(String c1, String c2, String t){
+		Node n1, n2, tar;
+		int col1 = Integer.parseInt(c1);
+		int col2 = Integer.parseInt(c2);
+		int target = Integer.parseInt(t);
+		boolean rVal = true;
+		Value temp = new Value();
+		//get first node in first row
+		n1 = getCell(0, col1);
+		
+		//get first node in second row
+		n2 = getCell(0, col2);
+		
+		//get first node in target row
+		tar = getCell(0, target);
+		
+		for(int i = 0; i < rows; i++){
+			temp = n1.val.add(n2.val);
+			if(temp.getTag() == "dbl"){
+				tar.val = temp;
+				tar = tar.bottom;
+				n1 = n1.bottom;
+				n2 = n2.bottom;
+			} else {
+				n1 = n1.bottom;
+				n2 = n2.bottom;
+				tar = tar.bottom;
+				rVal = false;
+			}
+			
+		}
+		return rVal;
+	}
+	
+	boolean subtractColumns(String c1, String c2, String t){
+		Node n1, n2, tar;
+		int col1 = Integer.parseInt(c1);
+		int col2 = Integer.parseInt(c2);
+		int target = Integer.parseInt(t);
+		boolean rVal = true;
+		Value temp = new Value();
+		//get first node in first row
+		n1 = getCell(0, col1);
+		
+		//get first node in second row
+		n2 = getCell(0, col2);
+		
+		//get first node in target row
+		tar = getCell(0, target);
+		
+		for(int i = 0; i < rows; i++){
+			temp = n1.val.subtract(n2.val);
+			if(temp.getTag() == "dbl"){
+				tar.val = temp;
+				tar = tar.bottom;
+				n1 = n1.bottom;
+				n2 = n2.bottom;
+			} else {
+				n1 = n1.bottom;
+				n2 = n2.bottom;
+				tar = tar.bottom;
+				rVal = false;
+			}
+			
+		}
+		return rVal;
+	}
+	
+	boolean multiplyColumns(String c1, String c2, String t){
+		Node n1, n2, tar;
+		int col1 = Integer.parseInt(c1);
+		int col2 = Integer.parseInt(c2);
+		int target = Integer.parseInt(t);
+		boolean rVal = true;
+		Value temp = new Value();
+		//get first node in first row
+		n1 = getCell(0, col1);
+		
+		//get first node in second row
+		n2 = getCell(0, col2);
+		
+		//get first node in target row
+		tar = getCell(0, target);
+		
+		for(int i = 0; i < rows; i++){
+			temp = n1.val.multiply(n2.val);
+			if(temp.getTag() == "dbl"){
+				tar.val = temp;
+				tar = tar.bottom;
+				n1 = n1.bottom;
+				n2 = n2.bottom;
+			} else {
+				n1 = n1.bottom;
+				n2 = n2.bottom;
+				tar = tar.bottom;
+				rVal = false;
+			}
+			
+		}
+		return rVal;
+	}
+	
+	boolean divideColumns(String c1, String c2, String t){
+		Node n1, n2, tar;
+		int col1 = Integer.parseInt(c1);
+		int col2 = Integer.parseInt(c2);
+		int target = Integer.parseInt(t);
+		boolean rVal = true;
+		Value temp = new Value();
+		//get first node in first row
+		n1 = getCell(0, col1);
+		
+		//get first node in second row
+		n2 = getCell(0, col2);
+		
+		//get first node in target row
+		tar = getCell(0, target);
+		
+		for(int i = 0; i < rows; i++){
+			temp = n1.val.divide(n2.val);
+			if(temp.getTag() == "dbl"){
+				tar.val = temp;
+				tar = tar.bottom;
+				n1 = n1.bottom;
+				n2 = n2.bottom;
+			} else {
+				n1 = n1.bottom;
+				n2 = n2.bottom;
+				tar = tar.bottom;
+				rVal = false;
+			}
+			
 		}
 		return rVal;
 	}
@@ -323,23 +560,7 @@ public class Grid {
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-/*
- * --to do--
- * handle improper input ie - instead of numbers
- * do fill and n functions
- */
+
 	
 	
 	// ~~~~~~~~~~~~~TEST~~~~~~~~~~~CODE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
