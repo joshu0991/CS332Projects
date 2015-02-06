@@ -35,6 +35,17 @@ public class driver {
 			break;
 			
 		case("f"):
+			System.out.println("Enter first node row");
+			row1 = s.next();	
+			System.out.println("Enter first node column");
+			col1 = s.next();
+			System.out.println("Enter second node row");
+			row2 = s.next();
+			System.out.println("Enter second node column");
+			col2 = s.next();
+			System.out.println("Enter population value column");
+			String p = s.next();
+			g.fill(row1, col1, row2, col2, p);
 			rVal = false;
 			break;
 		
@@ -162,18 +173,19 @@ public class driver {
 			s.close();//close the scanner
 			rVal = true;
 			break;
+		
+		//assign cells
 		case("as"):
 			System.out.println("Enter first node row");
 			row1 = s.next();	
 			System.out.println("Enter first node column");
 			col1 = s.next();
-			System.out.println("Enter second node row");
-			row2 = s.next();
-			System.out.println("Enter second node column");
-			col2 = s.next();
-			g.assignCell(row1, col1, row2, col2);
+			System.out.println("Enter new value");
+			String val = s.next();
+			g.assignCell(row1, col1, val);
 			rVal = false;
 			break;
+			
 		case("n"):
 			System.out.println("Enter first node row");
 			row1 = s.next();	

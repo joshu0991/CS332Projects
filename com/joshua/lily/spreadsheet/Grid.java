@@ -523,6 +523,7 @@ public class Grid {
 		return rVal;
 	}
 	
+	//divide columns
 	boolean divideColumns(String c1, String c2, String t){
 		Node n1, n2, tar;
 		int col1 = Integer.parseInt(c1);
@@ -558,17 +559,47 @@ public class Grid {
 	}
 	
 	//assign a cell another cells value
-	public void assignCell(String r1, String c1, String r2, String c2){
-		Node n1, n2;
+	public void assignCell(String r1, String c1, String val){
+		Node n1;
+		Value newV;
+		if(val.charAt(0) == '\"'){
+			newV = new Value(val);
+		}else{
+			//int num = Integer.parseInt(val);
+			newV = new Value(Integer.parseInt(val));
+		}
 		int row1 = Integer.parseInt(r1);
 		int col1 = Integer.parseInt(c1);
-		int row2 = Integer.parseInt(r2);
-		int col2 = Integer.parseInt(c2);
 		n1 = getCell(row1, col1);
-		n2 = getCell(row2, col2);
-		n1.val = n2.val;
+		n1.val = newV;
 	}
 	
+	//fill a sub grid with a value
+	public boolean fill(String row1, String col1, String row2, String col2, String val){
+		int r1 = Integer.parseInt(row1);
+		int r2 = Integer.parseInt(row2);
+		int c1 = Integer.parseInt(col1);
+		int c2 = Integer.parseInt(col2);
+		Value newV;
+		Node n1, marker;
+		if(val.charAt(0) == '\"'){
+			newV = new Value(val);
+		}else{
+			newV = new Value(Integer.parseInt(val));
+		}
+		marker = getCell(r1, c1);
+		int[] dis =  calculateDistance(r1, c1, r2, c2);
+		
+		for(int i = 0; i < dis[0] + 1; i++){//for columns
+			n1 = marker;
+			for(int j = 0; j < dis[1] + 1; j++){//for rows
+				n1.val = newV;
+				n1 = n1.right;
+			}
+			marker = marker.bottom;
+		}
+		return true;
+	}
 	
 
 	

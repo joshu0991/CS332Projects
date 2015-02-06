@@ -7,6 +7,19 @@ public class Value {
 	private double dVal;
 	private String tag = "inv";//can be str dbl or inv
 	
+	public Value(String s){
+		s = s.substring(1);
+		sVal = s;
+		tag = "str";
+	}
+	public Value(double d){
+		dVal = d;
+		tag = "dbl";
+	}
+	public Value(){
+		
+	}
+	
 	public String getsVal() {
 		return sVal;
 	}
@@ -35,7 +48,7 @@ public class Value {
 	public String toString(){
 		String s = "";
 		if(tag == "str"){
-		s = String.format("%1$-" + 10 + "s", s);//create a string length 10
+		s = String.format("%1$-" + 10 + "s", sVal);//create a string length 10
 		}else if(tag == "dbl"){
 			DecimalFormat df = new  DecimalFormat ("0.0000");//make a new decimal format
 			s = df.format(dVal);//format the double store in a string
