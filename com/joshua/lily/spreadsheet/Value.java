@@ -102,9 +102,10 @@ public class Value {
 	}
 	
 	//divide this value by an input
+	//return invalad if dividing by 0
 	public Value divide(Value n){
 		Value r = new Value();
-		if(this.tag.equals("dbl") && n.tag.equals("dbl")) {
+		if(this.tag.equals("dbl") && n.tag.equals("dbl") && n.dVal != 0) {
 			r.dVal = this.dVal / n.dVal;
 			r.tag = "dbl";
 			}
