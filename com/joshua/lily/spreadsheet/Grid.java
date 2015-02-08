@@ -608,7 +608,6 @@ public class Grid {
 	//delete row
 	public boolean deleteRow(String row){
 		int r = Integer.parseInt(row);
-		boolean firstRowChecker = false;
 		Node above, below, n;
 		if(rows != 1){ //make sure there are rows to remove
 		//check to see if deleting first row if not.. isn't the special case
@@ -616,7 +615,6 @@ public class Grid {
 			above = getCell((r-1), 0);//node above it
 			below = getCell((r+1), 0);//node below it
 		} else{ //were deleting first row
-			firstRowChecker = true;
 			above = getCell(this.rows - 1, 0); //the last cell in the list
 			below = getCell((r+1), 0);
 			if(rows != 1){//not the last row in the matrix
@@ -639,5 +637,11 @@ public class Grid {
 			return false;
 		}
 	}
-
+	
+	public boolean insertRow(String row){
+		int r = Integer.parseInt(row);
+		
+		return true;
+	}
+	
 	}
