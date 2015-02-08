@@ -164,6 +164,9 @@ public class driver {
 			break;
 			
 		case("ir"):
+			System.out.println("Enter row before new row");
+			row1 = s.next();
+			g.insertRow(row1);
 			rVal = false;
 			break;
 			

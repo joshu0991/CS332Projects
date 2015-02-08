@@ -640,6 +640,38 @@ public class Grid {
 	
 	public boolean insertRow(String row){
 		int r = Integer.parseInt(row);
+		Node n, previous, newNode, watcher, left = null;
+		if(r != 0 && r != rows){
+			previous = getCell((r-1), 0);//node above it
+			watcher = previous;
+			n = getCell(r, 0);
+		} else {
+			previous = getCell(this.rows - 1, 0); //the last cell in the list
+			watcher = this.head.bottom;//watch the node so head can be reset
+			n = getCell(r, 0); 
+		}
+		
+		for(int i = 0; i < columns; i++) {
+			newNode = new Node();
+			newNode.bottom = n;
+			previous.bottom = newNode;
+			previous = previous.right;//move the previous row over
+			n = n.right;//move node row over
+			if(i == 0){
+				left = newNode;
+			}
+			if(i != 0){
+				left.right = newNode;
+				left = newNode;
+			}
+			if(i == (columns - 1)){
+				newNode.right = watcher;
+				rows++;
+			}
+			if(r == 0 && i == 0){
+				this.head.bottom = newNode;
+			}
+		}
 		
 		return true;
 	}
