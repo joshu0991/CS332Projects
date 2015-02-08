@@ -76,6 +76,10 @@ public class Grid {
 
 	//traverse the grid and display the values in a grid format
 	public void display(){
+	if(head.bottom == null){ //means the list is empty
+		System.out.println("Nothing to display");
+		return;
+	}
 		//print the column headers
 	Node currentRow, currentNode;//pointer to current row and current node
 	String s = "";
@@ -601,85 +605,39 @@ public class Grid {
 		return true;
 	}
 	
-
-	
-	
-	// ~~~~~~~~~~~~~TEST~~~~~~~~~~~CODE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	public void displayGrid() {
-		Node t = head.bottom;
-
-		for (int a = 0; a < rows + 1; a++) {
-			System.out.println("First column " + t.val.getdVal());
-			t = t.bottom;
-
+	//delete row
+	public boolean deleteRow(String row){
+		int r = Integer.parseInt(row);
+		boolean firstRowChecker = false;
+		Node above, below, n;
+		if(rows != 1){ //make sure there are rows to remove
+		//check to see if deleting first row if not.. isn't the special case
+		if(r != 0 && r != rows){
+			above = getCell((r-1), 0);//node above it
+			below = getCell((r+1), 0);//node below it
+		} else{ //were deleting first row
+			firstRowChecker = true;
+			above = getCell(this.rows - 1, 0); //the last cell in the list
+			below = getCell((r+1), 0);
+			if(rows != 1){//not the last row in the matrix
+				this.head.bottom = getCell((r+1), 0);
+			}
 		}
-		System.out.println("---------------------------------------");
-		t = head.bottom.right;
-		for (int b = 0; b < rows + 1; b++) {
-			System.out.println("Second col " + t.val.getdVal());
-			t = t.bottom;
+		//loop over the columns
+		for(int i = 0; i < columns - 1; i++){
+			n = above.bottom;
+			above.bottom = n.bottom;
+			n.bottom = null;
+			n.right = null;		
+			above = above.right;
+			below = below.right;
 		}
-		System.out.println("---------------------------------------");
-
-		t = head.bottom.right.right;
-		for (int c = 0; c < rows + 1; c++) {
-			System.out.println("third col " + t.val.getdVal());
-			t = t.bottom;
+		rows--;
+		return true;
+		}else{
+			head.bottom = null;
+			return false;
 		}
-
-		System.out.println("---------------------------------------");
-		t = head.bottom.right.right.right;
-		for (int d = 0; d < rows + 1; d++) {
-			System.out.println("forth col " + t.val.getdVal());
-			t = t.bottom;
-		}
-
-		System.out.println("---------------------------------------");
-		t = head.bottom.right.right.right.right;
-		for (int e = 0; e < rows + 1; e++) {
-			System.out.println("fifth col " + t.val.getdVal());
-			t = t.bottom;
-		}
-		// check a random node
-		t = head.bottom.right.bottom.bottom.right;
-		System.out.println("Random " + t.val.getdVal());
-
-		System.out.println("---------------------------------------");
-		t = head.bottom;
-		for (int e = 0; e < columns; e++) {
-			System.out.println("first row " + t.val.getdVal());
-			t = t.right;
-		}
-
-		System.out.println("---------------------------------------");
-		t = head.bottom.bottom;
-		for (int e = 0; e < columns + 1; e++) {
-			System.out.println("second row " + t.val.getdVal());
-			t = t.right;
-		}
-
-		System.out.println("---------------------------------------");
-		t = head.bottom.bottom.bottom;
-		for (int e = 0; e < columns + 1; e++) {
-			System.out.println("third row " + t.val.getdVal());
-			t = t.right;
-		}
-		System.out.println("---------------------------------------");
-		t = head.bottom.bottom.bottom.bottom;
-		for (int e = 0; e < columns + 1; e++) {
-			System.out.println("forth row " + t.val.getdVal());
-			t = t.right;
-		}
-		t.val.setdVal(10.342);
-		System.out.println("From tostring " + t.val.toString());
-		System.out.println("---------------------------------------");
-		t = head.bottom.right.right.right.right.bottom;
-		System.out.println("test row " + t.val.getdVal());
-		
-		t = head.bottom.right.right.right.right;
-				System.out.println("T val " + t.val.getdVal());
-				System.out.println("Node val " + t.right);
-		
 	}
 
-}
+	}

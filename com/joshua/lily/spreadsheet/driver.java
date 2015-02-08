@@ -166,9 +166,17 @@ public class driver {
 		case("ir"):
 			rVal = false;
 			break;
+			
 		case("delr"):
+			System.out.println("Enter row for deletion");
+			row1 = s.next();
+			t = g.deleteRow(row1);
+			if(t == false){
+				System.out.println("Can not delete from an empty list");
+			}
 			rVal = false;
 			break;
+			
 		case("q"):
 			s.close();//close the scanner
 			rVal = true;
