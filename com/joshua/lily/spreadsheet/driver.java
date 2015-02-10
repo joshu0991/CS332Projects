@@ -163,6 +163,7 @@ public class driver {
 			rVal = false;
 			break;
 			
+		//insert a row
 		case("ir"):
 			System.out.println("Enter row before new row");
 			row1 = s.next();
@@ -170,6 +171,7 @@ public class driver {
 			rVal = false;
 			break;
 			
+		//delete a row
 		case("delr"):
 			System.out.println("Enter row for deletion");
 			row1 = s.next();
@@ -180,6 +182,7 @@ public class driver {
 			rVal = false;
 			break;
 			
+		//quit the program
 		case("q"):
 			s.close();//close the scanner
 			rVal = true;
@@ -196,7 +199,8 @@ public class driver {
 			g.assignCell(row1, col1, val);
 			rVal = false;
 			break;
-			
+		
+		//number all rows
 		case("n"):
 			System.out.println("Enter first node row");
 			row1 = s.next();	
@@ -306,6 +310,7 @@ public class driver {
 			rVal = false;
 			break;
 			
+		//divide a column
 		case("dc"):
 			System.out.println("Enter first column");
 			col1 = s.next();
@@ -325,7 +330,12 @@ public class driver {
 		case("ic"):
 			rVal = false;
 			break;
+			
+		//delete columns
 		case("delc"):
+			System.out.println("Enter the column before the column to delete");
+			col1 = s.next();
+			t = g.deleteColumns(col1);
 			rVal = false;
 			break;
 		}
@@ -336,8 +346,6 @@ public class driver {
 	public static void main(String [] args){
 		boolean contin = false;
 		while(contin == false){
-			//Grid g = new Grid();//for testing
-			//g.displayGrid();
 			contin = buildMenu();
 		}
 		

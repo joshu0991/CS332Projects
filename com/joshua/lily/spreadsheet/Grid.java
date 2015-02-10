@@ -638,6 +638,7 @@ public class Grid {
 		}
 	}
 	
+	//insert a row
 	public boolean insertRow(String row){
 		int r = Integer.parseInt(row);
 		Node n, previous, newNode, watcher, left = null;
@@ -676,4 +677,36 @@ public class Grid {
 		return true;
 	}
 	
+	//delete a column
+	public boolean deleteColumns(String col) {
+		int c = Integer.parseInt(col);
+		Node leftOf, rightOf, n;
+		if(columns != 1){
+			if(c != 0 && c != rows){
+				leftOf = getCell(0, (c-1));//node left
+				rightOf = getCell(0, (c+1));//node right
+			} else {
+				leftOf = getCell(0, this.rows - 1); //the last cell in the list
+				rightOf = getCell(0, (c+1));
+				if(columns != 1){//not the last row in the matrix
+					this.head.bottom = getCell(0, (c+1));
+				}
+			}
+			//loop over the columns
+			for(int i = 0; i < rows; i++){
+				n = leftOf.right;
+				leftOf.right = n.right;
+				n.bottom = null;//set the node to delete pointers to null so it can be garbage collected
+				n.right = null;		
+				leftOf = leftOf.bottom;
+				rightOf = rightOf.bottom;
+			}
+			columns--;//now one less column
+			return true;
+			}else{//this will happen if this is the last column in the sheet
+				head.bottom = null;
+				return false;
+		}
 	}
+
+}
