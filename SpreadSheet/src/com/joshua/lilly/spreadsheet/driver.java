@@ -2,6 +2,7 @@ package com.joshua.lilly.spreadsheet;
 import java.util.Scanner;
 public class driver {
 	
+	//instantiated objects
 	private static final Grid g = new Grid();
 	private static final Scanner s = new Scanner(System.in);
 	private static boolean buildMenu(){
