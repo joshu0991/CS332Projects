@@ -329,6 +329,9 @@ public class driver {
 			break;
 			
 		case("ic"):
+			System.out.println("Enter the column to be inserted");
+			col1 = s.next();
+			t = g.insertColumn(col1);
 			rVal = false;
 			break;
 			
@@ -337,6 +340,9 @@ public class driver {
 			System.out.println("Enter the column before the column to delete");
 			col1 = s.next();
 			t = g.deleteColumns(col1);
+			if(t == true){
+				System.out.println("Deleted column " + col1);
+			}
 			rVal = false;
 			break;
 		}

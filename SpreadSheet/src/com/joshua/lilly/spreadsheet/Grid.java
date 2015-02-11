@@ -717,5 +717,44 @@ public class Grid {
 				return false;
 		}
 	}//end delete columns
+	
+	//insert a column
+	public boolean insertColumn(String col){
+		int c = Integer.parseInt(col);
+		Node n, previous, newNode, watcher, top = null;
+		if(c != 0 && c != rows){
+			previous = getCell(0, (c-1));//node left of it
+			watcher = previous;//watch the node
+			n = getCell(0, c);
+		} else {
+			previous = getCell(0, this.columns - 1); //the last cell in the list
+			watcher = this.head.bottom;//watch the node so head can be reset
+			n = getCell(0, c); 
+		}
+		
+		for(int i = 0; i < rows; i++) {
+			newNode = new Node();
+			newNode.right = n;
+			previous.right = newNode;
+			if(i == 0){
+				top = newNode;
+			}
+			if(i != 0){
+				top.bottom = newNode;
+				top = newNode;
+			}
+			if(i == (rows - 1)){
+				newNode.bottom = watcher;
+				columns++;
+			}
+			if(c == 0 && i == 0){
+				this.head.bottom = previous.right;
+			}
+			previous = previous.bottom;//move the previous column over
+			n = n.bottom;//move node column over
+		}
+		
+		return true;
+	}//end insert column
 
 }//end grid class
