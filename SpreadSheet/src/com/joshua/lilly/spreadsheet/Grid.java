@@ -728,7 +728,7 @@ public class Grid {
 			n = getCell(0, c);
 		} else {
 			previous = getCell(0, this.columns - 1); //the last cell in the list
-			watcher = this.head.bottom;//watch the node so head can be reset
+			watcher = null;//watch the node so head can be reset
 			n = getCell(0, c); 
 		}
 		
@@ -748,7 +748,8 @@ public class Grid {
 				columns++;
 			}
 			if(c == 0 && i == 0){
-				this.head.bottom = previous.right;
+				this.head.bottom = newNode;
+				watcher = newNode;
 			}
 			previous = previous.bottom;//move the previous column over
 			n = n.bottom;//move node column over
