@@ -24,6 +24,7 @@ public class driver {
 		
 	}
 
+	//get the input
 	public static boolean parseInput(String input){
 		Scanner s = new Scanner(System.in);
 		boolean t;
@@ -34,17 +35,18 @@ public class driver {
 			g.display();
 			rVal = false;
 			break;
-			
+		
+		//fill a reigon
 		case("f"):
-			System.out.println("Enter first node row");
+			System.out.println("Enter first row");
 			row1 = s.next();	
-			System.out.println("Enter first node column");
+			System.out.println("Enter first column");
 			col1 = s.next();
-			System.out.println("Enter second node row");
+			System.out.println("Enter second row");
 			row2 = s.next();
-			System.out.println("Enter second node column");
+			System.out.println("Enter second column");
 			col2 = s.next();
-			System.out.println("Enter population value column");
+			System.out.println("Enter population column");
 			String p = s.next();
 			g.fill(row1, col1, row2, col2, p);
 			rVal = false;
@@ -52,21 +54,21 @@ public class driver {
 		
 		//add two cells
 		case("a"):
-			System.out.println("Enter first node row");
+			System.out.println("Enter first row");
 			row1 = s.next();	
-			System.out.println("Enter first node column");
+			System.out.println("Enter first column");
 			col1 = s.next();
-			System.out.println("Enter second node row");
+			System.out.println("Enter second row");
 			row2 = s.next();
-			System.out.println("Enter second node column");
+			System.out.println("Enter second column");
 			col2 = s.next();
-			System.out.println("Enter destination node row");
+			System.out.println("Enter destination row");
 			desRow = s.next();
-			System.out.println("Enter destination node column");
+			System.out.println("Enter destination column");
 			desCol = s.next();
 			t = g.addCells(row1, col1, row2, col2, desRow, desCol);
 			if(t == true){
-				System.out.println("Successfully added " + row1 + ", " + col1 + " by " + row2 + ", " + col2);
+				System.out.println("Successfully added cells");
 			} else {
 				System.out.println("Some cells not operated on");
 			}
@@ -75,21 +77,21 @@ public class driver {
 			
 		//multiply cells
 		case("m"):
-			System.out.println("Enter first node row");
+			System.out.println("Enter first row");
 			row1 = s.next();	
-			System.out.println("Enter first node column");
+			System.out.println("Enter first column");
 			col1 = s.next();
-			System.out.println("Enter second node row");
+			System.out.println("Enter second row");
 			row2 = s.next();
-			System.out.println("Enter second node column");
+			System.out.println("Enter second column");
 			col2 = s.next();
-			System.out.println("Enter destination node row");
+			System.out.println("Enter destination row");
 			desRow = s.next();
-			System.out.println("Enter destination node column");
+			System.out.println("Enter destination column");
 			desCol = s.next();
 			t = g.multiplyCells(row1, col1, row2, col2, desRow, desCol);
 			if(t == true){
-				System.out.println("Successfully multiplied " + row1 + ", " + col1 + " by " + row2 + ", " + col2);
+				System.out.println("Successfully multiplied cells");
 			} else {
 				System.out.println("Some cells not operated on");
 			}
@@ -166,9 +168,14 @@ public class driver {
 			
 		//insert a row
 		case("ir"):
-			System.out.println("Enter row before new row");
+			System.out.println("Enter new row number");
 			row1 = s.next();
-			g.insertRow(row1);
+			t = g.insertRow(row1);
+			if(t == true){
+				System.out.println("Successfully inserted row");
+			}else{
+				System.out.println("Failed to insert row");
+			}
 			rVal = false;
 			break;
 			
@@ -179,6 +186,8 @@ public class driver {
 			t = g.deleteRow(row1);
 			if(t == false){
 				System.out.println("Can not delete from an empty list");
+			} else {
+				System.out.println("Successfully deleted row");
 			}
 			rVal = false;
 			break;
@@ -191,9 +200,9 @@ public class driver {
 		
 		//assign cells
 		case("as"):
-			System.out.println("Enter first node row");
+			System.out.println("Enter first row");
 			row1 = s.next();	
-			System.out.println("Enter first node column");
+			System.out.println("Enter first column");
 			col1 = s.next();
 			System.out.println("Enter new value");
 			String val = s.next();
@@ -203,13 +212,13 @@ public class driver {
 		
 		//number all rows
 		case("n"):
-			System.out.println("Enter first node row");
+			System.out.println("Enter first row");
 			row1 = s.next();	
-			System.out.println("Enter first node column");
+			System.out.println("Enter first column");
 			col1 = s.next();
-			System.out.println("Enter second node row");
+			System.out.println("Enter second row");
 			row2 = s.next();
-			System.out.println("Enter second node column");
+			System.out.println("Enter second column");
 			col2 = s.next();
 			t = g.number(row1, col1, row2, col2);
 			rVal = false;
@@ -217,46 +226,46 @@ public class driver {
 		
 		//subtract two cells
 		case("s"):
-			System.out.println("Enter first node row");
+			System.out.println("Enter first row");
 			row1 = s.next();	
-			System.out.println("Enter first node column");
+			System.out.println("Enter first column");
 			col1 = s.next();
-			System.out.println("Enter second node row");
+			System.out.println("Enter second row");
 			row2 = s.next();
-			System.out.println("Enter second node column");
+			System.out.println("Enter second column");
 			col2 = s.next();
-			System.out.println("Enter destination node row");
+			System.out.println("Enter destination row");
 			desRow = s.next();
-			System.out.println("Enter destination node column");
+			System.out.println("Enter destination column");
 			desCol = s.next();
 			t = g.subCells(row1, col1, row2, col2, desRow, desCol);
 			if(t == true){
-				System.out.println("Successfully subtracted " + row1 + ", " + col1 + " by " + row2 + ", " + col2);
+				System.out.println("Successfully subtracted cells");
 			} else {
-				System.out.println("ould not complete operation");
+				System.out.println("Could not complete operation");
 			}
 			rVal = false;
 			break;
 		
 		//divide two cells
 		case("d"):
-			System.out.println("Enter first node row");
+			System.out.println("Enter first row");
 			row1 = s.next();	
-			System.out.println("Enter first node column");
+			System.out.println("Enter first column");
 			col1 = s.next();
-			System.out.println("Enter second node row");
+			System.out.println("Enter second row");
 			row2 = s.next();
-			System.out.println("Enter second node column");
+			System.out.println("Enter second column");
 			col2 = s.next();
-			System.out.println("Enter destination node row");
+			System.out.println("Enter destination row");
 			desRow = s.next();
-			System.out.println("Enter destination node column");
+			System.out.println("Enter destination column");
 			desCol = s.next();
 			t = g.divideCells(row1, col1, row2, col2, desRow, desCol);
 			if(t == true){
-				System.out.println("Successfully divided " + row1 + ", " + col1 + " by " + row2 + ", " + col2);
+				System.out.println("Successfully divided cells");
 			} else {
-				System.out.println("ould not complete operation");
+				System.out.println("Could not complete operation");
 			}
 			rVal = false;
 			break;
@@ -295,6 +304,7 @@ public class driver {
 			rVal = false;
 			break;
 			
+		//subtract a column
 		case("sc"):
 			System.out.println("Enter first column");
 			col1 = s.next();
@@ -327,11 +337,17 @@ public class driver {
 			}
 			rVal = false;
 			break;
-			
+		
+		//insert a column	
 		case("ic"):
 			System.out.println("Enter the column to be inserted");
 			col1 = s.next();
 			t = g.insertColumn(col1);
+			if(t == true){
+				System.out.println("Successfully inserted a column");
+			} else {
+				System.out.println("Failed to insert column");
+			}
 			rVal = false;
 			break;
 			
@@ -342,6 +358,8 @@ public class driver {
 			t = g.deleteColumns(col1);
 			if(t == true){
 				System.out.println("Deleted column " + col1);
+			} else {
+				System.out.println("Failed to delete column");
 			}
 			rVal = false;
 			break;

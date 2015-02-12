@@ -1,7 +1,5 @@
 package com.joshua.lilly.spreadsheet;
-
-import java.util.HashMap;
-
+import java.math.*;
 public class Grid {
 
 	private int rows = 10, columns = 6; // track number of rows and columns
@@ -288,8 +286,8 @@ public class Grid {
 	//calculate the distance between two cells
 	int [] calculateDistance(int row1, int col1, int row2, int col2){
 		int[] rVal = new int[2];
-		rVal[0] = row2 - row1;
-		rVal[1] = col2 - col1;
+		rVal[0] = Math.abs(row2 - row1);//return absolute value since row2 or col2 can be < row 1 or col2
+		rVal[1] = Math.abs(col2 - col1);
 		return rVal;
 	}//end calculateDistance
 	
@@ -653,6 +651,23 @@ public class Grid {
 	public boolean insertRow(String row){
 		int r = Integer.parseInt(row);
 		Node n, previous, newNode, watcher, left = null;
+		
+		//case for an empty list
+		if(this.head.bottom == null){
+			this.head.bottom = new Node();
+			n = this.head.bottom;
+			for(int c = 0; c < columns; c++){
+				newNode = new Node();
+				n.right = newNode;
+				n = n.right;
+				if(c == (columns - 1)){
+					newNode.right = this.head.bottom;
+					rows++;
+					return true;
+				}
+			}
+		}
+		
 		if(r != 0 && r != rows){
 			previous = getCell((r-1), 0);//node above it
 			watcher = previous;
@@ -697,7 +712,7 @@ public class Grid {
 				leftOf = getCell(0, (c-1));//node left
 				rightOf = getCell(0, (c+1));//node right
 			} else {
-				leftOf = getCell(0, this.rows - 1); //the last cell in the list
+				leftOf = getCell(0, this.columns - 1); //the last cell in the list
 				rightOf = getCell(0, (c+1));
 				if(columns != 1){//not the last row in the matrix
 					this.head.bottom = getCell(0, (c+1));
@@ -724,10 +739,31 @@ public class Grid {
 	public boolean insertColumn(String col){
 		int c = Integer.parseInt(col);
 		Node n, previous, newNode, watcher, top = null;
+		
+		//case for an empty list
+				if(this.head.bottom == null){//list empty if head is null
+					this.head.bottom = new Node();//init head
+					n = this.head.bottom;
+					//walk column and assign
+					for(int m = 0; m < rows; m++){
+						newNode = new Node();
+						n.bottom = newNode;
+						n = n.bottom;
+						if(m == (rows - 1)){
+							newNode.bottom = this.head.bottom;
+							return true;
+						}
+					}
+				}
+		
 		if(c != 0 && c != rows){
 			previous = getCell(0, (c-1));//node left of it
 			watcher = previous;//watch the node
-			n = getCell(0, c);
+			if(columns == 1){
+				n = previous;//there is only one column need to assign n to previous 
+			}else{
+				n = getCell(0, c);
+			}
 		} else {
 			previous = getCell(0, this.columns - 1); //the last cell in the list
 			watcher = null;//watch the node so head can be reset
