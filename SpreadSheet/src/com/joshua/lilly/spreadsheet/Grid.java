@@ -1,5 +1,7 @@
 package com.joshua.lilly.spreadsheet;
 
+import java.util.HashMap;
+
 public class Grid {
 
 	private int rows = 10, columns = 6; // track number of rows and columns
@@ -757,5 +759,5 @@ public class Grid {
 		
 		return true;
 	}//end insert column
-
+	
 }//end grid class
