@@ -620,7 +620,7 @@ public class Grid {
 		Node above, below, n;
 		if(rows != 1){ //make sure there are rows to remove
 		//check to see if deleting first row if not.. isn't the special case
-		if(r != 0 && r != rows){
+		if(r != 0 && r != rows && r % rows != 0){
 			above = getCell((r-1), 0);//node above it
 			below = getCell((r+1), 0);//node below it
 		} else{ //were deleting first row
@@ -647,22 +647,42 @@ public class Grid {
 		}
 	}//end delete row
 	
+	/*
+	 * if(this.head.bottom == null){//list empty if head is null
+					this.head.bottom = new Node();//init head
+					n = this.head.bottom;
+					//walk column and assign
+					for(int m = 0; m < rows; m++){
+						newNode = new Node();
+						n.bottom = newNode;
+						n = n.bottom;
+						if(m == (rows - 1)){
+							newNode.bottom = this.head.bottom;
+							return true;
+						}
+					}
+				}
+	 */
+	
 	//insert a row
 	public boolean insertRow(String row){
 		int r = Integer.parseInt(row);
 		Node n, previous, newNode, watcher, left = null;
 		
 		//case for an empty list
-		if(this.head.bottom == null){
-			this.head.bottom = new Node();
-			n = this.head.bottom;
+		if(head.bottom == null){
+			if(columns == 1){//there are no columns to make so a new row count just has to be incremendted
+				rows++;
+				return true;
+			} 
+			head.bottom = new Node();
+			n = head.bottom;
 			for(int c = 0; c < columns; c++){
 				newNode = new Node();
 				n.right = newNode;
 				n = n.right;
 				if(c == (columns - 1)){
 					newNode.right = this.head.bottom;
-					rows++;
 					return true;
 				}
 			}
@@ -708,14 +728,14 @@ public class Grid {
 		int c = Integer.parseInt(col);
 		Node leftOf, rightOf, n;
 		if(columns != 1){
-			if(c != 0 && c != rows){
+			if(c != 0 && c != columns && c % columns != 0){
 				leftOf = getCell(0, (c-1));//node left
 				rightOf = getCell(0, (c+1));//node right
 			} else {
 				leftOf = getCell(0, this.columns - 1); //the last cell in the list
 				rightOf = getCell(0, (c+1));
 				if(columns != 1){//not the last row in the matrix
-					this.head.bottom = getCell(0, (c+1));
+					this.head.bottom = getCell(0, (c+1));//reassign the head to the cell over one
 				}
 			}
 			//loop over the columns
@@ -738,9 +758,9 @@ public class Grid {
 	//insert a column
 	public boolean insertColumn(String col){
 		int c = Integer.parseInt(col);
-		Node n, previous, newNode, watcher, top = null;
+		Node n = null, previous = null, newNode = null, watcher = null, top = null;
 		
-		//case for an empty list
+				//case for an empty list
 				if(this.head.bottom == null){//list empty if head is null
 					this.head.bottom = new Node();//init head
 					n = this.head.bottom;
@@ -755,19 +775,23 @@ public class Grid {
 						}
 					}
 				}
-		
-		if(c != 0 && c != rows){
+		//case for non empty list
+		if(c != 0 && c != rows && c < columns){
 			previous = getCell(0, (c-1));//node left of it
 			watcher = previous;//watch the node
 			if(columns == 1){
 				n = previous;//there is only one column need to assign n to previous 
-			}else{
+			}else {
 				n = getCell(0, c);
 			}
-		} else {
+		} else if(c == 0 && c < columns){
 			previous = getCell(0, this.columns - 1); //the last cell in the list
 			watcher = null;//watch the node so head can be reset
 			n = getCell(0, c); 
+		} else if(c >= columns){//we're inserting on the end
+			previous = getCell(0, columns - 1);
+			watcher = null;
+			n = getCell(0, 0);
 		}
 		
 		for(int i = 0; i < rows; i++) {
