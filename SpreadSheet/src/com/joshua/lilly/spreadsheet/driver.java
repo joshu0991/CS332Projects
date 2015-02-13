@@ -27,9 +27,9 @@ public class driver {
 	//get the input
 	public static boolean parseInput(String input){
 		Scanner s = new Scanner(System.in);
-		boolean t;
+		boolean t = false;
 		boolean rVal = false;
-		String row1, col1, row2, col2, desRow, desCol;
+		String row1 = null, col1 = null, row2 = null, col2 = null, desRow = null, desCol = null;
 		switch(input){
 		case("dis")://display the grid
 			g.display();
@@ -38,35 +38,43 @@ public class driver {
 		
 		//fill a reigon
 		case("f"):
-			System.out.println("Enter first row");
-			row1 = s.next();	
-			System.out.println("Enter first column");
-			col1 = s.next();
-			System.out.println("Enter second row");
-			row2 = s.next();
-			System.out.println("Enter second column");
-			col2 = s.next();
-			System.out.println("Enter population column");
-			String p = s.next();
-			g.fill(row1, col1, row2, col2, p);
+			try{
+				System.out.println("Enter first row");
+				row1 = s.next();	
+				System.out.println("Enter first column");
+				col1 = s.next();
+				System.out.println("Enter second row");
+				row2 = s.next();
+				System.out.println("Enter second column");
+				col2 = s.next();
+				System.out.println("Enter population column");
+				String p = s.next();
+				g.fill(row1, col1, row2, col2, p);
+			} catch (NumberFormatException e){
+				System.out.println("Not a valad input please enter integers");
+			}
 			rVal = false;
 			break;
 		
 		//add two cells
 		case("a"):
-			System.out.println("Enter first row");
-			row1 = s.next();	
-			System.out.println("Enter first column");
-			col1 = s.next();
-			System.out.println("Enter second row");
-			row2 = s.next();
-			System.out.println("Enter second column");
-			col2 = s.next();
-			System.out.println("Enter destination row");
-			desRow = s.next();
-			System.out.println("Enter destination column");
-			desCol = s.next();
-			t = g.addCells(row1, col1, row2, col2, desRow, desCol);
+			try{
+				System.out.println("Enter first row");
+				row1 = s.next();	
+				System.out.println("Enter first column");
+				col1 = s.next();
+				System.out.println("Enter second row");
+				row2 = s.next();
+				System.out.println("Enter second column");
+				col2 = s.next();
+				System.out.println("Enter destination row");
+				desRow = s.next();
+				System.out.println("Enter destination column");
+				desCol = s.next();
+				t = g.addCells(row1, col1, row2, col2, desRow, desCol);
+			} catch(NumberFormatException e) {
+				System.out.println("Not a valad input please enter integers");
+			}
 			if(t == true){
 				System.out.println("Successfully added cells");
 			} else {
@@ -77,19 +85,23 @@ public class driver {
 			
 		//multiply cells
 		case("m"):
-			System.out.println("Enter first row");
-			row1 = s.next();	
-			System.out.println("Enter first column");
-			col1 = s.next();
-			System.out.println("Enter second row");
-			row2 = s.next();
-			System.out.println("Enter second column");
-			col2 = s.next();
-			System.out.println("Enter destination row");
-			desRow = s.next();
-			System.out.println("Enter destination column");
-			desCol = s.next();
-			t = g.multiplyCells(row1, col1, row2, col2, desRow, desCol);
+			try{
+				System.out.println("Enter first row");
+				row1 = s.next();	
+				System.out.println("Enter first column");
+				col1 = s.next();
+				System.out.println("Enter second row");
+				row2 = s.next();
+				System.out.println("Enter second column");
+				col2 = s.next();
+				System.out.println("Enter destination row");
+				desRow = s.next();
+				System.out.println("Enter destination column");
+				desCol = s.next();
+				t = g.multiplyCells(row1, col1, row2, col2, desRow, desCol);
+			} catch (NumberFormatException e) {
+				System.out.println("Not a valad input please enter integers");
+			}
 			if(t == true){
 				System.out.println("Successfully multiplied cells");
 			} else {
@@ -100,13 +112,17 @@ public class driver {
 		
 		//add two rows and store in a row
 		case("ar"):
-			System.out.println("Enter first row");
-			row1 = s.next();
-			System.out.println("Enter second row");
-			row2 = s.next();
-			System.out.println("Enter target row");
-			desRow = s.next();
-			t = g.addRows(row1, row2, desRow);
+			try{
+				System.out.println("Enter first row");
+				row1 = s.next();
+				System.out.println("Enter second row");
+				row2 = s.next();
+				System.out.println("Enter target row");
+				desRow = s.next();
+				t = g.addRows(row1, row2, desRow);
+			} catch(NumberFormatException e) {
+				System.out.println("Not a valad input please enter integers");
+			}
 			if(t == true){
 				System.out.println("Successfully completed row operation");
 			}else{
@@ -117,13 +133,17 @@ public class driver {
 		
 		//multiple two rows and store in a row
 		case("mr"):
-			System.out.println("Enter first row");
-			row1 = s.next();
-			System.out.println("Enter second row");
-			row2 = s.next();
-			System.out.println("Enter target row");
-			desRow = s.next();
-			t = g.multiplyRows(row1, row2, desRow);
+			try{
+				System.out.println("Enter first row");
+				row1 = s.next();
+				System.out.println("Enter second row");
+				row2 = s.next();
+				System.out.println("Enter target row");
+				desRow = s.next();
+				t = g.multiplyRows(row1, row2, desRow);
+			} catch(NumberFormatException e) {
+				System.out.println("Not a valad input please enter integers");
+			}
 			if(t == true){
 				System.out.println("Successfully completed row operation");
 			}else{
@@ -134,13 +154,17 @@ public class driver {
 		
 		//add columns
 		case("ac"):
-			System.out.println("Enter first column");
-			col1 = s.next();
-			System.out.println("Enter second column");
-			col2 = s.next();
-			System.out.println("Enter target column");
-			desRow = s.next();
-			t = g.addColumns(col1, col2, desRow);
+			try{
+				System.out.println("Enter first column");
+				col1 = s.next();
+				System.out.println("Enter second column");
+				col2 = s.next();
+				System.out.println("Enter target column");
+				desRow = s.next();
+				t = g.addColumns(col1, col2, desRow);
+			} catch(NumberFormatException e) {
+				System.out.println("Not a valad input please enter integers");
+			}
 			if(t == true){
 				System.out.println("Successfully completed column operation");
 			}else{
@@ -151,13 +175,17 @@ public class driver {
 			
 		//multiply columns
 		case("mc"):
-			System.out.println("Enter first column");
-			col1 = s.next();
-			System.out.println("Enter second column");
-			col2 = s.next();
-			System.out.println("Enter target column");
-			desRow = s.next();
-			t = g.multiplyColumns(col1, col2, desRow);
+			try{
+				System.out.println("Enter first column");
+				col1 = s.next();
+				System.out.println("Enter second column");
+				col2 = s.next();
+				System.out.println("Enter target column");
+				desRow = s.next();
+				t = g.multiplyColumns(col1, col2, desRow);
+			} catch(NumberFormatException e) {
+				System.out.println("Not a valad input please enter integers");
+			}
 			if(t == true){
 				System.out.println("Successfully completed column operation");
 			}else{
@@ -168,9 +196,13 @@ public class driver {
 			
 		//insert a row
 		case("ir"):
-			System.out.println("Enter new row number");
-			row1 = s.next();
-			t = g.insertRow(row1);
+			try{
+				System.out.println("Enter new row number");
+				row1 = s.next();
+				t = g.insertRow(row1);
+			} catch(NumberFormatException e) {
+				System.out.println("Not a valad input please enter integers");
+			}
 			if(t == true){
 				System.out.println("Successfully inserted row");
 			}else{
@@ -181,9 +213,13 @@ public class driver {
 			
 		//delete a row
 		case("delr"):
-			System.out.println("Enter row for deletion");
-			row1 = s.next();
-			t = g.deleteRow(row1);
+			try{
+				System.out.println("Enter row for deletion");
+				row1 = s.next();
+				t = g.deleteRow(row1);
+			} catch(NumberFormatException e) {
+				System.out.println("Not a valad input please enter integers");
+			}
 			if(t == false){
 				System.out.println("Can not delete from an empty list");
 			} else {
@@ -200,45 +236,57 @@ public class driver {
 		
 		//assign cells
 		case("as"):
-			System.out.println("Enter first row");
-			row1 = s.next();	
-			System.out.println("Enter first column");
-			col1 = s.next();
-			System.out.println("Enter new value");
-			String val = s.next();
-			g.assignCell(row1, col1, val);
+			try{
+				System.out.println("Enter first row");
+				row1 = s.next();	
+				System.out.println("Enter first column");
+				col1 = s.next();
+				System.out.println("Enter new value");
+				String val = s.next();
+				g.assignCell(row1, col1, val);
+			} catch(NumberFormatException e) {
+				System.out.println("Not a valad input please enter integers");
+			}
 			rVal = false;
 			break;
 		
 		//number all rows
 		case("n"):
-			System.out.println("Enter first row");
-			row1 = s.next();	
-			System.out.println("Enter first column");
-			col1 = s.next();
-			System.out.println("Enter second row");
-			row2 = s.next();
-			System.out.println("Enter second column");
-			col2 = s.next();
-			t = g.number(row1, col1, row2, col2);
+			try{
+				System.out.println("Enter first row");
+				row1 = s.next();	
+				System.out.println("Enter first column");
+				col1 = s.next();
+				System.out.println("Enter second row");
+				row2 = s.next();
+				System.out.println("Enter second column");
+				col2 = s.next();
+				t = g.number(row1, col1, row2, col2);
+			} catch(NumberFormatException e) {
+				System.out.println("Not a valad input please enter integers");
+			}
 			rVal = false;
 			break;
 		
 		//subtract two cells
 		case("s"):
-			System.out.println("Enter first row");
-			row1 = s.next();	
-			System.out.println("Enter first column");
-			col1 = s.next();
-			System.out.println("Enter second row");
-			row2 = s.next();
-			System.out.println("Enter second column");
-			col2 = s.next();
-			System.out.println("Enter destination row");
-			desRow = s.next();
-			System.out.println("Enter destination column");
-			desCol = s.next();
-			t = g.subCells(row1, col1, row2, col2, desRow, desCol);
+			try{
+				System.out.println("Enter first row");
+				row1 = s.next();	
+				System.out.println("Enter first column");
+				col1 = s.next();
+				System.out.println("Enter second row");
+				row2 = s.next();
+				System.out.println("Enter second column");
+				col2 = s.next();
+				System.out.println("Enter destination row");
+				desRow = s.next();
+				System.out.println("Enter destination column");
+				desCol = s.next();
+				t = g.subCells(row1, col1, row2, col2, desRow, desCol);
+			} catch(NumberFormatException e) {
+				System.out.println("Not a valad input please enter integers");
+			}
 			if(t == true){
 				System.out.println("Successfully subtracted cells");
 			} else {
@@ -249,19 +297,23 @@ public class driver {
 		
 		//divide two cells
 		case("d"):
-			System.out.println("Enter first row");
-			row1 = s.next();	
-			System.out.println("Enter first column");
-			col1 = s.next();
-			System.out.println("Enter second row");
-			row2 = s.next();
-			System.out.println("Enter second column");
-			col2 = s.next();
-			System.out.println("Enter destination row");
-			desRow = s.next();
-			System.out.println("Enter destination column");
-			desCol = s.next();
-			t = g.divideCells(row1, col1, row2, col2, desRow, desCol);
+			try{
+				System.out.println("Enter first row");
+				row1 = s.next();	
+				System.out.println("Enter first column");
+				col1 = s.next();
+				System.out.println("Enter second row");
+				row2 = s.next();
+				System.out.println("Enter second column");
+				col2 = s.next();
+				System.out.println("Enter destination row");
+				desRow = s.next();
+				System.out.println("Enter destination column");
+				desCol = s.next();
+				t = g.divideCells(row1, col1, row2, col2, desRow, desCol);
+			} catch(NumberFormatException e) {
+				System.out.println("Not a valad input please enter integers");
+			}
 			if(t == true){
 				System.out.println("Successfully divided cells");
 			} else {
@@ -272,13 +324,17 @@ public class driver {
 			
 		//subtract two rows
 		case("sr"):
-			System.out.println("Enter first row");
-			row1 = s.next();
-			System.out.println("Enter second row");
-			row2 = s.next();
-			System.out.println("Enter target row");
-			desRow = s.next();
-			t = g.subtractRows(row1, row2, desRow);
+			try{
+				System.out.println("Enter first row");
+				row1 = s.next();
+				System.out.println("Enter second row");
+				row2 = s.next();
+				System.out.println("Enter target row");
+				desRow = s.next();
+				t = g.subtractRows(row1, row2, desRow);
+			} catch(NumberFormatException e) {
+				System.out.println("Not a valad input please enter integers");
+			}
 			if(t == true){
 				System.out.println("Successfully completed row operation");
 			}else{
@@ -289,13 +345,17 @@ public class driver {
 			
 		//divide rows
 		case("dr"):
-			System.out.println("Enter first row");
-			row1 = s.next();
-			System.out.println("Enter second row");
-			row2 = s.next();
-			System.out.println("Enter target row");
-			desRow = s.next();
-			t = g.divideRows(row1, row2, desRow);
+			try{
+				System.out.println("Enter first row");
+				row1 = s.next();
+				System.out.println("Enter second row");
+				row2 = s.next();
+				System.out.println("Enter target row");
+				desRow = s.next();
+				t = g.divideRows(row1, row2, desRow);
+			} catch(NumberFormatException e) {
+				System.out.println("Not a valad input please enter integers");
+			}
 			if(t == true){
 				System.out.println("Successfully completed row operation");
 			}else{
@@ -306,13 +366,17 @@ public class driver {
 			
 		//subtract a column
 		case("sc"):
-			System.out.println("Enter first column");
-			col1 = s.next();
-			System.out.println("Enter second column");
-			col2 = s.next();
-			System.out.println("Enter target column");
-			desRow = s.next();
-			t = g.subtractColumns(col1, col2, desRow);
+			try{
+				System.out.println("Enter first column");
+				col1 = s.next();
+				System.out.println("Enter second column");
+				col2 = s.next();
+				System.out.println("Enter target column");
+				desRow = s.next();
+				t = g.subtractColumns(col1, col2, desRow);
+			} catch(NumberFormatException e) {
+				System.out.println("Not a valad input please enter integers");
+			}
 			if(t == true){
 				System.out.println("Successfully completed column operation");
 			}else{
@@ -323,13 +387,17 @@ public class driver {
 			
 		//divide a column
 		case("dc"):
-			System.out.println("Enter first column");
-			col1 = s.next();
-			System.out.println("Enter second column");
-			col2 = s.next();
-			System.out.println("Enter target column");
-			desRow = s.next();
-			t = g.divideColumns(col1, col2, desRow);
+			try{
+				System.out.println("Enter first column");
+				col1 = s.next();
+				System.out.println("Enter second column");
+				col2 = s.next();
+				System.out.println("Enter target column");
+				desRow = s.next();
+				t = g.divideColumns(col1, col2, desRow);
+			} catch(NumberFormatException e) {
+				System.out.println("Not a valad input please enter integers");
+			}
 			if(t == true){
 				System.out.println("Successfully completed column operation");
 			}else{
@@ -340,9 +408,13 @@ public class driver {
 		
 		//insert a column	
 		case("ic"):
-			System.out.println("Enter the column to be inserted");
-			col1 = s.next();
-			t = g.insertColumn(col1);
+			try{
+				System.out.println("Enter the column to be inserted");
+				col1 = s.next();
+				t = g.insertColumn(col1);
+			} catch(NumberFormatException e) {
+				System.out.println("Not a valad input please enter integers");
+			}
 			if(t == true){
 				System.out.println("Successfully inserted a column");
 			} else {
@@ -353,9 +425,13 @@ public class driver {
 			
 		//delete columns
 		case("delc"):
-			System.out.println("Enter the column before the column to delete");
-			col1 = s.next();
-			t = g.deleteColumns(col1);
+			try{
+				System.out.println("Enter the column before the column to delete");
+				col1 = s.next();
+				t = g.deleteColumns(col1);
+			} catch(NumberFormatException e) {
+				System.out.println("Not a valad input please enter integers");
+			}
 			if(t == true){
 				System.out.println("Deleted column " + col1);
 			} else {
@@ -366,7 +442,6 @@ public class driver {
 		}
 		return rVal;
 	}
-	
 	
 	public static void main(String [] args){
 		boolean contin = false;

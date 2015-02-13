@@ -1,5 +1,5 @@
 package com.joshua.lilly.spreadsheet;
-import java.math.*;
+
 public class Grid {
 
 	private int rows = 10, columns = 6; // track number of rows and columns
@@ -26,9 +26,6 @@ public class Grid {
 		Node temp = new Node();// create a temp node init with with new node to
 								// start off
 		head.bottom = temp;// set entrance point
-		//double t_counter = 1;
-		//temp.val.setdVal(t_counter);// test value
-		//temp.val.setTag("dbl");
 		Node top = temp;// set the top value to be the one just created
 		Node prevTop = null;// should init to null since the beginning has no
 							// previous
@@ -47,9 +44,6 @@ public class Grid {
 			}
 			for (int j = 0; j < rows - 1; j++) {
 				Node newNode = new Node();
-				//t_counter += 1;
-				//newNode.val.setdVal(t_counter);
-				//newNode.val.setTag("dbl");
 				temp.bottom = newNode; // link new node to bottom
 				temp = newNode;
 
@@ -175,11 +169,9 @@ public class Grid {
 		
 		//get the first cell reference
 		n1 = getCell(row1, col1);
-		//System.out.println("Value " + n1.val.getdVal());
 		
 		//get second cell reference
 		n2 = getCell(row2, col2);
-		//System.out.println("Value " + n2.val.getdVal());
 		
 		//check both tags
 		dest = getCell(destRow, destCol);
@@ -343,14 +335,15 @@ public class Grid {
 		//get first node in target row
 		tar = getCell(target, 0);
 		
+		//loop over 
 		for(int i = 0; i <= columns; i++){
-			temp = n1.val.multiply(n2.val);
-			if(temp.getTag() == "dbl"){
+			temp = n1.val.multiply(n2.val);//multiply the values
+			if(temp.getTag() == "dbl"){//if the tag is double store it
 				tar.val = temp;
 				tar = tar.right;
 				n1 = n1.right;
 				n2 = n2.right;
-			} else {
+			} else {//else increment pointers
 				n1 = n1.right;
 				n2 = n2.right;
 				tar = tar.right;
@@ -380,12 +373,12 @@ public class Grid {
 		
 		for(int i = 0; i <= columns; i++){
 			temp = n1.val.divide(n2.val);
-			if(temp.getTag() == "dbl"){
+			if(temp.getTag() == "dbl"){//check the tag
 				tar.val = temp;
 				tar = tar.right;
 				n1 = n1.right;
 				n2 = n2.right;
-			} else {
+			} else {//else increment pointers
 				n1 = n1.right;
 				n2 = n2.right;
 				tar = tar.right;
@@ -415,12 +408,12 @@ public class Grid {
 		
 		for(int i = 0; i <= columns; i++){
 			temp = n1.val.subtract(n2.val);
-			if(temp.getTag() == "dbl"){
+			if(temp.getTag() == "dbl"){//check the tag
 				tar.val = temp;
 				tar = tar.right;
 				n1 = n1.right;
 				n2 = n2.right;
-			} else {
+			} else {//if not double just increment pointer
 				n1 = n1.right;
 				n2 = n2.right;
 				tar = tar.right;
@@ -646,73 +639,6 @@ public class Grid {
 			return false;
 		}
 	}//end delete row
-	
-	/*
-	 	public boolean insertColumn(String col){
-		int c = Integer.parseInt(col);
-		Node n = null, previous = null, newNode = null, watcher = null, top = null;
-		
-				//case for an empty list
-				if(this.head.bottom == null){//list empty if head is null
-					this.head.bottom = new Node();//init head
-					n = this.head.bottom;
-					//walk column and assign
-					for(int m = 0; m < rows; m++){
-						newNode = new Node();
-						n.bottom = newNode;
-						n = n.bottom;
-						if(m == (rows - 1)){
-							newNode.bottom = this.head.bottom;
-							return true;
-						}
-					}
-				}
-		//case for non empty list
-		if(c != 0 && c != rows && c < columns){
-			previous = getCell(0, (c-1));//node left of it
-			watcher = previous;//watch the node
-			if(columns == 1){
-				n = previous;//there is only one column need to assign n to previous 
-			}else {
-				n = getCell(0, c);
-			}
-		} else if(c == 0 && c < columns){
-			previous = getCell(0, this.columns - 1); //the last cell in the list
-			watcher = null;//watch the node so head can be reset
-			n = getCell(0, c); 
-		} else if(c >= columns){//we're inserting on the end
-			previous = getCell(0, columns - 1);
-			watcher = null;
-			n = getCell(0, 0);
-		}
-		
-		for(int i = 0; i < rows; i++) {
-			newNode = new Node();
-			newNode.right = n;
-			previous.right = newNode;
-			if(i == 0){
-				top = newNode;
-			}
-			if(i != 0){
-				top.bottom = newNode;
-				top = newNode;
-			}
-			if(i == (rows - 1)){
-				newNode.bottom = watcher;
-				columns++;
-			}
-			if(c == 0 && i == 0){
-				this.head.bottom = newNode;
-				watcher = newNode;
-			}
-			previous = previous.bottom;//move the previous column over
-			n = n.bottom;//move node column over
-		}
-		
-		return true;
-	}//end insert column
-		
-	 */
 	
 	//insert a row
 	public boolean insertRow(String row){

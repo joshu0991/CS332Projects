@@ -16,30 +16,38 @@ public class Value {
 		dVal = d;
 		tag = "dbl";
 	}
+	
+	//default constructor do nothing
 	public Value(){
 		
 	}
 	
+	//get sVal
 	public String getsVal() {
 		return sVal;
 	}
 
+	//setVal
 	public void setsVal(String sVal) {
 		this.sVal = sVal;
 	}
 
+	//get double
 	public double getdVal() {
 		return dVal;
 	}
 
+	//set double
 	public void setdVal(double dVal) {
 		this.dVal = dVal;
 	}
 
+	//get the tag
 	public String getTag() {
 		return tag;
 	}
 
+	//set the tag
 	public void setTag(String tag) {
 		this.tag = tag;
 	}
