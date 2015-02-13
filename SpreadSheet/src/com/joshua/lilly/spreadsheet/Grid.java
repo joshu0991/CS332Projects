@@ -648,7 +648,12 @@ public class Grid {
 	}//end delete row
 	
 	/*
-	 * if(this.head.bottom == null){//list empty if head is null
+	 	public boolean insertColumn(String col){
+		int c = Integer.parseInt(col);
+		Node n = null, previous = null, newNode = null, watcher = null, top = null;
+		
+				//case for an empty list
+				if(this.head.bottom == null){//list empty if head is null
 					this.head.bottom = new Node();//init head
 					n = this.head.bottom;
 					//walk column and assign
@@ -662,12 +667,57 @@ public class Grid {
 						}
 					}
 				}
+		//case for non empty list
+		if(c != 0 && c != rows && c < columns){
+			previous = getCell(0, (c-1));//node left of it
+			watcher = previous;//watch the node
+			if(columns == 1){
+				n = previous;//there is only one column need to assign n to previous 
+			}else {
+				n = getCell(0, c);
+			}
+		} else if(c == 0 && c < columns){
+			previous = getCell(0, this.columns - 1); //the last cell in the list
+			watcher = null;//watch the node so head can be reset
+			n = getCell(0, c); 
+		} else if(c >= columns){//we're inserting on the end
+			previous = getCell(0, columns - 1);
+			watcher = null;
+			n = getCell(0, 0);
+		}
+		
+		for(int i = 0; i < rows; i++) {
+			newNode = new Node();
+			newNode.right = n;
+			previous.right = newNode;
+			if(i == 0){
+				top = newNode;
+			}
+			if(i != 0){
+				top.bottom = newNode;
+				top = newNode;
+			}
+			if(i == (rows - 1)){
+				newNode.bottom = watcher;
+				columns++;
+			}
+			if(c == 0 && i == 0){
+				this.head.bottom = newNode;
+				watcher = newNode;
+			}
+			previous = previous.bottom;//move the previous column over
+			n = n.bottom;//move node column over
+		}
+		
+		return true;
+	}//end insert column
+		
 	 */
 	
 	//insert a row
 	public boolean insertRow(String row){
 		int r = Integer.parseInt(row);
-		Node n, previous, newNode, watcher, left = null;
+		Node n = null, previous = null, newNode = null, watcher = null, left = null;
 		
 		//case for an empty list
 		if(head.bottom == null){
@@ -688,14 +738,18 @@ public class Grid {
 			}
 		}
 		
-		if(r != 0 && r != rows){
+		if(r != 0 && r != rows && r < rows){
 			previous = getCell((r-1), 0);//node above it
 			watcher = previous;
 			n = getCell(r, 0);
-		} else {
+		} else if(r == 0 && r < rows){
 			previous = getCell(this.rows - 1, 0); //the last cell in the list
 			watcher = this.head.bottom;//watch the node so head can be reset
 			n = getCell(r, 0); 
+		} else if(r >= rows){
+			previous = getCell(rows - 1, 0);
+			watcher = null;
+			n = getCell(0, 0);
 		}
 		
 		for(int i = 0; i < columns; i++) {
@@ -762,6 +816,10 @@ public class Grid {
 		
 				//case for an empty list
 				if(this.head.bottom == null){//list empty if head is null
+					if(rows == 1){//there are no rows to make so a new column, count just has to be incremendted
+						columns++;
+						return true;
+					}
 					this.head.bottom = new Node();//init head
 					n = this.head.bottom;
 					//walk column and assign
