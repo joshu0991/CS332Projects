@@ -1,5 +1,16 @@
+/**
+ * @author Joshua Lilly
+ */
 package com.joshua.lilly.spreadsheet;
 
+/**
+ * Grid class for controlling all things spreadsheet related
+ * @see #head
+ * @see #rows
+ * @see #rows
+ * @see #Grid
+ * 
+ */
 public class Grid {
 
 	private int rows = 10, columns = 6; // track number of rows and columns
@@ -20,8 +31,12 @@ public class Grid {
 		head = new Node();
 		setUpEmptyGrid();
 	}
-
-	// set up an empty 9x5 grid
+	
+	/**
+	 * sets up an empty list without using an array.
+	 * grid size is 9x5
+	 * @return void
+	 */
 	private void setUpEmptyGrid() {
 		Node temp = new Node();// create a temp node init with with new node to
 								// start off
@@ -36,9 +51,6 @@ public class Grid {
 				prevTop = top; // no longer the first column track previous
 								// column
 				temp = new Node();
-				//t_counter += 1;// test value
-				//temp.val.setdVal(t_counter);
-				//temp.val.setTag("dbl");
 				top = temp;
 				prevTop.right = temp; // link to the right
 			}
@@ -71,7 +83,11 @@ public class Grid {
 
 	}//end setup function
 
-	//traverse the grid and display the values in a grid format
+	/**
+	 * Displays a list and the headers for columns and rows.
+	 * Traverses list and prints it in the grid format.
+	 * @return void
+	 */
 	public void display(){
 	if(head.bottom == null){ //means the list is empty
 		System.out.println("Nothing to display");
@@ -111,7 +127,12 @@ public class Grid {
 	
 	}//end display
 	
-	//get a cell reference given a column and row
+	/**
+	 * Gets a cell and returns it's pointer.
+	 * @param row target row
+	 * @param col target column
+	 * @return Node
+	 */
 	private Node getCell(int row, int col){
 		Node n1 = head.bottom;
 		for(int k = 0; k < row + 1; k++){//get firsts row
@@ -127,7 +148,16 @@ public class Grid {
 		return  n1;
 	} //end get cell
 	
-	//add two cells
+	/**
+	 * Uses the value classes add function to add two cells.
+	 * @param r1 first nodes row
+	 * @param c1 first nodes column
+	 * @param r2 second nodes row
+	 * @param c2 second nodes column
+	 * @param dRow destination row
+	 * @param dCol destination column
+	 * @return true on success false on failure.
+	 */
 	public boolean addCells(String r1, String c1, String r2, String c2, String dRow, String dCol){
 		int row1, row2, col1, col2, destRow, destCol;
 		Node dest, n1, n2;
@@ -155,7 +185,16 @@ public class Grid {
 		}
 	}//end add cells
 	
-	//sub two cells
+	/**
+	 * Uses value classes subtract function to subtract two cells.
+	 * @param r1 first nodes row
+	 * @param c1 first nodes column
+	 * @param r2 second nodes row
+	 * @param c2 second nodes column
+	 * @param dRow destination row
+	 * @param dCol destination column
+	 * @return True on success false on failure.
+	 */
 	public boolean subCells(String r1, String c1, String r2, String c2, String dRow, String dCol){
 		int row1, row2, col1, col2, destRow, destCol;
 		Node dest, n1, n2;
@@ -186,7 +225,16 @@ public class Grid {
 		
 	}//end subtract cells
 	
-	//multiply two cells
+	/**
+	 * Multiplies two cells using the value classes multiply function.
+	 * @param r1 first nodes row
+	 * @param c1 first nodes column
+	 * @param r2 second nodes row
+	 * @param c2 second nodes column
+	 * @param dRow destination row
+	 * @param dCol destination column
+	 * @return true on success false on failure.
+	 */
 	public boolean multiplyCells(String r1, String c1, String r2, String c2, String dRow, String dCol){
 		int row1, row2, col1, col2, destRow, destCol;
 		Node dest, n1, n2;
@@ -217,7 +265,16 @@ public class Grid {
 		}
 	}//end multiply cells
 	
-	//divide two cells
+	/**
+	 * Divide two cells using the value classes divide function.
+	 * @param r1 first nodes row
+	 * @param c1 first nodes column
+	 * @param r2 second nodes row
+	 * @param c2 second nodes column
+	 * @param dRow destination nodes row
+	 * @param dCol destination nodes column
+	 * @return True on success false on failure.
+	 */
 	public boolean divideCells(String r1, String c1, String r2, String c2, String dRow, String dCol){
 		int row1, row2, col1, col2, destRow, destCol;
 		Node dest, n1, n2;
@@ -248,7 +305,15 @@ public class Grid {
 		}
 	}//end divide cells
 	
-	//fill a grid with increminting numbers
+	/**
+	 * Function to populate a sub grid with an input value. Can be a String if prefixed
+	 * with " or is assumed double if no prefix.
+	 * @param r1 first nodes row
+	 * @param c1 first nodes column
+	 * @param r2 second nodes row
+	 * @param c2 second nodes column
+	 * @return True on success and false on failure.
+	 */
 	public boolean number(String r1, String c1, String r2, String c2){
 		int row1, row2, col1, col2;
 		Node n1;
@@ -275,7 +340,15 @@ public class Grid {
 		
 	}//end number
 	
-	//calculate the distance between two cells
+	/**
+	 * Takes in the rows and columns of two cells and returns the distance
+	 * one cell is from another.
+	 * @param row1 first nodes row
+	 * @param col1 first nodes column
+	 * @param row2 second nodes row
+	 * @param col2 second nodes column
+	 * @return Integer array consisting of row and column distance.
+	 */
 	int [] calculateDistance(int row1, int col1, int row2, int col2){
 		int[] rVal = new int[2];
 		rVal[0] = Math.abs(row2 - row1);//return absolute value since row2 or col2 can be < row 1 or col2
@@ -283,7 +356,14 @@ public class Grid {
 		return rVal;
 	}//end calculateDistance
 	
- 	//add two rows
+ 	/**
+ 	 * Takes in two rows and multiplies them using the value classes multiply function stores 
+ 	 * result in a target row.
+ 	 * @param r1 first row
+ 	 * @param r2 second row
+ 	 * @param t target row
+ 	 * @return True on success and false on failure.
+ 	 */
 	boolean addRows(String r1, String r2, String t){
 		Node n1, n2, tar;
 		int row1 = Integer.parseInt(r1);
@@ -302,12 +382,12 @@ public class Grid {
 		
 		for(int i = 0; i < columns; i++){
 			temp = n1.val.add(n2.val);
-			if(temp.getTag() == "dbl"){
-				tar.val = temp;
+			if(temp.getTag() == "dbl"){//check the tag 
+				tar.val = temp;//if it's double store it
 				tar = tar.right;
 				n1 = n1.right;
 				n2 = n2.right;
-			} else {
+			} else {//else continue
 				n1 = n1.right;
 				n2 = n2.right;
 				tar = tar.right;
@@ -318,7 +398,13 @@ public class Grid {
 		return rVal;
 	}//end add rows
 	
-	//multiply two rows
+	/**
+	 * Multiply two rows using the value classes multiply function. Store result in a target.
+	 * @param r1 first row
+	 * @param r2 second row
+	 * @param t target row
+	 * @return True on success false on failure.
+	 */
 	boolean multiplyRows(String r1, String r2, String t){
 		Node n1, n2, tar;
 		int row1 = Integer.parseInt(r1);
@@ -354,7 +440,15 @@ public class Grid {
 		return rVal;
 	}//end multiply rows
 	
-	//divide two rows
+	/**
+	 * Divides two rows using the value classes divide function.
+	 * If denominator is zero does not do operation and creates a value
+	 * object with an invalid tag.
+	 * @param r1 first row
+	 * @param r2 second row
+	 * @param t target row
+	 * @return True on success false on failure.
+	 */
 	boolean divideRows(String r1, String r2, String t){
 		Node n1, n2, tar;
 		int row1 = Integer.parseInt(r1);
@@ -389,7 +483,14 @@ public class Grid {
 		return rVal;
 	}//end divide rows
 	
-	//subtract two rows
+	/**
+	 * Subtract two rows using the value classes subtract function store the result in
+	 * a target row.
+	 * @param r1 first row
+	 * @param r2 second row
+	 * @param t target row
+	 * @return True on success false on failure.
+	 */
 	boolean subtractRows(String r1, String r2, String t){
 		Node n1, n2, tar;
 		int row1 = Integer.parseInt(r1);
@@ -424,7 +525,13 @@ public class Grid {
 		return rVal;
 	}//end subtract columns
 	
-	//add columns
+	/**
+	 * Add two columns using the value classes add function and store in a target column.
+	 * @param c1 first column
+	 * @param c2 second column
+	 * @param t target column
+	 * @return True on success false on failure.
+	 */
 	boolean addColumns(String c1, String c2, String t){
 		Node n1, n2, tar;
 		int col1 = Integer.parseInt(c1);
@@ -443,12 +550,12 @@ public class Grid {
 		
 		for(int i = 0; i < rows; i++){
 			temp = n1.val.add(n2.val);
-			if(temp.getTag() == "dbl"){
-				tar.val = temp;
+			if(temp.getTag() == "dbl"){//check the tag 
+				tar.val = temp;//if double store
 				tar = tar.bottom;
 				n1 = n1.bottom;
 				n2 = n2.bottom;
-			} else {
+			} else {//else increase pointer
 				n1 = n1.bottom;
 				n2 = n2.bottom;
 				tar = tar.bottom;
@@ -513,12 +620,12 @@ public class Grid {
 		
 		for(int i = 0; i < rows; i++){
 			temp = n1.val.multiply(n2.val);
-			if(temp.getTag() == "dbl"){
+			if(temp.getTag() == "dbl"){//check the tag
 				tar.val = temp;
 				tar = tar.bottom;
 				n1 = n1.bottom;
 				n2 = n2.bottom;
-			} else {
+			} else {//else advance pointer
 				n1 = n1.bottom;
 				n2 = n2.bottom;
 				tar = tar.bottom;
