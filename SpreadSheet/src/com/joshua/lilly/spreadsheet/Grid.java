@@ -695,10 +695,11 @@ public class Grid {
 		int c2 = Integer.parseInt(col2);
 		Value newV;
 		Node n1, marker;
+		boolean character = false, dbl = false;
 		if(val.charAt(0) == '\"'){
-			newV = new Value(val);
+			character = true;
 		}else{
-			newV = new Value(Integer.parseInt(val));
+			dbl = true;
 		}
 		marker = getCell(r1, c1);
 		int[] dis =  calculateDistance(r1, c1, r2, c2);
@@ -706,6 +707,11 @@ public class Grid {
 		for(int i = 0; i < dis[0] + 1; i++){//for columns
 			n1 = marker;
 			for(int j = 0; j < dis[1] + 1; j++){//for rows
+				if(character == true){
+					newV = new Value(val);
+				}else{
+					newV = new Value(Double.parseDouble(val));
+				}
 				n1.val = newV;
 				n1 = n1.right;
 			}

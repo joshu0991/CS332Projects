@@ -19,7 +19,9 @@ public class Value {
 	
 	//default constructor do nothing
 	public Value(){
-		
+		dVal = 0;
+		sVal = null;
+		tag = "inv";
 	}
 	
 	//get sVal
