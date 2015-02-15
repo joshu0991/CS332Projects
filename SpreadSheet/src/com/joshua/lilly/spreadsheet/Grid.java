@@ -168,7 +168,8 @@ public class Grid {
 		destRow = Integer.parseInt(dRow);
 		destCol = Integer.parseInt(dCol);
 		Value t = new Value();
-		
+		//check to make sure the requested values are on the board
+		if(row1 < rows && col1 < columns && row2 < rows && col2 < columns){
 		//get the first cell reference
 		n1 = getCell(row1, col1);
 		
@@ -183,6 +184,10 @@ public class Grid {
 		}else{
 			return false;
 		}
+		}else{
+			return false;
+		}
+			
 	}//end add cells
 	
 	/**
@@ -205,7 +210,8 @@ public class Grid {
 		destRow = Integer.parseInt(dRow);
 		destCol = Integer.parseInt(dCol);
 		Value t = new Value();
-		
+		//check to make sure the requested values are on the board
+		if(row1 < rows && col1 < columns && row2 < rows && col2 < columns){
 		//get the first cell reference
 		n1 = getCell(row1, col1);
 		
@@ -222,7 +228,9 @@ public class Grid {
 		}else{
 			return false;
 		}
-		
+		}else{
+			return false;
+		}
 	}//end subtract cells
 	
 	/**
@@ -245,7 +253,8 @@ public class Grid {
 		destRow = Integer.parseInt(dRow);
 		destCol = Integer.parseInt(dCol);
 		Value t = new Value();
-		
+		//check to make sure the requested values are on the board
+		if(row1 < rows && col1 < columns && row2 < rows && col2 < columns){
 		//get the first cell reference
 		n1 = getCell(row1, col1);
 		//System.out.println("Value " + n1.val.getdVal());
@@ -260,6 +269,9 @@ public class Grid {
 		if(!t.getTag().equals("inv")){
 			dest.val = t;
 			return true;
+		}else{
+			return false;
+		}
 		}else{
 			return false;
 		}
@@ -285,7 +297,8 @@ public class Grid {
 		destRow = Integer.parseInt(dRow);
 		destCol = Integer.parseInt(dCol);
 		Value t = new Value();
-		
+		//check to make sure the requested values are on the board
+		if(row1 < rows && col1 < columns && row2 < rows && col2 < columns){
 		//get the first cell reference
 		n1 = getCell(row1, col1);
 		//System.out.println("Value " + n1.val.getdVal());
@@ -300,6 +313,9 @@ public class Grid {
 		if(!t.getTag().equals("inv")){
 			dest.val = t;
 			return true;
+		}else{
+			return false;
+		}
 		}else{
 			return false;
 		}
@@ -323,6 +339,8 @@ public class Grid {
 		col2 = Integer.parseInt(c2);
 		double counter = 0;
 		//get the first cell reference
+		if(row1 < rows && col1 < columns && row2 < rows && col2 < columns && 
+				row1 <= row2 && col1 <= col2){
 		Node marker = getCell(row1, col1);		
 
 		int[] distance = calculateDistance(row1, col1, row2, col2); 
@@ -337,7 +355,9 @@ public class Grid {
 			marker = marker.bottom;
 		}
 		return true;
-		
+		}else{
+			return false;
+		}
 	}//end number
 	
 	/**
@@ -372,6 +392,8 @@ public class Grid {
 		boolean rVal = true;
 		Value temp = new Value();
 		//get first node in first row
+		//check to make sure the requested values are on the board
+		if(row1 < rows && row2 < rows && target < rows){
 		n1 = getCell(row1, 0);
 		
 		//get first node in second row
@@ -393,7 +415,9 @@ public class Grid {
 				tar = tar.right;
 				rVal = false;
 			}
-			
+		}
+		}else{
+			rVal = false;
 		}
 		return rVal;
 	}//end add rows
@@ -412,6 +436,8 @@ public class Grid {
 		int target = Integer.parseInt(t);
 		boolean rVal = true;
 		Value temp = new Value();
+		//check to make sure the requested values are on the board
+		if(row1 < rows && row2 < rows && target < rows){
 		//get first node in first row
 		n1 = getCell(row1, 0);
 		
@@ -437,6 +463,9 @@ public class Grid {
 			}
 			
 		}
+		}else{
+			rVal = false;
+		}
 		return rVal;
 	}//end multiply rows
 	
@@ -456,6 +485,8 @@ public class Grid {
 		int target = Integer.parseInt(t);
 		boolean rVal = true;
 		Value temp = new Value();
+		//check to make sure the requested values are on the board
+		if(row1 < rows && row2 < rows && target < rows){
 		//get first node in first row
 		n1 = getCell(row1, 0);
 		
@@ -480,6 +511,9 @@ public class Grid {
 			}
 			
 		}
+		}else{
+			rVal = false;
+		}
 		return rVal;
 	}//end divide rows
 	
@@ -498,6 +532,8 @@ public class Grid {
 		int target = Integer.parseInt(t);
 		boolean rVal = true;
 		Value temp = new Value();
+		//check to make sure the requested values are on the board
+		if(row1 < rows && row2 < rows && target < rows){
 		//get first node in first row
 		n1 = getCell(row1, 0);
 		
@@ -522,6 +558,9 @@ public class Grid {
 			}
 			
 		}
+		}else{
+			rVal = false;
+		}
 		return rVal;
 	}//end subtract columns
 	
@@ -539,6 +578,8 @@ public class Grid {
 		int target = Integer.parseInt(t);
 		boolean rVal = true;
 		Value temp = new Value();
+		//check to make sure the requested values are on the board
+		if(col1 < columns && col2 < columns && target < columns){
 		//get first node in first row
 		n1 = getCell(0, col1);
 		
@@ -563,6 +604,9 @@ public class Grid {
 			}
 			
 		}
+		}else{
+			rVal = false;
+		}
 		return rVal;
 	}//end add columns
 	
@@ -574,6 +618,8 @@ public class Grid {
 		int target = Integer.parseInt(t);
 		boolean rVal = true;
 		Value temp = new Value();
+		//check to make sure the requested values are on the board
+		if(col1 < columns && col2 < columns && target < columns){
 		//get first node in first row
 		n1 = getCell(0, col1);
 		
@@ -598,6 +644,9 @@ public class Grid {
 			}
 			
 		}
+		}else{
+			rVal = false;
+		}
 		return rVal;
 	}//end subtract columns
 	
@@ -609,6 +658,8 @@ public class Grid {
 		int target = Integer.parseInt(t);
 		boolean rVal = true;
 		Value temp = new Value();
+		//check to make sure the requested values are on the board
+		if(col1 < columns && col2 < columns && target < columns){
 		//get first node in first row
 		n1 = getCell(0, col1);
 		
@@ -633,6 +684,9 @@ public class Grid {
 			}
 			
 		}
+		}else{
+			rVal = false;
+		}
 		return rVal;
 	}//end multiply columns
 	
@@ -644,6 +698,8 @@ public class Grid {
 		int target = Integer.parseInt(t);
 		boolean rVal = true;
 		Value temp = new Value();
+		//check to make sure the requested values are on the board
+		if(col1 < columns && col2 < columns && target < columns){
 		//get first node in first row
 		n1 = getCell(0, col1);
 		
@@ -667,6 +723,9 @@ public class Grid {
 				rVal = false;
 			}
 			
+		}
+		}else{
+			rVal = false;
 		}
 		return rVal;
 	}//end divide columns
@@ -695,11 +754,12 @@ public class Grid {
 		int c2 = Integer.parseInt(col2);
 		Value newV;
 		Node n1, marker;
-		boolean character = false, dbl = false;
+		boolean character = false;
+		if(r1 < rows && r2 < rows && c1 < columns && c2 < columns &&
+				r1 <= r2 && c1 <= c2 ){
+		//check if 1st is a character
 		if(val.charAt(0) == '\"'){
 			character = true;
-		}else{
-			dbl = true;
 		}
 		marker = getCell(r1, c1);
 		int[] dis =  calculateDistance(r1, c1, r2, c2);
@@ -717,7 +777,10 @@ public class Grid {
 			}
 			marker = marker.bottom;
 		}
-		return true;
+			return true;
+		}else{
+			return false;
+		}
 	}//end fill
 	
 	//delete row
@@ -748,7 +811,8 @@ public class Grid {
 		rows--;
 		return true;
 		}else{
-			head.bottom = null;
+			//head.bottom = null;//this line of code is the difference between being able
+			//to completely empty the sheet and always keeping a row.
 			return false;
 		}
 	}//end delete row
@@ -843,7 +907,8 @@ public class Grid {
 			columns--;//now one less column
 			return true;
 			}else{//this will happen if this is the last column in the sheet
-				head.bottom = null;
+				//head.bottom = null; this line of code is the difference
+				//between making the list able to have zero columns or keeping one.
 				return false;
 		}
 	}//end delete columns

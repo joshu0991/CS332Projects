@@ -221,7 +221,7 @@ public class driver {
 				System.out.println("Not a valad input please enter integers");
 			}
 			if(t == false){
-				System.out.println("Can not delete from an empty list");
+				System.out.println("Can not delete last row. The sheet must have one row");
 			} else {
 				System.out.println("Successfully deleted row");
 			}
@@ -265,6 +265,11 @@ public class driver {
 			} catch(NumberFormatException e) {
 				System.out.println("Not a valad input please enter integers");
 			}
+		if(t == true){
+			System.out.println("Successfully populated sub grid");
+		}else{
+			System.out.println("Failed to populate sub grid");
+		}
 			rVal = false;
 			break;
 		
