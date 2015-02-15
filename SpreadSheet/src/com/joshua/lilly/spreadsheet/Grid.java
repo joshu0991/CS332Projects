@@ -179,7 +179,7 @@ public class Grid {
 		dest = getCell(destRow, destCol);
 		t = n1.val.add(n2.val);
 		if(!t.getTag().equals("inv")){
-			dest.val = t;
+			dest.val = new Value(t.getdVal());
 			return true;
 		}else{
 			return false;
@@ -223,7 +223,7 @@ public class Grid {
 		t = n1.val.add(n2.val);
 		t = n1.val.subtract(n2.val);
 		if(!t.getTag().equals("inv")){
-			dest.val = t;
+			dest.val = new Value(t.getdVal());
 			return true;
 		}else{
 			return false;
@@ -267,7 +267,7 @@ public class Grid {
 		dest = getCell(destRow, destCol);
 		t = n1.val.multiply(n2.val);
 		if(!t.getTag().equals("inv")){
-			dest.val = t;
+			dest.val = new Value(t.getdVal());
 			return true;
 		}else{
 			return false;
@@ -311,7 +311,7 @@ public class Grid {
 		dest = getCell(destRow, destCol);
 		t = n1.val.divide(n2.val);
 		if(!t.getTag().equals("inv")){
-			dest.val = t;
+			dest.val = new Value(t.getdVal());
 			return true;
 		}else{
 			return false;
@@ -371,9 +371,9 @@ public class Grid {
 	 */
 	int [] calculateDistance(int row1, int col1, int row2, int col2){
 		int[] rVal = new int[2];
-		rVal[0] = Math.abs(row2 - row1);//return absolute value since row2 or col2 can be < row 1 or col2
+		rVal[0] = Math.abs(row2 - row1);//return absolute value. Defensive programming...
 		rVal[1] = Math.abs(col2 - col1);
-		return rVal;
+		return rVal;//an arrary of rows and columns
 	}//end calculateDistance
 	
  	/**
@@ -405,7 +405,7 @@ public class Grid {
 		for(int i = 0; i < columns; i++){
 			temp = n1.val.add(n2.val);
 			if(temp.getTag() == "dbl"){//check the tag 
-				tar.val = temp;//if it's double store it
+				tar.val = new Value(temp.getdVal());//if it's double store it
 				tar = tar.right;
 				n1 = n1.right;
 				n2 = n2.right;
@@ -417,7 +417,7 @@ public class Grid {
 			}
 		}
 		}else{
-			rVal = false;
+			rVal = false;//some values were strings
 		}
 		return rVal;
 	}//end add rows
@@ -451,8 +451,8 @@ public class Grid {
 		for(int i = 0; i <= columns; i++){
 			temp = n1.val.multiply(n2.val);//multiply the values
 			if(temp.getTag() == "dbl"){//if the tag is double store it
-				tar.val = temp;
-				tar = tar.right;
+				tar.val = new Value(temp.getdVal());//make a brand new value object with the value
+				tar = tar.right;//increment across row
 				n1 = n1.right;
 				n2 = n2.right;
 			} else {//else increment pointers
@@ -464,7 +464,7 @@ public class Grid {
 			
 		}
 		}else{
-			rVal = false;
+			rVal = false;//failed due to some values being incorrect
 		}
 		return rVal;
 	}//end multiply rows
@@ -499,8 +499,8 @@ public class Grid {
 		for(int i = 0; i <= columns; i++){
 			temp = n1.val.divide(n2.val);
 			if(temp.getTag() == "dbl"){//check the tag
-				tar.val = temp;
-				tar = tar.right;
+				tar.val = new Value(temp.getdVal());//a brand new value object
+				tar = tar.right;//increment across row
 				n1 = n1.right;
 				n2 = n2.right;
 			} else {//else increment pointers
@@ -512,7 +512,7 @@ public class Grid {
 			
 		}
 		}else{
-			rVal = false;
+			rVal = false;//some values were incorrect
 		}
 		return rVal;
 	}//end divide rows
@@ -546,8 +546,8 @@ public class Grid {
 		for(int i = 0; i <= columns; i++){
 			temp = n1.val.subtract(n2.val);
 			if(temp.getTag() == "dbl"){//check the tag
-				tar.val = temp;
-				tar = tar.right;
+				tar.val = new Value(temp.getdVal());//brand new value
+				tar = tar.right;//increment the pointers
 				n1 = n1.right;
 				n2 = n2.right;
 			} else {//if not double just increment pointer
@@ -559,7 +559,7 @@ public class Grid {
 			
 		}
 		}else{
-			rVal = false;
+			rVal = false;//some values were incorrect
 		}
 		return rVal;
 	}//end subtract columns
@@ -592,8 +592,8 @@ public class Grid {
 		for(int i = 0; i < rows; i++){
 			temp = n1.val.add(n2.val);
 			if(temp.getTag() == "dbl"){//check the tag 
-				tar.val = temp;//if double store
-				tar = tar.bottom;
+				tar.val = new Value(temp.getdVal());//if double store brand new value
+				tar = tar.bottom;//increment downward
 				n1 = n1.bottom;
 				n2 = n2.bottom;
 			} else {//else increase pointer
@@ -605,12 +605,18 @@ public class Grid {
 			
 		}
 		}else{
-			rVal = false;
+			rVal = false;//some values were incorrect
 		}
 		return rVal;
 	}//end add columns
 	
-	//subtract columns
+	/**
+	 * Subtracts two input columns and stores the results in a target column.
+	 * @param c1 The first column
+	 * @param c2 The second column
+	 * @param t The target column
+	 * @return return true on success and false on failure.
+	 */
 	boolean subtractColumns(String c1, String c2, String t){
 		Node n1, n2, tar;
 		int col1 = Integer.parseInt(c1);
@@ -631,9 +637,9 @@ public class Grid {
 		
 		for(int i = 0; i < rows; i++){
 			temp = n1.val.subtract(n2.val);
-			if(temp.getTag() == "dbl"){
-				tar.val = temp;
-				tar = tar.bottom;
+			if(temp.getTag() == "dbl"){//this is a number not a string
+				tar.val = new Value(temp.getdVal());//store the brand new value
+				tar = tar.bottom;//increment pointers downward
 				n1 = n1.bottom;
 				n2 = n2.bottom;
 			} else {
@@ -645,12 +651,18 @@ public class Grid {
 			
 		}
 		}else{
-			rVal = false;
+			rVal = false;//some values were wrong
 		}
 		return rVal;
 	}//end subtract columns
 	
-	//multiply columns
+	/**
+	 * Take two input columns and multiply them using value's multiply function
+	 * @param c1 First column
+	 * @param c2 Second column
+	 * @param t target column
+	 * @return True on success false on failure.
+	 */
 	boolean multiplyColumns(String c1, String c2, String t){
 		Node n1, n2, tar;
 		int col1 = Integer.parseInt(c1);
@@ -672,8 +684,8 @@ public class Grid {
 		for(int i = 0; i < rows; i++){
 			temp = n1.val.multiply(n2.val);
 			if(temp.getTag() == "dbl"){//check the tag
-				tar.val = temp;
-				tar = tar.bottom;
+				tar.val = new Value(temp.getdVal());//store a brand new value
+				tar = tar.bottom;//increment the pointers downward
 				n1 = n1.bottom;
 				n2 = n2.bottom;
 			} else {//else advance pointer
@@ -685,12 +697,21 @@ public class Grid {
 			
 		}
 		}else{
-			rVal = false;
+			rVal = false;//some values were bad
 		}
 		return rVal;
 	}//end multiply columns
 	
-	//divide columns
+	/**
+	 * Take two input columns and divide them using value's multiply function.
+	 * Does not divide by zero if zero is the denominator it will create a value object
+	 * with an invalid tag and not store the value in the grid. Instead the value will 
+	 * be unchanged and the user will get a message saying some values weren't changed.
+	 * @param c1 First column
+	 * @param c2 Second column
+	 * @param t target column
+	 * @return True on success false on failure.
+	 */
 	boolean divideColumns(String c1, String c2, String t){
 		Node n1, n2, tar;
 		int col1 = Integer.parseInt(c1);
@@ -711,9 +732,9 @@ public class Grid {
 		
 		for(int i = 0; i < rows; i++){
 			temp = n1.val.divide(n2.val);
-			if(temp.getTag() == "dbl"){
-				tar.val = temp;
-				tar = tar.bottom;
+			if(temp.getTag() == "dbl"){//the value is a double
+				tar.val = new Value(temp.getdVal());//store a brand new value object
+				tar = tar.bottom;//increment the pointers
 				n1 = n1.bottom;
 				n2 = n2.bottom;
 			} else {
@@ -725,28 +746,42 @@ public class Grid {
 			
 		}
 		}else{
-			rVal = false;
+			rVal = false;//some values were bad
 		}
 		return rVal;
 	}//end divide columns
 	
-	//assign a cell another cells value
+	/**
+	 * Given x y coordinates of a cell will populate that cell with the given value.
+	 * Can be a string, if prefixed with " or a number.
+	 * @param r1 New values row 
+	 * @param c1 New values column
+	 * @param val The value to populate
+	 * @return void
+	 */
 	public void assignCell(String r1, String c1, String val){
 		Node n1;
 		Value newV;
-		if(val.charAt(0) == '\"'){
-			newV = new Value(val);
+		if(val.charAt(0) == '\"'){//check if the value is a string
+			newV = new Value(val);//make a new string value
 		}else{
-			//int num = Integer.parseInt(val);
-			newV = new Value(Integer.parseInt(val));
+			newV = new Value(Integer.parseInt(val));//make a new double value
 		}
 		int row1 = Integer.parseInt(r1);
 		int col1 = Integer.parseInt(c1);
-		n1 = getCell(row1, col1);
-		n1.val = newV;
+		n1 = getCell(row1, col1);//get the target
+		n1.val = newV;//store the value 
 	}//end assign cell
 	
-	//fill a sub grid with a value
+	/**
+	 * Fill a sub grid with a given value.
+	 * @param row1 First row in sub grid
+	 * @param col1 First column in sub grid
+	 * @param row2 Second row in sub grid
+	 * @param col2 Second column in sub grid
+	 * @param val The value to populate with
+	 * @return True on success false on failure.
+	 */
 	public boolean fill(String row1, String col1, String row2, String col2, String val){
 		int r1 = Integer.parseInt(row1);
 		int r2 = Integer.parseInt(row2);
@@ -755,27 +790,29 @@ public class Grid {
 		Value newV;
 		Node n1, marker;
 		boolean character = false;
+		//validate the input input is on the grid and the first cell is to the left of the
+		//second cell
 		if(r1 < rows && r2 < rows && c1 < columns && c2 < columns &&
 				r1 <= r2 && c1 <= c2 ){
 		//check if 1st is a character
 		if(val.charAt(0) == '\"'){
 			character = true;
 		}
-		marker = getCell(r1, c1);
-		int[] dis =  calculateDistance(r1, c1, r2, c2);
+		marker = getCell(r1, c1);//mark the location
+		int[] dis =  calculateDistance(r1, c1, r2, c2);//calculate the distance between
 		
 		for(int i = 0; i < dis[0] + 1; i++){//for columns
 			n1 = marker;
 			for(int j = 0; j < dis[1] + 1; j++){//for rows
-				if(character == true){
-					newV = new Value(val);
+				if(character == true){//if it's a string
+					newV = new Value(val);//make a brand new string value
 				}else{
-					newV = new Value(Double.parseDouble(val));
+					newV = new Value(Double.parseDouble(val));//else make a brand new double
 				}
-				n1.val = newV;
+				n1.val = newV;//increment pointers
 				n1 = n1.right;
 			}
-			marker = marker.bottom;
+			marker = marker.bottom;//move the marker
 		}
 			return true;
 		}else{
@@ -783,7 +820,11 @@ public class Grid {
 		}
 	}//end fill
 	
-	//delete row
+	/**
+	 * Delete a row from the grid. Must leave one row in the grid.
+	 * @param row Target for deletion.
+	 * @return True on success false on failure
+	 */
 	public boolean deleteRow(String row){
 		int r = Integer.parseInt(row);
 		Node above, below, n;
@@ -803,12 +844,12 @@ public class Grid {
 		for(int i = 0; i < columns - 1; i++){
 			n = above.bottom;
 			above.bottom = n.bottom;
-			n.bottom = null;
+			n.bottom = null;//make candidate for garbage collection.
 			n.right = null;		
-			above = above.right;
+			above = above.right;//move across
 			below = below.right;
 		}
-		rows--;
+		rows--;//we have one less row
 		return true;
 		}else{
 			//head.bottom = null;//this line of code is the difference between being able
@@ -817,39 +858,46 @@ public class Grid {
 		}
 	}//end delete row
 	
-	//insert a row
+	/**
+	 * Given a row number will insert a new row as that number. If the row is higher than the
+	 * number of rows in the grid the new row will be tacked on as the highest numbered row
+	 * in the grid (the last row).
+	 * @param row Insertion point
+	 * @return True on success false on failure.
+	 */
 	public boolean insertRow(String row){
 		int r = Integer.parseInt(row);
 		Node n = null, previous = null, newNode = null, watcher = null, left = null;
 		
 		//case for an empty list
-		if(head.bottom == null){
+		if(head.bottom == null){//if it was possible to make an empty grid...
 			if(columns == 1){//there are no columns to make so a new row count just has to be incremendted
-				rows++;
+				rows++;// we have one more row
 				return true;
 			} 
-			head.bottom = new Node();
+			head.bottom = new Node();//point the head to a new node
 			n = head.bottom;
+			//lol c++ ... get it...
 			for(int c = 0; c < columns; c++){
-				newNode = new Node();
-				n.right = newNode;
-				n = n.right;
-				if(c == (columns - 1)){
+				newNode = new Node(); // the new node 
+				n.right = newNode;//point the right pointer to the new node
+				n = n.right;//increment right
+				if(c == (columns - 1)){//were at the end link back to beginning.
 					newNode.right = this.head.bottom;
 					return true;
 				}
 			}
 		}
-		
-		if(r != 0 && r != rows && r < rows){
+		//check all possible cases
+		if(r != 0 && r != rows && r < rows){ //not the first 
 			previous = getCell((r-1), 0);//node above it
 			watcher = previous;
 			n = getCell(r, 0);
-		} else if(r == 0 && r < rows){
+		} else if(r == 0 && r < rows){ // the first
 			previous = getCell(this.rows - 1, 0); //the last cell in the list
 			watcher = this.head.bottom;//watch the node so head can be reset
 			n = getCell(r, 0); 
-		} else if(r >= rows){
+		} else if(r >= rows){//off the grid will make it the last on the grid
 			previous = getCell(rows - 1, 0);
 			watcher = null;
 			n = getCell(0, 0);
@@ -861,18 +909,18 @@ public class Grid {
 			previous.bottom = newNode;
 			previous = previous.right;//move the previous row over
 			n = n.right;//move node row over
-			if(i == 0){
+			if(i == 0){//set the left watching node to link to at the end.
 				left = newNode;
 			}
-			if(i != 0){
+			if(i != 0){//link to the right
 				left.right = newNode;
 				left = newNode;
 			}
-			if(i == (columns - 1)){
+			if(i == (columns - 1)){//were at the end link to beginning
 				newNode.right = watcher;
-				rows++;
+				rows++;//we have one more row
 			}
-			if(r == 0 && i == 0){
+			if(r == 0 && i == 0){//this is an insert of the first column
 				this.head.bottom = newNode;
 			}
 		}
@@ -880,15 +928,19 @@ public class Grid {
 		return true;
 	}//end insert row
 	
-	//delete a column
+	/**
+	 * Delete a target input column
+	 * @param col Target for deletion
+	 * @return True on success false on failure.
+	 */
 	public boolean deleteColumns(String col) {
 		int c = Integer.parseInt(col);
 		Node leftOf, rightOf, n;
-		if(columns != 1){
-			if(c != 0 && c != columns && c % columns != 0){
+		if(columns != 1){//must have at least a column
+			if(c != 0 && c != columns && c % columns != 0){//if it isn't the first cell get the node
 				leftOf = getCell(0, (c-1));//node left
 				rightOf = getCell(0, (c+1));//node right
-			} else {
+			} else {//other wise it is the first cell so get the last cell and the first cell
 				leftOf = getCell(0, this.columns - 1); //the last cell in the list
 				rightOf = getCell(0, (c+1));
 				if(columns != 1){//not the last row in the matrix
@@ -897,7 +949,7 @@ public class Grid {
 			}
 			//loop over the columns
 			for(int i = 0; i < rows; i++){
-				n = leftOf.right;
+				n = leftOf.right;//move it
 				leftOf.right = n.right;
 				n.bottom = null;//set the node to delete pointers to null so it can be garbage collected
 				n.right = null;		
@@ -913,15 +965,21 @@ public class Grid {
 		}
 	}//end delete columns
 	
-	//insert a column
+	/**
+	 * Insert a column in the grid as the input number. If the input is larger than the number
+	 * of columns a new row is tacked on to the end of the grid as the new highest numbered row.
+	 * @param col Target of insertion
+ 	 * @return True on success false on failure
+	 */
 	public boolean insertColumn(String col){
 		int c = Integer.parseInt(col);
 		Node n = null, previous = null, newNode = null, watcher = null, top = null;
 		
-				//case for an empty list
+				//case for an empty list won't happen due to validating input...
+				//but in place if we want the list to go to zero in the future ;)
 				if(this.head.bottom == null){//list empty if head is null
 					if(rows == 1){//there are no rows to make so a new column, count just has to be incremendted
-						columns++;
+						columns++;//one more column
 						return true;
 					}
 					this.head.bottom = new Node();//init head
@@ -938,7 +996,7 @@ public class Grid {
 					}
 				}
 		//case for non empty list
-		if(c != 0 && c != rows && c < columns){
+		if(c != 0 && c != rows && c < columns){//not the first column in the list
 			previous = getCell(0, (c-1));//node left of it
 			watcher = previous;//watch the node
 			if(columns == 1){
@@ -946,7 +1004,7 @@ public class Grid {
 			}else {
 				n = getCell(0, c);
 			}
-		} else if(c == 0 && c < columns){
+		} else if(c == 0 && c < columns){//this is the first row
 			previous = getCell(0, this.columns - 1); //the last cell in the list
 			watcher = null;//watch the node so head can be reset
 			n = getCell(0, c); 
@@ -958,20 +1016,20 @@ public class Grid {
 		
 		for(int i = 0; i < rows; i++) {
 			newNode = new Node();
-			newNode.right = n;
+			newNode.right = n;//make the right link
 			previous.right = newNode;
-			if(i == 0){
+			if(i == 0){//if it's zero set the top node of the list
 				top = newNode;
 			}
-			if(i != 0){
+			if(i != 0){//link downward
 				top.bottom = newNode;
 				top = newNode;
 			}
-			if(i == (rows - 1)){
+			if(i == (rows - 1)){//at the end of the grid link to the bottom
 				newNode.bottom = watcher;
 				columns++;
 			}
-			if(c == 0 && i == 0){
+			if(c == 0 && i == 0){//this is the zero column special case.
 				this.head.bottom = newNode;
 				watcher = newNode;
 			}
