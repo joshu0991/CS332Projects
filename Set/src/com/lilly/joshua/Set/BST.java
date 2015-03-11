@@ -5,12 +5,15 @@ import java.util.Stack;
 
 public class BST<T extends Comparable<T> > implements Iterable<T> {
 
+	BSTNode<T> root = new BSTNode<T>(null, null, null);
+	
 	private class TreeIterator<T> implements Iterator<T>{
 		Stack<T> stack = new Stack<T>();
-		BSTNode<T> cursor;
+		BSTNode<?> cursor =BST.this.root;
 		
 		@Override
 		public boolean hasNext() {
+			System.out.println("Cursor is " + cursor.data);
 			return (!stack.empty() || cursor != null);
 		}
 
@@ -20,7 +23,7 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 			return null;
 		}
 	}
-	
+	/*
 	private class BSTNode<T> {
 		BSTNode<T> left;
 		BSTNode<T> right;
@@ -32,7 +35,7 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 			this.data = data;
 		}
 	}
-	
+	*/
 	@Override
 	public Iterator<T> iterator() {
 		// TODO Auto-generated method stub
