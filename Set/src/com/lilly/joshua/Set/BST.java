@@ -23,7 +23,7 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 			return null;
 		}
 	}
-	/*
+	
 	private class BSTNode<T> {
 		BSTNode<T> left;
 		BSTNode<T> right;
@@ -35,7 +35,7 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 			this.data = data;
 		}
 	}
-	*/
+
 	@Override
 	public Iterator<T> iterator() {
 		// TODO Auto-generated method stub
