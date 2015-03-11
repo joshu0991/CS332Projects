@@ -6,13 +6,12 @@ import java.util.Stack;
 public class BST<T extends Comparable<T> > implements Iterable<T> {
 
 	private class TreeIterator<T> implements Iterator<T>{
-		Stack<T> s = new Stack<T>();
+		Stack<T> stack = new Stack<T>();
 		BSTNode<T> cursor;
 		
 		@Override
 		public boolean hasNext() {
-			// TODO Auto-generated method stub
-			return false;
+			return (!stack.empty() || cursor != null);
 		}
 
 		@Override
@@ -22,7 +21,7 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 		}
 	}
 	
-	public class BSTNode<T> {
+	private class BSTNode<T> {
 		BSTNode<T> left;
 		BSTNode<T> right;
 		T data;
