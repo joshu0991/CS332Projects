@@ -6,23 +6,35 @@ import java.util.Stack;
 public class BST<T extends Comparable<T> > implements Iterable<T> {
 
 	BSTNode<T> root = null;
-	
-	private class TreeIterator<T> implements Iterator<T>{
+	private int size = 0;
+
+	private class TreeIterator<T> implements Iterator<T> {
 		Stack<T> stack = new Stack<T>();
-		BSTNode<?> cursor =BST.this.root;
-		
+		BSTNode<?> cursor = BST.this.root;
+
 		@Override
 		public boolean hasNext() {
 			System.out.println("Cursor is " + cursor.data);
 			return (!stack.empty() || cursor != null);
-		}//has next
+		}// has next
 
+		@SuppressWarnings("unchecked")
 		@Override
 		public T next() {
-			// TODO Auto-generated method stub
-			return null;
-		}//next
-	}//treeiterator class
+			T savedCursor = null;
+			// go left until we hit the left most
+			// when we hit left most cursor will = null
+			while (cursor != null) {
+				stack.push((T) cursor);
+			}
+			// if the stack isn't emtpy pop the top element
+			if (!stack.isEmpty()) {
+				savedCursor = stack.pop();
+				cursor = cursor.right;
+			}
+			return savedCursor;
+		}// next
+	}// treeiterator class
 	
 	private class BSTNode<T> {
 		BSTNode<T> left;
@@ -45,6 +57,7 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 	public boolean insert(T data){
 		if(root == null){//if the root is null we found the location
 			root = new BSTNode<T>(data);
+			++size;
 			return true;
 		} else { //else enter the recursive insert
 			return insert(root, data);
@@ -64,6 +77,7 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 		else if(comp < 0){
 			//if left is null we have found the location.
 			if(p.left == null){
+				++size;
 				p.left = new BSTNode<T>(value);
 			} else {
 				insert(p.left, value);//else we need to recurse left.
@@ -73,6 +87,7 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 		} else if(comp > 0) {
 			//if right is null we have the location
 			if(p.right == null){
+				++size;
 				p.right = new BSTNode<T>(value);
 			} else {
 				insert(p.right, value);//else we need to recurse right
@@ -81,5 +96,6 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 		//some unforeseen thing happened if we're here.
 		return false;
 	}
+	
 
 }//BST.java
