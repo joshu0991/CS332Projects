@@ -9,12 +9,21 @@ public class Main {
 	s.insert("Our");
 	s.insert("fathers");
 	s.insert("brought");
-	s.insert("forth");
+	s.insert("Forth");
+	System.out.println(s.hasElement("Our"));
+	System.out.println(s.hasElement("pigs"));
+	s.find("Our");
+	s.find("Our");
+	s.find("fathers");
+	s.find("brought");
+	s.find("Forth");
+	s.find("Pizza");
 	Iterator<String> o = s.iterator();
 	o.next();
 	o.next();
 	o.next();
 	o.next();
+	
 	/*
 	//s.iterator().hasNext();
 	s.insert("Hello");

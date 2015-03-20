@@ -144,7 +144,46 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 		}
 		//some unforeseen thing happened if we're here.
 		return false;
-	}
+	}//insert
+	
+	//private recursive version called by find.
+	private BSTNode<T> search(T val, BSTNode<T> root){
+		if (root != null) {
+			if (root.data.compareTo(val) == 0) {
+				//if (root != null)
+				//	System.out.println("Found " + root.data);
+					return root;
+			} else if (root.data.compareTo(val) > 0) {
+				return search(val, root.left);
+			} else if (root.data.compareTo(val) < 0) {
+				return search(val, root.right);
+			} else {// we are here by mistake return null for debugging.
+				System.out.println("Failed");
+				return null;
+			}
+		} else {
+			//System.out.println("Failed");
+			return null;
+		}
+	}//search
+	
+	//public facing non-recursive find. Just calls the recursive version.
+	public BSTNode<T> find(T val){
+		if(root == null){
+			return root;
+		}else{
+			return search(val, root);
+		}
+	}//find
+	
+	//find out if a value exist in a tree.
+	public boolean hasElement(T data){
+		if(find(data) != null){
+			return true;
+		}else{
+			return false;
+		}
+	}//hasElement
 	
 
 }//BST.java
