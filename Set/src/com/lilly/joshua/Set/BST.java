@@ -183,115 +183,158 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 	}//hasElement
 	
 	public boolean delete(T val){
+		boolean removed = false;
 		// the value isn't in the tree.
 		if (!hasElement(val)) {
 			return false;
 		}
 		
-		BSTNode<T> parent = findParent(val);
+		BSTNode<T> parent = findParent(val, root);
 		BSTNode<T> target = find(val);
 		int count = countChildren(target);
+		
+		//case where the root = parent.
+		if(parent == target){
+			//one element in the tree that we will be removing
+			if(count == 0){
+				cleanUp(root);
+				return true;
+			} else if(count == 1){
+				if(root.hasLeft() ){
+					root = root.left;
+					return true;
+				}else{
+					root = root.right;
+					return true;
+				}
+			}else if(count == 2){
+				return true;
+			}
+		}
 		
 		switch (count) {
 		
 		// it's a leaf hack it off!
 		case (0):
-			switch (leftOrRight(parent)) {
+			switch (leftOrRight(parent, val)) {
 			
 			case LEFT:
 				parent.left = null;
+				removed = true;
 				break;
 			case RIGHT:
 				parent.right = null;
+				removed = true;
 				break;
-				
+			
 			}
 		break;
+		
 		//one child
 		case (1):
 			
-			switch (leftOrRight(parent)) {
+			switch (leftOrRight(parent, val)) {
 			//target lies to the left of the parent.
 			case LEFT:
-				switch(leftOrRight(target)){
+				switch(leftOrRight(target, val)){
 				//the target has a child on the left.
 				case LEFT:
 					parent.left = target.left;
+					removed = true;
 					cleanUp(target);
 					break;
 				//the target has a child on the right.
 				case RIGHT:
 					parent.left = target.right;
+					removed = true;
 					cleanUp(target);
 					break;
 				}
 				break;
 			//target lies to the right of parent.
 			case RIGHT:
-				switch(leftOrRight(target)){
+				switch(leftOrRight(target, val)){
 				//target has a child on the left.
 				case LEFT:
 					parent.right = target.left;
+					removed = true;
 					cleanUp(target);
 					break;
 				//target has a child on the right.	
 				case RIGHT:
 					parent.right = target.right;
+					removed = true;
 					cleanUp(target);
 					break;
 				}
 				break;
 			}
 		break;
+		
 		//two children
 		case(2):
 			System.out.println("Two children");
+			removed = true;
 			break;
 		
 		}
 		//System.out.println("Target " + target);
 		//System.out.println("Prev " + parent);
 		System.out.println("Deleted " + target);
-		return false;
+		return removed;
 	}//delete
 	
 	@SuppressWarnings("unchecked")
-	private BSTNode<T> findParent(T val){
-		int r = 1, l = 1;
-		Stack<T> stack = new Stack<T>();
-		BSTNode<T> cursor = root;
-		//this should always find a parent since we have already confirmed
-		//that the value is in the tree.
-		while(!stack.isEmpty() || cursor != null){
-			if (cursor != null) {
-				stack.push((T) cursor);
-				cursor = cursor.left;
-			} else {
-				if (!stack.isEmpty()) {
-					cursor = (BSTNode<T>) stack.pop();
-					if(cursor.hasLeft()){
-						l = cursor.data.compareTo(val);
-					}
-					if(cursor.hasRight()){
-						r = cursor.data.compareTo(val);
-					}
-					if(l == 0 || r == 0){
-						return cursor;
-					}
-				}
-		
-			}
+	private BSTNode<T> findParent(T val, BSTNode<T> root){
+		//if this is the trees root we have a special case.
+		//parent = target
+		if(root.data.compareTo(val) == 0){
+			return root;
+		} else {
+			return findParent(root, val,  null);
 		}
-		return cursor;
 	}//findParent
 	
+	
+	
+	private BSTNode<T> findParent(BSTNode<T> root, T val, BSTNode<T> parent){
+			if (root != null) {
+				if (root.data.compareTo(val) == 0) {
+					if (root != null)
+						System.out.println("Found " + parent.data);
+						return parent;
+				} else if (root.data.compareTo(val) > 0) {
+					return findParent(root.left, val, root);
+				} else if (root.data.compareTo(val) < 0) {
+					return findParent(root.right, val, root);
+				} else {// we are here by mistake return null for debugging.
+					System.out.println("Failed");
+					return null;
+				}
+			} else {
+				//System.out.println("Failed");
+				return null;
+			}
+	}	
+	
 	//decide where the node is
-	private leftRight leftOrRight(BSTNode<T> node){
+	private leftRight leftOrRight(BSTNode<T> node, T val){
+		if(node != root){
 		if(node.left != null){
-			return leftRight.LEFT;
-		} else {
-			return leftRight.RIGHT;
+			if(node.left.data.compareTo(val) == 0){
+				return leftRight.LEFT;
+			}
 		}
+		if(node.right != null) {
+			if(node.right.data.compareTo(val) == 0){
+				return leftRight.RIGHT;
+			}
+		}
+		}
+		//Should only end up here when the root is the parent and the target
+		//since we previously guaranteed that the data passed to this function
+		//was a parent node.
+		return null;
 	}
 	
 	private int countChildren(BSTNode<T> node){

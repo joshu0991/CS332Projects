@@ -18,9 +18,12 @@ public class Main {
 	//s.find("brought");
 	//s.find("Forth");
 	//s.find("Pizza");
-	//s.delete("forth");
-	//s.delete("Our");
-	System.out.println(s.hasElement("forth"));
+	s.delete("forth");
+	s.delete("Our");
+	assert(!s.hasElement("forth"));
+	assert(!s.hasElement("Our"));
+	assert(s.hasElement("fathers"));
+	assert(s.hasElement("brought"));
 	//System.out.println(s.hasElement("Our"));
 	Iterator<String> o = s.iterator();
 	//s.find("Forth");
