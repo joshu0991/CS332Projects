@@ -187,9 +187,11 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 		if (!hasElement(val)) {
 			return false;
 		}
+		
 		BSTNode<T> parent = findParent(val);
 		BSTNode<T> target = find(val);
 		int count = countChildren(target);
+		
 		switch (count) {
 		
 		// it's a leaf hack it off!
@@ -253,27 +255,34 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 		return false;
 	}//delete
 	
+	@SuppressWarnings("unchecked")
 	private BSTNode<T> findParent(T val){
 		int r = 1, l = 1;
-		BSTNode<T> node = null;
-		Iterator<T> treIt = iterator();
+		Stack<T> stack = new Stack<T>();
+		BSTNode<T> cursor = root;
 		//this should always find a parent since we have already confirmed
 		//that the value is in the tree.
-		while(treIt.hasNext()){
-			node = (BSTNode<T>)treIt.next();
-			//we've found the parent
-			if(node.hasLeft()){
-				l = node.data.compareTo(val);
-			}
-			if(node.hasRight()){
-				r = node.data.compareTo(val);
-			}
-			
-			if(l == 0 || r == 0){
-				return node;
+		while(!stack.isEmpty() || cursor != null){
+			if (cursor != null) {
+				stack.push((T) cursor);
+				cursor = cursor.left;
+			} else {
+				if (!stack.isEmpty()) {
+					cursor = (BSTNode<T>) stack.pop();
+					if(cursor.hasLeft()){
+						l = cursor.data.compareTo(val);
+					}
+					if(cursor.hasRight()){
+						r = cursor.data.compareTo(val);
+					}
+					if(l == 0 || r == 0){
+						return cursor;
+					}
+				}
+		
 			}
 		}
-		return node;
+		return cursor;
 	}//findParent
 	
 	//decide where the node is
