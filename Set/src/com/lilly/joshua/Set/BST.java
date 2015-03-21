@@ -18,7 +18,6 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 
 		@Override
 		public boolean hasNext() {
-			System.out.println("Cursor is " + cursor.data);
 			return (!stack.empty() || cursor != null);
 		}// has next
 
@@ -32,23 +31,21 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 			// go left until we hit the left most
 			// when we hit left most cursor will = null
 			while (!stack.isEmpty() || cursor != null) {
-				if(cursor != null){
+				if (cursor != null) {
 					stack.push((T) cursor);
 					cursor = cursor.left;
 				} else {
-					if(!stack.isEmpty()){
-						cursor = (BSTNode<T>)stack.pop();
-						savedCursor = (T)cursor;
+					if (!stack.isEmpty()) {
+						cursor = (BSTNode<T>) stack.pop();
+						savedCursor = (T) cursor.data;
 						cursor = cursor.right;
-						if(savedCursor != null){
-							System.out.println("Saved cursor " + savedCursor.toString());
-						}
+						return savedCursor;
 					}
-			}
+				}
 			}
 			return savedCursor;
 		}// next
-		
+
 	}// treeiterator class
 	
 	private class BSTNode<T> {
@@ -178,12 +175,137 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 	
 	//find out if a value exist in a tree.
 	public boolean hasElement(T data){
-		if(find(data) != null){
+		if(find(data) != null || root == null){
 			return true;
 		}else{
 			return false;
 		}
 	}//hasElement
 	
+	public boolean delete(T val){
+		// the value isn't in the tree.
+		if (!hasElement(val)) {
+			return false;
+		}
+		BSTNode<T> parent = findParent(val);
+		BSTNode<T> target = find(val);
+		int count = countChildren(target);
+		switch (count) {
+		
+		// it's a leaf hack it off!
+		case (0):
+			switch (leftOrRight(parent)) {
+			
+			case LEFT:
+				parent.left = null;
+				break;
+			case RIGHT:
+				parent.right = null;
+				break;
+				
+			}
+		break;
+		//one child
+		case (1):
+			
+			switch (leftOrRight(parent)) {
+			//target lies to the left of the parent.
+			case LEFT:
+				switch(leftOrRight(target)){
+				//the target has a child on the left.
+				case LEFT:
+					parent.left = target.left;
+					cleanUp(target);
+					break;
+				//the target has a child on the right.
+				case RIGHT:
+					parent.left = target.right;
+					cleanUp(target);
+					break;
+				}
+				break;
+			//target lies to the right of parent.
+			case RIGHT:
+				switch(leftOrRight(target)){
+				//target has a child on the left.
+				case LEFT:
+					parent.right = target.left;
+					cleanUp(target);
+					break;
+				//target has a child on the right.	
+				case RIGHT:
+					parent.right = target.right;
+					cleanUp(target);
+					break;
+				}
+				break;
+			}
+		break;
+		//two children
+		case(2):
+			System.out.println("Two children");
+			break;
+		
+		}
+		//System.out.println("Target " + target);
+		//System.out.println("Prev " + parent);
+		System.out.println("Deleted " + target);
+		return false;
+	}//delete
+	
+	private BSTNode<T> findParent(T val){
+		int r = 1, l = 1;
+		BSTNode<T> node = null;
+		Iterator<T> treIt = iterator();
+		//this should always find a parent since we have already confirmed
+		//that the value is in the tree.
+		while(treIt.hasNext()){
+			node = (BSTNode<T>)treIt.next();
+			//we've found the parent
+			if(node.hasLeft()){
+				l = node.data.compareTo(val);
+			}
+			if(node.hasRight()){
+				r = node.data.compareTo(val);
+			}
+			
+			if(l == 0 || r == 0){
+				return node;
+			}
+		}
+		return node;
+	}//findParent
+	
+	//decide where the node is
+	private leftRight leftOrRight(BSTNode<T> node){
+		if(node.left != null){
+			return leftRight.LEFT;
+		} else {
+			return leftRight.RIGHT;
+		}
+	}
+	
+	private int countChildren(BSTNode<T> node){
+		int counter = 0;
+		if(node.hasLeft()){
+			++counter;
+		}
+		if(node.hasRight()){
+			++counter;
+		}
+		return counter;
+	}//countchildren
+	
+	private enum leftRight{
+		LEFT, RIGHT;
+	}//left or right enum
+	
+	//make sure removed node gets slotted for garbage collection and doesn't
+	//hang out where it isn't wanted.
+	private void cleanUp(BSTNode<T> node){
+		node.left = null;
+		node.right = null;
+		node.data = null;
+	}
 
 }//BST.java

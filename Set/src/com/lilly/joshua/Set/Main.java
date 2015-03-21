@@ -9,20 +9,25 @@ public class Main {
 	s.insert("Our");
 	s.insert("fathers");
 	s.insert("brought");
-	s.insert("Forth");
-	System.out.println(s.hasElement("Our"));
-	System.out.println(s.hasElement("pigs"));
-	s.find("Our");
-	s.find("Our");
-	s.find("fathers");
-	s.find("brought");
-	s.find("Forth");
-	s.find("Pizza");
+	s.insert("forth");
+	//System.out.println(s.hasElement("Our"));
+	//System.out.println(s.hasElement("pigs"));
+	//s.find("Our");
+	//s.find("Our");
+	//s.find("fathers");
+	//s.find("brought");
+	//s.find("Forth");
+	//s.find("Pizza");
+	//s.delete("forth");
+	//s.delete("Our");
+	System.out.println(s.hasElement("forth"));
+	//System.out.println(s.hasElement("Our"));
 	Iterator<String> o = s.iterator();
-	o.next();
-	o.next();
-	o.next();
-	o.next();
+	//s.find("Forth");
+	System.out.println(o.next());
+	System.out.println(o.next());
+	System.out.println(o.next());
+	System.out.println(o.next());
 	
 	/*
 	//s.iterator().hasNext();
