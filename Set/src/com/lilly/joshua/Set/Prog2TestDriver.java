@@ -19,7 +19,7 @@ public static void main(String[] args)
 {
    basicTest();
    System.out.println();
-   //iTest();
+   iTest();
    System.out.println();
    //sTest();
    System.out.println();
@@ -57,13 +57,12 @@ private static void basicTest()
    System.out.println("delete 4: " + set);
    
 }
-/*
-*/
+
 /* test for integer sets and sets of sets -- creates
    sets of integers, performs operations, then creates
    sets of sets of integers and performs operations
  */
-/*
+
 private static void iTest()
 {
    // create an array of sets of Integer
@@ -93,10 +92,12 @@ private static void iTest()
    for (int i = 0; i < 4; i++)
       System.out.println(aSetsOfSets[i]);
 }
+
+/*
 // This test is identical to the previous test but with Strings  
 private static void sTest()
 {
-   // create an array of sets of Stringss
+   // create an array of sets of Strings
    Set<String>[] aSets = (Set<String>[]) new Set[4];
    // assign set values to first two array elements
    String[] a1 = {"One", "two", "three"};
