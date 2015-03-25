@@ -11,7 +11,7 @@ test is then repeated with Strings in place of
 integers
 */
 
-/*
+
 @SuppressWarnings("unchecked")
 public class Prog2TestDriver
 {
@@ -19,11 +19,11 @@ public static void main(String[] args)
 {
    basicTest();
    System.out.println();
-   iTest();
+   //iTest();
    System.out.println();
-   sTest();
+   //sTest();
    System.out.println();
-   opTest();
+   //opTest();
 }
 
 // test insertion and deletion of set elements
@@ -57,6 +57,7 @@ private static void basicTest()
    System.out.println("delete 4: " + set);
    
 }
+/*
 */
 /* test for integer sets and sets of sets -- creates
    sets of integers, performs operations, then creates
@@ -190,7 +191,7 @@ private static void opTest()
       System.out.println(":  fail");
    
 }
-
+*/
 }
 
-*/
+

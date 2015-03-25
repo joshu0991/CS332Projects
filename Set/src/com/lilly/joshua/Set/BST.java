@@ -8,7 +8,7 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 	//root inits to null.
 	BSTNode<T> root = null;
 	
-	//keep track of the size for debugging purposes.
+	//keep track of the size.
 	private int size = 0;
 
 	//tree iterator class representing an iterator over the bst.
@@ -148,7 +148,6 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 		if (root != null) {
 			if (root.data.compareTo(val) == 0) {
 				//if (root != null)
-				//	System.out.println("Found " + root.data);
 					return root;
 			} else if (root.data.compareTo(val) > 0) {
 				return search(val, root.left);
@@ -202,23 +201,28 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 			//one element in the tree that we will be removing
 			if(count == 0){
 				if(root.hasLeft() ){
+					size--;
 					root = root.left;
 				} else if(root.hasRight()){
+					size--;
 					root = root.right;
 				} else {
+					size--;
 					root = null;
 				}
 				return true;
 			} else if(count == 1){
 				if(root.hasLeft() ){
+					size--;
 					root = root.left;
 					return true;
 				}else{
+					size--;
 					root = root.right;
 					return true;
 				}
 			}else if(count == 2){
-				//return true;
+				//let it continue
 			}
 		}
 		
@@ -226,16 +230,17 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 		
 		// it's a leaf hack it off!
 		case (0):
-			System.out.println("No children");
 			switch (leftOrRight(parent, val)) {
 			
 			case LEFT:
 				parent.left = null;
 				removed = true;
+				size--;
 				break;
 			case RIGHT:
 				parent.right = null;
 				removed = true;
+				size--;
 				break;
 			
 			}
@@ -243,7 +248,6 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 		
 		//one child
 		case (1):
-			System.out.println("One child");
 			switch (leftOrRight(parent, val)) {
 			//target lies to the left of the parent.
 			case LEFT:
@@ -253,17 +257,20 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 					parent.left = target.left;
 					removed = true;
 					cleanUp(target);
+					size--;
 					break;
 				//the target has a child on the right.
 				case RIGHT:
 					parent.left = target.right;
 					removed = true;
 					cleanUp(target);
+					size--;
 					break;
 				//some way made it here without children
 				default:
 					//hold breath and pray to god we aren't deleting half our tree :)... jk
 					parent.left = null;
+					size--;
 					break;	
 				}
 				break;
@@ -272,17 +279,20 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 				switch(hasLeftOrRight(target)){
 				//target has a child on the left.
 				case LEFT:
+					size--;
 					parent.right = target.left;
 					removed = true;
 					cleanUp(target);
 					break;
 				//target has a child on the right.	
 				case RIGHT:
+					size--;
 					parent.right = target.right;
 					removed = true;
 					cleanUp(target);
 					break;
 				default:
+					size--;
 					parent.right = null;
 				}
 				break;
@@ -291,7 +301,6 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 		
 		//two children
 		case(2):
-			System.out.println("Two children");
 			//parent of smallest first target to swap second.
 			BSTNode[] dataArray = findSmallestInRight(target);
 			//swap the data
@@ -307,8 +316,10 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 			//can't have any left since it wouldn't be the smallest if it did.
 			else if(smallest.hasRight()){
 				removed = true;
+				size--;
 				p.left = smallest.right;
 			} else {
+				size--;
 				removed = true;
 				p.left = null;
 			}
@@ -334,8 +345,6 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 	private BSTNode<T> findParent(BSTNode<T> root, T val, BSTNode<T> parent){
 			if (root != null) {
 				if (root.data.compareTo(val) == 0) {
-					if (root != null)
-						System.out.println("Found " + parent.data);
 						return parent;
 				} else if (root.data.compareTo(val) > 0) {
 					return findParent(root.left, val, root);
@@ -431,6 +440,10 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 		r[0] = parent;
 		r[1] =  rVal;
 		return r;
+	}
+	
+	public int getSize(){
+		return size;
 	}
 	
 }//BST.java
