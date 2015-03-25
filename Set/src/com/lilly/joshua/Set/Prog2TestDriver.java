@@ -21,7 +21,7 @@ public static void main(String[] args)
    System.out.println();
    iTest();
    System.out.println();
-   //sTest();
+   sTest();
    System.out.println();
    //opTest();
 }
@@ -93,7 +93,7 @@ private static void iTest()
       System.out.println(aSetsOfSets[i]);
 }
 
-/*
+
 // This test is identical to the previous test but with Strings  
 private static void sTest()
 {
@@ -123,7 +123,7 @@ private static void sTest()
    for (int i = 0; i < 4; i++)
       System.out.println(aSetsOfSets[i]);
 }
-
+/*
 private static void opTest()
 {
    Set<Integer>[] setArray = (Set<Integer>[]) new Set[4];

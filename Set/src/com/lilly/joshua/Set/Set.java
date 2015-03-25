@@ -7,9 +7,7 @@ public class Set<T extends Comparable<T> > implements Iterable<T>, Comparable <S
 	BST<T> tree = new BST<T>();
 	
 	//creates an empty set
-	public Set(){
-		
-	}
+	public Set(){}
 	
 	public Set(T[] setElements){
 		for(int i = 0; i < setElements.length; i++){
@@ -17,7 +15,7 @@ public class Set<T extends Comparable<T> > implements Iterable<T>, Comparable <S
 		}
 	}
 	
-	//insert a value into the bianary search tree
+	//insert a value into the binary search tree
 	public boolean insert(T value){
 		if(tree != null){
 			tree.insert(value);
@@ -78,7 +76,6 @@ public class Set<T extends Comparable<T> > implements Iterable<T>, Comparable <S
 	public Set intersection(Set other){
 		Set<T> newSet = new Set<T>();
 		Iterator<T> a = this.iterator();
-		boolean has = false;
 		while(a.hasNext()){
 			T member = a.next();
 			if(other.elementOf(member)){
@@ -97,13 +94,32 @@ public class Set<T extends Comparable<T> > implements Iterable<T>, Comparable <S
 	}
 	
 	@Override
+	//if this class is larger returns 1
+	//if they are equal return 0
+	//if the other class is larger returns - 1
 	public int compareTo(Set<T> other) {
-		Iterator<T> a = this.tree.iterator();
-		Iterator<T> b = other.tree.iterator();
+		//a is this sets iterator
+		Iterator<T> a = this.iterator();
+		//b is the other sets iterator
+		Iterator<T> b = other.iterator();
 		while(a.hasNext() || b.hasNext()){
-			
+			//a is longer length wise.
+			if(a.hasNext() && !b.hasNext()){
+				return 1;
+			} else if(!a.hasNext() && b.hasNext()) {//b is longer length wise.
+				return -1;
+			} else if (!a.hasNext() && !b.hasNext()){ // they are the exact same sets
+				return 0;							  //so don't insert.
+			} else {//else they both have elements so compare them.
+				T aVal = a.next();
+				T bVal = b.next();
+				if(aVal.compareTo(bVal) == 0){
+					continue;
+				}else{
+					return aVal.compareTo(bVal);
+				}
+			}
 		}
-		
 		return 0;
 	}
 
