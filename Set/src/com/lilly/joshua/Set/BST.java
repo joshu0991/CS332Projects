@@ -175,9 +175,13 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 	
 	//find out if a value exist in a tree.
 	public boolean hasElement(T data){
+		if(root != null){
 		if(find(data) != null || root == null){
 			return true;
 		}else{
+			return false;
+		}
+		} else {
 			return false;
 		}
 	}//hasElement
@@ -197,7 +201,13 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 		if(parent == target){
 			//one element in the tree that we will be removing
 			if(count == 0){
-				cleanUp(root);
+				if(root.hasLeft() ){
+					root = root.left;
+				} else if(root.hasRight()){
+					root = root.right;
+				} else {
+					root = null;
+				}
 				return true;
 			} else if(count == 1){
 				if(root.hasLeft() ){
@@ -208,7 +218,7 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 					return true;
 				}
 			}else if(count == 2){
-				return true;
+				//return true;
 			}
 		}
 		
@@ -216,6 +226,7 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 		
 		// it's a leaf hack it off!
 		case (0):
+			System.out.println("No children");
 			switch (leftOrRight(parent, val)) {
 			
 			case LEFT:
@@ -232,11 +243,11 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 		
 		//one child
 		case (1):
-			
+			System.out.println("One child");
 			switch (leftOrRight(parent, val)) {
 			//target lies to the left of the parent.
 			case LEFT:
-				switch(leftOrRight(target, val)){
+				switch(hasLeftOrRight(target)){
 				//the target has a child on the left.
 				case LEFT:
 					parent.left = target.left;
@@ -249,11 +260,16 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 					removed = true;
 					cleanUp(target);
 					break;
+				//some way made it here without children
+				default:
+					//hold breath and pray to god we aren't deleting half our tree :)... jk
+					parent.left = null;
+					break;	
 				}
 				break;
 			//target lies to the right of parent.
 			case RIGHT:
-				switch(leftOrRight(target, val)){
+				switch(hasLeftOrRight(target)){
 				//target has a child on the left.
 				case LEFT:
 					parent.right = target.left;
@@ -266,6 +282,8 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 					removed = true;
 					cleanUp(target);
 					break;
+				default:
+					parent.right = null;
 				}
 				break;
 			}
@@ -274,13 +292,29 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 		//two children
 		case(2):
 			System.out.println("Two children");
-			removed = true;
-			break;
+			//parent of smallest first target to swap second.
+			BSTNode[] dataArray = findSmallestInRight(target);
+			//swap the data
+			BSTNode<T> p = dataArray[0];
+			BSTNode<T> smallest = dataArray[1];
+			target.data = smallest.data;
+			//the smallest node only has a single child in it's rst
+			if(p == smallest){
+				p = target;
+				p.right = null;
+			}
+			//check to see if the smallest node has any right children.
+			//can't have any left since it wouldn't be the smallest if it did.
+			else if(smallest.hasRight()){
+				removed = true;
+				p.left = smallest.right;
+			} else {
+				removed = true;
+				p.left = null;
+			}
+		break;
 		
 		}
-		//System.out.println("Target " + target);
-		//System.out.println("Prev " + parent);
-		System.out.println("Deleted " + target);
 		return removed;
 	}//delete
 	
@@ -319,7 +353,7 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 	
 	//decide where the node is
 	private leftRight leftOrRight(BSTNode<T> node, T val){
-		if(node != root){
+		//if(node != root){
 		if(node.left != null){
 			if(node.left.data.compareTo(val) == 0){
 				return leftRight.LEFT;
@@ -330,11 +364,24 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 				return leftRight.RIGHT;
 			}
 		}
-		}
+		//}
 		//Should only end up here when the root is the parent and the target
 		//since we previously guaranteed that the data passed to this function
 		//was a parent node.
 		return null;
+	}
+	
+	//used to quickly determine if there exist a value on the side.
+	//should be cautous when using since this was designed with using it 
+	//in cases where a node has one child.
+	private leftRight hasLeftOrRight(BSTNode<T> node){
+		if(node.hasLeft()){
+			return leftRight.LEFT;
+		} else if(node.hasRight()) {
+			return leftRight.RIGHT;
+		} else {
+			return null;
+		}
 	}
 	
 	private int countChildren(BSTNode<T> node){
@@ -360,4 +407,30 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 		node.data = null;
 	}
 
+	//get the smallest value in a given nodes right subtree
+	private BSTNode<T>[] findSmallestInRight(BSTNode<T> node){
+		boolean con = true;
+		BSTNode<T> rVal = null;
+		BSTNode<T> parent = null;
+		//get a pointer to the right subtree
+		if(node.hasRight()){
+			rVal = node.right;
+			parent = rVal;
+		} else {//something went horribly wrong.
+			return null;
+		}
+		while(con == true){
+			if(rVal.hasLeft()){
+				parent = rVal;
+				rVal = rVal.left;//if it has a val go to that val
+			} else {
+				con = false;//else we are at the smallest break and return.
+			}
+		}
+		BSTNode<T>[] r = new BSTNode[2];
+		r[0] = parent;
+		r[1] =  rVal;
+		return r;
+	}
+	
 }//BST.java
