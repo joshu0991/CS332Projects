@@ -165,6 +165,8 @@ private static void opTest()
    
    System.out.print(setArray[3] + " equals " + setArray[0]
                     + " " + setArray[3].subsetOf(setArray[0]));
+   //we're comparing addresses here. Since object at 3 is a deep copy...
+   //the addresses should be != to one another.
    if (!setArray[3].equals(setArray[0]))
       System.out.println(":  ok");
    else
