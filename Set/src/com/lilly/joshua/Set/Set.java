@@ -123,6 +123,22 @@ public class Set<T extends Comparable<T> > implements Iterable<T>, Comparable <S
 		return 0;
 	}
 
+	public boolean subsetOf(Set<T> a){
+		return true;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Set<T> copy(){
+		Iterator<T> it = iterator();
+		Set<T> newSet = new Set<T>();
+		//get all of the values in the set and insert  them
+		//into the new set aka deep copy.
+		while(it.hasNext()){
+			newSet.insert(it.next());
+		}
+		return newSet;
+	}
+	
 	@Override
 	public Iterator<T> iterator() {
 		return tree.iterator();

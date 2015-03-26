@@ -23,7 +23,7 @@ public static void main(String[] args)
    System.out.println();
    sTest();
    System.out.println();
-   //opTest();
+   opTest();
 }
 
 // test insertion and deletion of set elements
@@ -123,7 +123,7 @@ private static void sTest()
    for (int i = 0; i < 4; i++)
       System.out.println(aSetsOfSets[i]);
 }
-/*
+
 private static void opTest()
 {
    Set<Integer>[] setArray = (Set<Integer>[]) new Set[4];
@@ -192,7 +192,7 @@ private static void opTest()
       System.out.println(":  fail");
    
 }
-*/
+
 }
 
 
