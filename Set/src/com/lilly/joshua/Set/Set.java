@@ -123,8 +123,17 @@ public class Set<T extends Comparable<T> > implements Iterable<T>, Comparable <S
 		return 0;
 	}
 
-	public boolean subsetOf(Set<T> a){
-		return true;
+	//is this class a subset of the passed set?
+	public boolean subsetOf(Set<T> set){
+		Iterator<T> a = this.iterator();
+		boolean posSubSet = true;
+		while(a.hasNext()){
+			posSubSet = set.tree.hasElement(a.next());
+			if(posSubSet == false){
+				return posSubSet;
+			}
+		}
+		return posSubSet;
 	}
 	
 	@SuppressWarnings("unchecked")

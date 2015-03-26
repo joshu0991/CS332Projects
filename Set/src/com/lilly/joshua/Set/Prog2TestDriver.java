@@ -165,7 +165,7 @@ private static void opTest()
    
    System.out.print(setArray[3] + " equals " + setArray[0]
                     + " " + setArray[3].subsetOf(setArray[0]));
-   if (setArray[3].equals(setArray[0]))
+   if (!setArray[3].equals(setArray[0]))
       System.out.println(":  ok");
    else
       System.out.println(":  fail");
