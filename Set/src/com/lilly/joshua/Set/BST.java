@@ -2,30 +2,47 @@ package com.lilly.joshua.Set;
 
 import java.util.Iterator;
 import java.util.Stack;
-
+/**
+ * Class that represents a Binary tree.
+ * @author Joshua Lilly
+ * @param <T> generic type argument
+ */
 public class BST<T extends Comparable<T> > implements Iterable<T> {
 
 	//root inits to null.
+	/**
+	 * root of the tree should initialize to zero.
+	 */
 	BSTNode<T> root = null;
 	
-	//keep track of the size.
+	/**
+	 * keep track of the size.
+	 */
 	private int size = 0;
 
-	//tree iterator class representing an iterator over the bst.
+	/**
+	 * tree iterator class representing an iterator over the bst.
+	 */
 	private class TreeIterator<T> implements Iterator<T> {
-		Stack<T> stack = new Stack<T>();
-		BSTNode<?> cursor = BST.this.root;
+		Stack<T> stack = new Stack<T>();//generic stack for temporarily storing elements.
+		BSTNode<?> cursor = BST.this.root; // the root inits.to root of the tree
 
+		/**
+		 * @return returns true if this tree has another element false otherwise.
+		 */
 		@Override
 		public boolean hasNext() {
+			//false via short circuit evaluation if stack is empty OR cursor is null.
 			return (!stack.empty() || cursor != null);
 		}// has next
 
-		
+		/**
+		 * @return returns the next element from the set. These are default
+		 *  lexicographical order due to the fact that elements are constrained 
+		 *  to be comparable.
+		 */
 		@SuppressWarnings("unchecked")
 		@Override
-		//return the next element from the set. These are default lexographical order due
-		//to the fact that elements are constrained to be comparable.
 		public T next() {
 			T savedCursor = null;
 			// go left until we hit the left most
@@ -35,11 +52,11 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 					stack.push((T) cursor);
 					cursor = cursor.left;
 				} else {
-					if (!stack.isEmpty()) {
-						cursor = (BSTNode<T>) stack.pop();
-						savedCursor = (T) cursor.data;
-						cursor = cursor.right;
-						return savedCursor;
+					if (!stack.isEmpty()) {//if not empty
+						cursor = (BSTNode<T>) stack.pop();//pop the stack
+						savedCursor = (T) cursor.data;//save the data.
+						cursor = cursor.right;//move the cursor.
+						return savedCursor;//return the data.
 					}
 				}
 			}
@@ -48,12 +65,17 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 
 	}// treeiterator class
 	
+	/**
+	 * Generic class representing a binary tree node.
+	 */
 	private class BSTNode<T> {
 		BSTNode<T> left;
 		BSTNode<T> right;
 		T data;
-		
-		//return true if this class has a left element.
+		/**
+		 * 
+		 * @return true if this class has a left element false otherwise.
+		 */
 		public boolean hasLeft(){
 			if(left == null){
 				return false;
@@ -62,7 +84,10 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 			}
 		}
 		
-		//return true if this class has a right element.
+		/**
+		 * 
+		 * @return true if this class has a right element false otherwise.
+		 */
 		public boolean hasRight(){
 			if(right == null){
 				return false;
@@ -71,14 +96,20 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 			}
 		}
 		
-		//constructor insert the data.
+		/**
+		 * Build a new BSTNode with the given argument.
+		 * @param data the data to add to this node in the tree.
+		 */
 		BSTNode(T data){
 			this.data = data;
 			left = null;
 			right  = null;
 		}//BSTNode constructor
 		
-		//to string for bstclass. for testing only...
+		/**
+		 * @return formated string representing a bst node
+		 * primarily for testing.
+		 */
 		public String toString(){
 			if(this.data != null){
 				return (String) data;
@@ -89,15 +120,20 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 		
 	}//BSTNode class
 
-	//iterator for retrunign an iterator to this tree.
+	/**
+	 * @return iterator returns an iterator representing the private tree class.
+	 */
 	@Override
 	public Iterator<T> iterator() {
-		// TODO Auto-generated method stub
 		return new TreeIterator<T>();
 	}//iterator
 
 	
-	//non-recursive function for inserting data
+	/**
+	 * non-recursive function for inserting data
+	 * @param data the generic data to insert.
+	 * @return return the recursive insert, true on success, false on failure.
+	 */
 	public boolean insert(T data){
 		if(root == null){//if the root is null we found the location
 			root = new BSTNode<T>(data);
@@ -108,7 +144,12 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 		}
 	}//insert
 	
-	//insert a value into a bst recursivly. 
+	/**
+	 * Private version called by public insert which inserts a value into a bst recursively.
+	 * @param p binary search tree node should init to reference to this root.
+	 * @param value the value to insert into the tree
+	 * @return return true on success false on failue.
+	 */ 
 	private boolean insert(BSTNode<T> p, T value){
 		int comp = p.data.compareTo(value);
 		//if it's equal to zero the data is already in the  list return false 
@@ -146,33 +187,40 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 	//private recursive version called by find.
 	private BSTNode<T> search(T val, BSTNode<T> root){
 		if (root != null) {
+			//if 0 returns they are equal
 			if (root.data.compareTo(val) == 0) {
-				//if (root != null)
 					return root;
-			} else if (root.data.compareTo(val) > 0) {
+			} else if (root.data.compareTo(val) > 0) { // traverse left
 				return search(val, root.left);
-			} else if (root.data.compareTo(val) < 0) {
+			} else if (root.data.compareTo(val) < 0) { //traverse right
 				return search(val, root.right);
 			} else {// we are here by mistake return null for debugging.
 				System.out.println("Failed");
 				return null;
 			}
 		} else {
-			//System.out.println("Failed");
 			return null;
 		}
 	}//search
 	
-	//public facing non-recursive find. Just calls the recursive version.
+	/**
+	 * Public facing non-recursive find. Just calls the recursive version.
+	 * @param val the value to find.
+	 * @return true on success and false on failure.
+	 */
 	public BSTNode<T> find(T val){
 		if(root == null){
 			return root;
 		}else{
-			return search(val, root);
+			return search(val, root);//start recursing.
 		}
 	}//find
 	
-	//find out if a value exist in a tree.
+	/**
+	 * Find out if a value exist in a tree.
+	 * @param data the data to search for
+	 * @return true if this tree contains an element false if it doesn't.
+	 */
 	public boolean hasElement(T data){
 		if(root != null){
 		if(find(data) != null || root == null){
@@ -185,6 +233,11 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 		}
 	}//hasElement
 	
+	/**
+	 * Delete a value from a bst.
+	 * @param val the value to remove from a tree.
+	 * @return true if the tree contained the value and it was deleted false otherwise.
+	 */
 	public boolean delete(T val){
 		boolean removed = false;
 		// the value isn't in the tree.
@@ -222,58 +275,67 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 					return true;
 				}
 			}else if(count == 2){
-				//let it continue
+				//let it continue so do nothing.
+				//this is just here to reduce ambiguity
+				//and increase readability.
 			}
 		}
-		
+		//switch for the count of children
 		switch (count) {
 		
-		// it's a leaf hack it off!
+		// this node has no children so it's a leaf hack it off!
 		case (0):
+			//switch to check where the node is.
 			switch (leftOrRight(parent, val)) {
 			
 			case LEFT:
 				parent.left = null;
 				removed = true;
 				size--;
-				break;
+				break;//case left
+				
 			case RIGHT:
 				parent.right = null;
 				removed = true;
 				size--;
-				break;
+				break;//case right
 			
 			}
-		break;
+		break;//zero children
 		
-		//one child
+		//one child case need to go around target node.
 		case (1):
+			//find where the target is relative to the parent.
 			switch (leftOrRight(parent, val)) {
 			//target lies to the left of the parent.
 			case LEFT:
+				//find out if the target as a left or right child.
 				switch(hasLeftOrRight(target)){
 				//the target has a child on the left.
 				case LEFT:
 					parent.left = target.left;
 					removed = true;
-					cleanUp(target);
+					cleanUp(target);//set the node to point to nothing.
 					size--;
-					break;
+					break;//case left
+					
 				//the target has a child on the right.
 				case RIGHT:
 					parent.left = target.right;
 					removed = true;
 					cleanUp(target);
 					size--;
-					break;
-				//some way made it here without children
+					break;//case right
+					
+				//some way made it here without children we are now in a errored state.
 				default:
 					//hold breath and pray to god we aren't deleting half our tree :)... jk
 					parent.left = null;
 					size--;
-					break;	
+					break;//case default.	
 				}
-				break;
+				break;//case left.
+				
 			//target lies to the right of parent.
 			case RIGHT:
 				switch(hasLeftOrRight(target)){
@@ -283,23 +345,26 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 					parent.right = target.left;
 					removed = true;
 					cleanUp(target);
-					break;
+					break;//case left.
+					
 				//target has a child on the right.	
 				case RIGHT:
 					size--;
 					parent.right = target.right;
 					removed = true;
 					cleanUp(target);
-					break;
+					break;//case right 
+					
 				default:
 					size--;
 					parent.right = null;
+					break;//default case
 				}
-				break;
+				break;//case right
 			}
-		break;
+		break;//case 1
 		
-		//two children
+		//two children need to do a replacement.
 		case(2):
 			//parent of smallest first target to swap second.
 			BSTNode[] dataArray = findSmallestInRight(target);
@@ -323,13 +388,18 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 				removed = true;
 				p.left = null;
 			}
-		break;
+		break;//case 2
 		
 		}
 		return removed;
 	}//delete
 	
-	@SuppressWarnings("unchecked")
+	/**
+	 * Find the parent of a given node.
+	 * @param val the value to find the parent of
+	 * @param root a bstnode representing at first the root of this tree.
+	 * @return a reference to a bst node.
+	 */
 	private BSTNode<T> findParent(T val, BSTNode<T> root){
 		//if this is the trees root we have a special case.
 		//parent = target
@@ -340,10 +410,16 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 		}
 	}//findParent
 	
-	
-	
+	/**
+	 * Find the parent of a node. This is the private recursive version
+	 * @param root a reference to a bst node.
+	 * @param val the value representing the value to find the parent of.
+	 * @param parent the parent of the node that is root.
+	 * @return return a reference to a bst node.
+	 */
 	private BSTNode<T> findParent(BSTNode<T> root, T val, BSTNode<T> parent){
 			if (root != null) {
+				//this is the value we are looking for.
 				if (root.data.compareTo(val) == 0) {
 						return parent;
 				} else if (root.data.compareTo(val) > 0) {
@@ -355,14 +431,17 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 					return null;
 				}
 			} else {
-				//System.out.println("Failed");
 				return null;
 			}
 	}	
 	
-	//decide where the node is
+	/**
+	 * Decide if the node is on the right or left.
+	 * @param node the node to check if it has a left or right node.
+	 * @param val the value we are looking for on the left or right.
+	 * @return an enum type that represents the left or right value on a node.
+	 */
 	private leftRight leftOrRight(BSTNode<T> node, T val){
-		//if(node != root){
 		if(node.left != null){
 			if(node.left.data.compareTo(val) == 0){
 				return leftRight.LEFT;
@@ -373,16 +452,21 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 				return leftRight.RIGHT;
 			}
 		}
-		//}
 		//Should only end up here when the root is the parent and the target
 		//since we previously guaranteed that the data passed to this function
 		//was a parent node.
 		return null;
 	}
 	
-	//used to quickly determine if there exist a value on the side.
-	//should be cautous when using since this was designed with using it 
-	//in cases where a node has one child.
+	/**
+	 * used to quickly determine if there exist a value on the side.
+	 * should be cautious when using since this was designed with using it
+	 * in cases where a node has one child.
+	 * @param node the node to check if it has right or left children.
+	 * @return return an enum type that represents the right or left element of the node
+	 * doesn't matter which we return first since the way this function is used doesn' care.
+	 * If this fails it returns null.
+	 */
 	private leftRight hasLeftOrRight(BSTNode<T> node){
 		if(node.hasLeft()){
 			return leftRight.LEFT;
@@ -391,8 +475,13 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 		} else {
 			return null;
 		}
-	}
+	}//has left or right.
 	
+	/**
+	 * Count the children on a given node.
+	 * @param node the node to count the children of.
+	 * @return the number of children the tree contains.
+	 */
 	private int countChildren(BSTNode<T> node){
 		int counter = 0;
 		if(node.hasLeft()){
@@ -404,6 +493,9 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 		return counter;
 	}//countchildren
 	
+	/**
+	 * enum containing the left and right values.
+	 */
 	private enum leftRight{
 		LEFT, RIGHT;
 	}//left or right enum
@@ -416,7 +508,13 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 		node.data = null;
 	}
 
-	//get the smallest value in a given nodes right subtree
+	/**
+	 * Get the smallest value in a given nodes right subtree for use 
+	 * when deleting a node with two children.
+	 * @param node the node to find the smallest value in right subtree.
+	 * @return A generic array containing the smallest node in the right subtree
+	 * at r[1] and the parent of that node in r[0]
+	 */
 	private BSTNode<T>[] findSmallestInRight(BSTNode<T> node){
 		boolean con = true;
 		BSTNode<T> rVal = null;
@@ -436,12 +534,16 @@ public class BST<T extends Comparable<T> > implements Iterable<T> {
 				con = false;//else we are at the smallest break and return.
 			}
 		}
+		//make an array of the raw class
 		BSTNode<T>[] r = new BSTNode[2];
 		r[0] = parent;
 		r[1] =  rVal;
 		return r;
-	}
+	}//findSmallestInRight
 	
+	/**
+	 * @return size of this tree.
+	 */
 	public int getSize(){
 		return size;
 	}
