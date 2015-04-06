@@ -21,7 +21,17 @@ public class IndexedFile
    public IndexedFile(Disk disk, int recordSize, int keySize,
                       int firstAllocated, int indexStart,
                       int indexSectors, int indexRoot, int indexLevels)
-   {}
+   {
+	   this.disk = disk;
+	   this.recordSize = recordSize;
+	   this.keySize = keySize;
+	   this.firstAllocated = firstAllocated;
+	   this.indexStart = indexStart;
+	   this.indexRoot = indexRoot;
+	   this.indexSectors = indexSectors;
+	   this.indexLevels = indexLevels;
+	   
+   }
    public boolean insertRecord(char[] record)
    {
 	   return true;

@@ -8,11 +8,19 @@ public class Disk
    public Disk()    // for default sectorCount and sectorSize
    {}
    public Disk(int sectorCount, int sectorSize)
-   {}
-   public void readSector(int sectorNumber, char[] buffer)   // sector to 
-   {}                                                        // buffer
-   public void writeSector(int sectorNumber, char[] buffer)  // buffer to
-   {}                                                        // sector 
+   {
+	   this.sectorCount = sectorCount;
+	   this.sectorSize = sectorSize;
+   }
+   public void readSector(int sectorNumber, char[] buffer)   // sector to buffer
+   {
+	   
+   }                                                        
+   
+   public void writeSector(int sectorNumber, char[] buffer)  // buffer to sector 
+   {
+	   
+   }
    public int getSectorCount()
    {
       return sectorCount;
