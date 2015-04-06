@@ -6,7 +6,10 @@ public class Disk
    private int sectorSize;    // characters in a sector
    private char[][] store;    // all disk data is stored here
    public Disk()    // for default sectorCount and sectorSize
-   {}
+   {
+	   this.sectorCount = 10000;
+	   this.sectorSize = 512;
+   }
    public Disk(int sectorCount, int sectorSize)
    {
 	   this.sectorCount = sectorCount;
