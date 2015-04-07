@@ -30,6 +30,7 @@ public class IndexedFile
 	   this.indexRoot = indexRoot;
 	   this.indexSectors = indexSectors;
 	   this.indexLevels = indexLevels;
+	   buffer = new char[disk.getSectorSize()];
 	   
    }
    public boolean insertRecord(char[] record)
@@ -44,6 +45,18 @@ public class IndexedFile
    private int getSector(String key)   // returns sector number indicated by key
    {
 	   return 0;
-   }  
+   }
+   
+   private void createIndex(){
+	   
+   }
+   
+   private void insertInitialData(){
+	   
+   }
+   
+   private class indexNode{
+	   
+   }
    
 }
