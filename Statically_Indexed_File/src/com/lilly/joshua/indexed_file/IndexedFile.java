@@ -47,13 +47,10 @@ public class IndexedFile
 	   return 0;
    }
    
-   private void createIndex(){
+   public void createIndex(){
 	   
    }
    
-   private void insertInitialData(){
-	   
-   }
    
    private class indexNode{
 	   
