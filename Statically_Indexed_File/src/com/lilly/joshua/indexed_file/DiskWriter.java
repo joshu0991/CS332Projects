@@ -8,7 +8,7 @@ public class DiskWriter {
 		
 		 Disk disk = new Disk();
 		 try {
-			Loader loader = new Loader(disk, 60, 999);
+			Loader loader = new Loader(disk);
 		} catch (DiskOverFlowError e) {
 			e.printStackTrace();
 		}

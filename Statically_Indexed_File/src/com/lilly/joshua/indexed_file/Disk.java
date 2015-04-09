@@ -18,13 +18,14 @@ public class Disk
 	   store = new char[sectorCount][sectorSize];
    }
 
-	public char[] readSector(int sectorNumber, char[] buffer)   // sector to buffer
+   //buffer should be created with new therefore isn't popped with stack
+   //frame.
+	public void readSector(int sectorNumber, char[] buffer)   // sector to buffer
    {
 		//have to read one sector at a time. 
 	 for(int i = 0; i < sectorSize; i++){
 		 buffer[i] = store[sectorNumber][i];
 	 }
-	 return buffer;
    }
 	
    public void writeSector(int sectorNumber, char[] buffer) throws DiskOverFlowError  // buffer to sector 
