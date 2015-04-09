@@ -8,16 +8,18 @@ import java.io.IOException;
 public class Loader {
 
 	Disk disk;
+	//999 is sector 1000
+	private int sectorNumber = 999;
 	
 	public Loader(){}
 	
-	public Loader(Disk disk){
+	public Loader(Disk disk) throws DiskOverFlowError{
 		this.disk = disk;
 		loadData();
 		buildIndex();
 	}
 	
-	public void loadData(){
+	public void loadData() throws DiskOverFlowError{
 		BufferedReader reader = null;
 		 try {
 			reader = new BufferedReader(new FileReader("/Users/sputnik-110/Documents/workspace/Statically_Indexed_File/src/com/lilly/joshua/indexed_file/mountainofdata.txt"));
@@ -28,10 +30,21 @@ public class Loader {
 		 
 		String data;
 		try {
+			//Track the number of files per sector
+			int i = 1;
 			while((data = reader.readLine()) != null){
 				//build a record with 60 character size.
 				char[] record = buildRecord(data);
 				//write the records to the next open sector.......
+				disk.writeSector(sectorNumber, record);
+				
+				//only write 5 records to a file
+				if(i == 5){
+					i = 1;
+					sectorNumber++;
+				} else {
+					i++;
+				}
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -75,7 +88,6 @@ public class Loader {
 				buf[k] = '\0';
 			}
 		}
-		System.out.println(String.valueOf(buf)+  buf.length);
 		return buf;
 	}//buildRecord
 	

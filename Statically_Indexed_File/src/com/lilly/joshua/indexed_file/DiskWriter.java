@@ -7,7 +7,11 @@ public class DiskWriter {
 	public static void main(String[] args) {
 		
 		 Disk disk = new Disk();
-		 Loader loader = new Loader(disk);
+		 try {
+			Loader loader = new Loader(disk);
+		} catch (DiskOverFlowError e) {
+			e.printStackTrace();
+		}
 		//IndexedFile if = new IndexedFile(disk, 60, 27, 1000, )
 		Scanner scanner = new Scanner(System.in);
 		boolean finished = false;
