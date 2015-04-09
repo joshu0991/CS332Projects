@@ -18,6 +18,12 @@ public class Loader {
 	int indexLevels;
 	public Loader(){}
 
+	//default for basic Loader class.
+	public Loader(Disk disk) throws DiskOverFlowError{
+		this.disk = disk;
+		this.recordSize = 60;
+		this.firstAllocated = 999;
+	}
 	
 	public Loader(Disk disk, int recordSize, 
 			int firstAllocated) throws DiskOverFlowError{
