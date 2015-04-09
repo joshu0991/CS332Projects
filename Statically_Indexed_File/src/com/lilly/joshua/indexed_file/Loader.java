@@ -16,7 +16,6 @@ public class Loader {
 	private int indexSectors;
 	int indexRoot; 
 	int indexLevels;
-	public Loader(){}
 
 	//default for basic Loader class.
 	public Loader(Disk disk) throws DiskOverFlowError{
@@ -67,10 +66,40 @@ public class Loader {
 		}
 	}//loadData
 	
+	//getters
+	
 	public int getTotalSectorsUsed() {
 		return totalSectorsUsed;
 	}
+	
+	public int getRecordSize() {
+		return recordSize;
+	}
 
+	public int getKeySize() {
+		return keySize;
+	}
+
+	public int getFirstAllocated() {
+		return firstAllocated;
+	}
+
+	public int getIndexStart() {
+		return indexStart;
+	}
+
+	public int getIndexSectors() {
+		return indexSectors;
+	}
+
+	public int getIndexRoot() {
+		return indexRoot;
+	}
+
+	public int getIndexLevels() {
+		return indexLevels;
+	}
+	
 	//construct a record by removing unwanted characters and then inserting
 	//the data into a recordSize character long record. Truncates the data if it is larger
 	//than sizes in the character array.
