@@ -8,13 +8,22 @@ import java.io.IOException;
 public class Loader {
 
 	Disk disk;
-	//999 is sector 1000
-	private int sectorNumber = 999;
-	
+	private int totalSectorsUsed = 0;
+	private int recordSize;
+	private int keySize;
+	private int firstAllocated;
+	private int indexStart;
+	private int indexSectors;
+	int indexRoot; 
+	int indexLevels;
 	public Loader(){}
+
 	
-	public Loader(Disk disk) throws DiskOverFlowError{
+	public Loader(Disk disk, int recordSize, 
+			int firstAllocated) throws DiskOverFlowError{
 		this.disk = disk;
+		this.recordSize = recordSize;
+		this.firstAllocated = firstAllocated;
 		loadData();
 		buildIndex();
 	}
@@ -33,15 +42,15 @@ public class Loader {
 			//Track the number of files per sector
 			int i = 1;
 			while((data = reader.readLine()) != null){
-				//build a record with 60 character size.
+				//build a record with recordSize character size.
 				char[] record = buildRecord(data);
 				//write the records to the next open sector.......
-				disk.writeSector(sectorNumber, record);
-				
+				disk.writeSector(firstAllocated, record);
+				totalSectorsUsed++;
 				//only write 5 records to a file
 				if(i == 5){
 					i = 1;
-					sectorNumber++;
+					firstAllocated++;
 				} else {
 					i++;
 				}
@@ -50,14 +59,18 @@ public class Loader {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
+	}//loadData
 	
+	public int getTotalSectorsUsed() {
+		return totalSectorsUsed;
+	}
+
 	//construct a record by removing unwanted characters and then inserting
-	//the data into a 60 character long record. Truncates the data if it is larger
+	//the data into a recordSize character long record. Truncates the data if it is larger
 	//than sizes in the character array.
 	private char[] buildRecord(String dataLine){
-		//records are always 60 chars long.
-		char[] buf = new char[60];
+		//records are always recordSize chars long.
+		char[] buf = new char[recordSize];
 		int l = 0;
 		String[] brokenRecord = breakUpRecord(dataLine);
 		//write the key/city to a record file.
@@ -81,7 +94,7 @@ public class Loader {
 		l = 0;
 		//write the size
 		String size = brokenRecord[2];
-		for(int k = 55; k < 60; k++, l++){
+		for(int k = 55; k < recordSize; k++, l++){
 			if((l) < size.length()){
 				buf[k] = size.charAt(l);
 			} else {
@@ -115,6 +128,8 @@ public class Loader {
 	}//breakUpRecord
 	
 	private void buildIndex(){
+		
+		
 		
 	}//build index.
 	

@@ -48,11 +48,13 @@ public class Disk
 		   		+ "  Did you mean to write to the overflow buffer?");
 		   
 	   }
+	   /*
 	   char[] tester = new char[sectorSize];
 	   for(int test = 0; test < 300; test++){
 		   tester[test] = store[sectorNumber][test];
 	   }
 	   System.out.println("New sector is " + String.valueOf(tester));
+	   */
    }
    
    private int calculateSectorSize(int sectorNumber){
