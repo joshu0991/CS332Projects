@@ -1,7 +1,14 @@
 package com.lilly.joshua.indexed_file;
-
+/*
+ * TEST CODEEEEE
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+*/
 public class Disk
 {
+	static int counter = 0;
    private int sectorCount;   // sectors on the disk
    private int sectorSize;    // characters in a sector
    private char[][] store;    // all disk data is stored here
@@ -31,23 +38,31 @@ public class Disk
 	
    public void writeSector(int sectorNumber, char[] buffer)  // buffer to sector 
    {
-	   System.out.println("Writing " + String.valueOf(buffer) + " to sector number " + sectorNumber);
 	   //length of the data to write.
 	   int length = buffer.length;
 	   
-	   //this is a redundant check to make sure the disk user
-	   //is checking to make sure the buffer size is large enough
-	   //if this fails the record should have been written to 
-	   //the overflow buffer.
 	   for(int i = 0; i <= (length - 1); i++){
 			   store[sectorNumber][i] = buffer[i];
-		   }
+		}
 	   
 	   char[] tester = new char[300];
 	   for(int test = 0; test < 300; test++){
 		   tester[test] = store[sectorNumber][test];
 	   }
-	   System.out.println("New sector is " + String.valueOf(tester) + " " + tester.length);
+	   /*
+	    * ------------------TEST CODEEEEE
+	   try {
+		   	counter++;
+			BufferedWriter writer = new BufferedWriter(new FileWriter("/Users/sputnik-110/Documents/workspace/Statically_Indexed_File/src/com/lilly/joshua/indexed_file/out.txt", true));
+			writer.write(String.valueOf(tester));
+			writer.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	   System.out.println(String.valueOf(tester) + "--LINE--");
+	   System.out.println("COUNTER " + counter);
+	   */
    }
    
    public int getSectorCount()
