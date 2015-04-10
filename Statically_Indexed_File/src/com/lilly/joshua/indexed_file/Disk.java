@@ -1,6 +1,6 @@
 package com.lilly.joshua.indexed_file;
 /*
- * TEST CODEEEEE
+ //TEST CODEEEEE
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -50,7 +50,7 @@ public class Disk
 		   tester[test] = store[sectorNumber][test];
 	   }
 	   /*
-	    * ------------------TEST CODEEEEE
+	   // ------------------TEST CODEEEEE
 	   try {
 		   	counter++;
 			BufferedWriter writer = new BufferedWriter(new FileWriter("/Users/sputnik-110/Documents/workspace/Statically_Indexed_File/src/com/lilly/joshua/indexed_file/out.txt", true));

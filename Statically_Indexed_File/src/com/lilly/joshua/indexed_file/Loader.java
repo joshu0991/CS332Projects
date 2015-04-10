@@ -18,7 +18,6 @@ public class Loader {
 	private int indexRoot; 
 	private int indexLevels;
 	private int indexFileSize;
-	private int levelSize;
 	
 	//default for basic Loader class.
 	public Loader(Disk disk) throws DiskOverFlowError{
@@ -77,10 +76,10 @@ public class Loader {
 					
 					//throw the old array on the ground!!!
 					buffer = new char[disk.getSectorSize()];
-					buffer = buildBuffer(buffer, record);
+					buffer = buildBuffer(buffer, record, "data");
 				//if this isn't the fifth file we will just append the record to the buffer.
 				} else {
-					buffer = buildBuffer(buffer, record);
+					buffer = buildBuffer(buffer, record, "data");
 					i++;
 				}
 			}
@@ -89,7 +88,7 @@ public class Loader {
 			if(buffer[0] != 0){
 				disk.writeSector(location, buffer);
 			}
-			this.indexStart = firstAllocated + totalSectorsUsed;
+			this.indexStart = firstAllocated + totalSectorsUsed + 1;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -202,9 +201,11 @@ public class Loader {
 			
 			//build an entire level of "nodes" each level with
 			//fewer than the previous.
-			levelSize = buildLevel(start, (start+levelSize));
+			int end = start + levelSize;
+			levelSize = buildLevel(start, end);
 			indexLevels++;
-			start = totalSectorsUsed + levelSize; //----------------------need to check this------------------		
+			//new start is end of last section.
+			start = end; //----------------------need to check this------------------		
 		}
 		
 		//get the first keySize chars and sector number
@@ -221,7 +222,7 @@ public class Loader {
 	private void bufferDisk(){
 		try {
 			loadData();
-			//buildIndex();
+			buildIndex();
 		} catch (DiskOverFlowError e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -231,40 +232,48 @@ public class Loader {
 	//build a tree level given a begin and end index
 	//loop over all given sectors get the first keys and sectors
 	//store those in another sector.
-	private int buildLevel(int begin, int end) throws DiskOverFlowError{
+	private int buildLevel(int begin, int end){
 		//number of "nodes" this level contains.
-		levelSize = 1;
+		int levelSize = 1;
 		//have to read the entire sector at a time.
-		char[] buffer = new char[disk.getSectorSize()];
-		int writeLocation = indexStart;
+		char[] readBuffer = new char[disk.getSectorSize()];
+		char[] writeBuffer = new char[disk.getSectorSize()];
+		int writeLocation = end + 1;
 		//initially we will automatically take up one sector.
 		indexSectors++;
 		//we initially have this many bits that we can fill up.
 		int remainingBits = disk.getSectorSize();
 		char[] indexListing = new char[indexFileSize];
-		for(int i = begin; i < end; i++){
+		for(int i = begin; i <= end; i++){
 			
 			//fill up the "bucket" so we can get the key.
-			disk.readSector(i, buffer);
+			disk.readSector(i, readBuffer);
 			
 			//build an indexed record
-			indexListing = buildIndexFile(buffer, i);
-			
-			//append the index to the buffer to be rewritten.
-			buffer = buildBuffer(buffer, indexListing);
+			indexListing = buildIndexFile(readBuffer, i);
 			
 			//if remaining bits is greater than indexFileSize write index to the same sector.
 			if(remainingBits >=  indexFileSize){
-				disk.writeSector(writeLocation, buffer);
+				
+				//append the index to the buffer to be rewritten.
+				writeBuffer = buildBuffer(writeBuffer, indexListing, "index");
 				remainingBits -= indexListing.length;
+			//we write so reset everything.
 			} else {
 				totalSectorsUsed++;
+				disk.writeSector(writeLocation, writeBuffer);
 				writeLocation = indexSectors + indexStart;
-				disk.writeSector(writeLocation, buffer);
 				//incremented at the beginning so need to use that position.
 				indexSectors++;
+				writeBuffer = new char[disk.getSectorSize()];
+				writeBuffer = buildBuffer(writeBuffer, indexListing, "index");
+				indexListing = new char[indexFileSize];
+				remainingBits = (disk.getSectorSize() - indexListing.length);
 				levelSize++;
 			}
+		}
+		if(writeBuffer[0] != '\0'){
+			disk.writeSector(writeLocation, writeBuffer);
 		}
 		
 		//we have the root and it is equal to where we are writing.
@@ -317,25 +326,46 @@ public class Loader {
 	
 	//call this when reading a file and editing the contents. This can only be 
 	//called when we have previously checked that the buffer has the appropriate space.
-	private char[] buildBuffer(char[] currentBuffer, char[] fileToAdd){
+	//type can be data for data building or index for index files.
+	private char[] buildBuffer(char[] currentBuffer, char[] fileToAdd, String type){
 		//start position for new Data.
-		int position = calculateSectorSize(currentBuffer);
-		for(int i = 0; i < fileToAdd.length; i++, position++){
-			currentBuffer[position] = fileToAdd[i];
+		if(type.equals("data")){
+			int position = calculateSectorSize(currentBuffer, type);
+			for(int i = 0; i < fileToAdd.length; i++, position++){
+				currentBuffer[position] = fileToAdd[i];
+			}
+		} else if(type.equals("index")){
+			int position = calculateSectorSize(currentBuffer, type);
+			for(int i = 0; i < fileToAdd.length; i++, position++){
+				currentBuffer[position] = fileToAdd[i];
+			}
+		//didn't pass in a correct type.
+		} else {
+			return null;
 		}
 		return currentBuffer;
 	}//buildBuffer
 	
 	//find out how many spaces are occupied on a disk.
-	private int calculateSectorSize(char[] sector){
+	private int calculateSectorSize(char[] sector, String type){
 		   int size = 0;
 		   //loop over entire sector
-		   while(size < disk.getSectorSize()){
-			   if(sector[size] != 0  || betweenSections(sector, size)){
-				   size++;
-			   } else {
-				   break;
-			   }
+		   if(type.equals("data")){
+			   while(size < disk.getSectorSize()){
+				   if(sector[size] != 0){
+					   size+=60;
+				   } else {
+					   break;
+				   }
+		   		}
+		   } else if(type.equals("index")){
+			   while(size < disk.getSectorSize()){
+				   if(sector[size] != 0){
+					   size+= indexFileSize;
+				  	} else {
+					  break;
+				  	}
+			   	}
 		   }
 		   return size;
 	   }//calculateSectorSize
