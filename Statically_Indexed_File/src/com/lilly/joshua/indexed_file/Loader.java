@@ -67,7 +67,7 @@ public class Loader {
 				//resets counters. 
 				//We only write when there are 5 files in the buffer.
 				if(i == 5){
-					i = 0;
+					i = 1;
 					//write the records to the next open sector when the buffer is full.
 					disk.writeSector(location, buffer);
 					location++;
@@ -77,7 +77,7 @@ public class Loader {
 					
 					//throw the old array on the ground!!!
 					buffer = new char[disk.getSectorSize()];
-					
+					buffer = buildBuffer(buffer, record);
 				//if this isn't the fifth file we will just append the record to the buffer.
 				} else {
 					buffer = buildBuffer(buffer, record);
