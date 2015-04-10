@@ -19,55 +19,35 @@ public class Disk
    }
 
    //buffer should be created with new therefore isn't popped with stack
-   //frame.
+   //frame
 	public void readSector(int sectorNumber, char[] buffer)   // sector to buffer
    {
 		//have to read one sector at a time. 
 	 for(int i = 0; i < sectorSize; i++){
+
 		 buffer[i] = store[sectorNumber][i];
 	 }
    }
 	
-   public void writeSector(int sectorNumber, char[] buffer) throws DiskOverFlowError  // buffer to sector 
+   public void writeSector(int sectorNumber, char[] buffer)  // buffer to sector 
    {
 	   System.out.println("Writing " + String.valueOf(buffer) + " to sector number " + sectorNumber);
 	   //length of the data to write.
 	   int length = buffer.length;
-	   int currentSectorSize = calculateSectorSize(sectorNumber);
 	   
 	   //this is a redundant check to make sure the disk user
 	   //is checking to make sure the buffer size is large enough
 	   //if this fails the record should have been written to 
 	   //the overflow buffer.
-	   if((sectorNumber - currentSectorSize) > 60){//okay to write in this case.
-	   		//add the values to the empty sector.
-		   for(int i = currentSectorSize; i <= (length - 1) + currentSectorSize; i++){
-			   store[sectorNumber][i] = buffer[(i - currentSectorSize)];
+	   for(int i = 0; i <= (length - 1); i++){
+			   store[sectorNumber][i] = buffer[i];
 		   }
-	   } else {
-		   throw new DiskOverFlowError("Tried to write to a full sector."
-		   		+ "  Did you mean to write to the overflow buffer?");
-		   
-	   }
-	   /*
-	   char[] tester = new char[sectorSize];
+	   
+	   char[] tester = new char[300];
 	   for(int test = 0; test < 300; test++){
 		   tester[test] = store[sectorNumber][test];
 	   }
-	   System.out.println("New sector is " + String.valueOf(tester));
-	   */
-   }
-   
-   private int calculateSectorSize(int sectorNumber){
-	   int size = 0;
-	   while(size < sectorSize){
-		   if(store[sectorNumber][size] != 0){
-			   size += 60;
-		   } else {
-			   break;
-		   }
-	   }
-	   return size;
+	   System.out.println("New sector is " + String.valueOf(tester) + " " + tester.length);
    }
    
    public int getSectorCount()

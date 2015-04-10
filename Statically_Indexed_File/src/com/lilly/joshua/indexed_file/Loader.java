@@ -53,22 +53,41 @@ public class Loader {
 		String data;
 		try {
 			//Track the number of files per sector
-			int i = 1;
+			int i = 0;
 			int location = firstAllocated;
+			
+			//buffer for storing data.
+			char[] buffer = new char[disk.getSectorSize()];
+			
 			while((data = reader.readLine()) != null){
 				//build a record with recordSize character size.
 				char[] record = buildRecord(data);
-				//write the records to the next open sector.
-				disk.writeSector(location, record);
-				//could get this though subtraction but this var makes it clearer.
-				totalSectorsUsed++;
-				//only write 5 records to a file
+				
+				//per spec only write 5 records to a sector initially, 
+				//resets counters. 
+				//We only write when there are 5 files in the buffer.
 				if(i == 5){
-					i = 1;
+					i = 0;
+					//write the records to the next open sector when the buffer is full.
+					disk.writeSector(location, buffer);
 					location++;
+					
+					//could get this though subtraction but this var makes it clearer.
+					totalSectorsUsed++;
+					
+					//throw the old array on the ground!!!
+					buffer = new char[disk.getSectorSize()];
+					
+				//if this isn't the fifth file we will just append the record to the buffer.
 				} else {
+					buffer = buildBuffer(buffer, record);
 					i++;
 				}
+			}
+			//with this design it is likely that the while loop will exit with data in
+			//the buffer that still needs to be written. So write it.
+			if(buffer[0] != 0){
+				disk.writeSector(location, buffer);
 			}
 			this.indexStart = firstAllocated + totalSectorsUsed;
 		} catch (IOException e) {
@@ -130,7 +149,7 @@ public class Loader {
 		}
 		//write the country
 		String country = brokenRecord[1];
-		for(int j = 27; j < 55; j++, l++){
+		for(int j = 27; j < 54; j++, l++){
 			if((l) < country.length()){
 				buf[j] = country.charAt(l);
 			} else {
@@ -140,7 +159,7 @@ public class Loader {
 		l = 0;
 		//write the size
 		String size = brokenRecord[2];
-		for(int k = 55; k < recordSize; k++, l++){
+		for(int k = 54; k < recordSize; k++, l++){
 			if((l) < size.length()){
 				buf[k] = size.charAt(l);
 			} else {
@@ -202,7 +221,7 @@ public class Loader {
 	private void bufferDisk(){
 		try {
 			loadData();
-			buildIndex();
+			//buildIndex();
 		} catch (DiskOverFlowError e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -222,19 +241,22 @@ public class Loader {
 		indexSectors++;
 		//we initially have this many bits that we can fill up.
 		int remainingBits = disk.getSectorSize();
-
-		for(int i = begin; i <= end; i++){
+		char[] indexListing = new char[indexFileSize];
+		for(int i = begin; i < end; i++){
 			
 			//fill up the "bucket" so we can get the key.
 			disk.readSector(i, buffer);
 			
 			//build an indexed record
-			buffer = buildIndexFile(buffer, i);
+			indexListing = buildIndexFile(buffer, i);
+			
+			//append the index to the buffer to be rewritten.
+			buffer = buildBuffer(buffer, indexListing);
 			
 			//if remaining bits is greater than indexFileSize write index to the same sector.
 			if(remainingBits >=  indexFileSize){
 				disk.writeSector(writeLocation, buffer);
-				remainingBits -= buffer.length;
+				remainingBits -= indexListing.length;
 			} else {
 				totalSectorsUsed++;
 				writeLocation = indexSectors + indexStart;
@@ -282,11 +304,58 @@ public class Loader {
 			//else we have the entire key filled in. So we need to write
 			// the sector value to the last six indices.
 			} else {
+				if(m < 6){
 				indexRecord[i] = sectorNumber[m];
 				m++;
+				} else {
+					indexRecord[i] = '\0';
+				}
 			}
 		}
 		return indexRecord;
+	}//buildIndexFile
+	
+	//call this when reading a file and editing the contents. This can only be 
+	//called when we have previously checked that the buffer has the appropriate space.
+	private char[] buildBuffer(char[] currentBuffer, char[] fileToAdd){
+		//start position for new Data.
+		int position = calculateSectorSize(currentBuffer);
+		for(int i = 0; i < fileToAdd.length; i++, position++){
+			currentBuffer[position] = fileToAdd[i];
+		}
+		return currentBuffer;
+	}//buildBuffer
+	
+	//find out how many spaces are occupied on a disk.
+	private int calculateSectorSize(char[] sector){
+		   int size = 0;
+		   //loop over entire sector
+		   while(size < disk.getSectorSize()){
+			   if(sector[size] != 0  || betweenSections(sector, size)){
+				   size++;
+			   } else {
+				   break;
+			   }
+		   }
+		   return size;
+	   }//calculateSectorSize
+	
+	//look ahead to see if this section is between another. This gets called when we
+	//hit a null char in our sector. Since we hit a null char we may be in the middle of a record
+	//if that is the case we want to count those chars as being used. If we aren't between pieces of
+	//data we can count the 
+	private boolean betweenSections(char[] buffer, int index){
+		boolean betweenData = false;
+		for(int i = index; i < buffer.length; i++){
+			//we found more data on the sector so count these zeros.
+			if(buffer[i] != '\0'){
+				betweenData = true;
+				return betweenData;
+			} else {
+				continue;
+			}
+		}
+		return betweenData;
 	}
 	
 }//loader.java
