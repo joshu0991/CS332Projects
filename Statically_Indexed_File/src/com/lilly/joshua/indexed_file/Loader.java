@@ -370,22 +370,4 @@ public class Loader {
 		   return size;
 	   }//calculateSectorSize
 	
-	//look ahead to see if this section is between another. This gets called when we
-	//hit a null char in our sector. Since we hit a null char we may be in the middle of a record
-	//if that is the case we want to count those chars as being used. If we aren't between pieces of
-	//data we can count the 
-	private boolean betweenSections(char[] buffer, int index){
-		boolean betweenData = false;
-		for(int i = index; i < buffer.length; i++){
-			//we found more data on the sector so count these zeros.
-			if(buffer[i] != '\0'){
-				betweenData = true;
-				return betweenData;
-			} else {
-				continue;
-			}
-		}
-		return betweenData;
-	}
-	
 }//loader.java

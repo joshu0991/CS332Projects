@@ -1,11 +1,11 @@
 package com.lilly.joshua.indexed_file;
-/*
+
  //TEST CODEEEEE
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-*/
+//end test code 
 public class Disk
 {
 	static int counter = 0;
@@ -74,5 +74,18 @@ public class Disk
    {
       return sectorSize;
    }
-   
+   //-------------------------test code --------------------------------------
+   public void printEverything() throws IOException{
+	   BufferedWriter writer = new BufferedWriter(new FileWriter("/Users/sputnik-110/Documents/workspace/Statically_Indexed_File/src/com/lilly/joshua/indexed_file/out.txt", true));
+	   for(int i = 0; i < sectorCount; i++){
+		   char[] a = new char[sectorSize];
+		   for(int j = 0; j < sectorSize; j++){
+			    a[j] = store[i][j];
+		   }
+			writer.write("Sector Number " + i + " " + String.valueOf(a) + "\n");
+	   
+	   }
+	   writer.close();
+   }
+   //end test code -------------------------------------------
 }
