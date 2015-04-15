@@ -1,18 +1,41 @@
 package com.lilly.joshua.indexed_file;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class DiskWriter {
 
 	public static void main(String[] args) {
-		
+		 Loader loader = null;
 		 Disk disk = new Disk();
 		 try {
-			Loader loader = new Loader(disk);
+			loader = new Loader(disk);
 		} catch (DiskOverFlowError e) {
 			e.printStackTrace();
 		}
-		//IndexedFile if = new IndexedFile(disk, 60, 27, 1000, )
+		 
+		 //----------------------------testCODE--------------------------
+		 try {
+			disk.printEverything();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 System.out.println("first alloced " + loader.getFirstAllocated());
+		 System.out.println("Number of levels " + loader.getIndexLevels());
+		 System.out.println("Index sectos " + loader.getIndexSectors());
+		 System.out.println("Total used " + loader.getTotalSectorsUsed());
+		 System.out.println("Index start " + loader.getIndexStart());
+		 System.out.println("Root "  + loader.getIndexRoot());
+		 
+		 //----------------end test code ----------------------------------------------
+		 
+		 
+		 //create a new indexed file. 
+		IndexedFile indexedFile = new IndexedFile(disk, loader.getRecordSize(),
+				loader.getKeySize(), loader.getFirstAllocated(), loader.getIndexStart(),
+				loader.getIndexSectors(), loader.getIndexRoot(), loader.getIndexLevels());
+		
 		Scanner scanner = new Scanner(System.in);
 		boolean finished = false;
 		while(!finished){
@@ -37,5 +60,4 @@ public class DiskWriter {
 		}
 		
 	}
-
 }

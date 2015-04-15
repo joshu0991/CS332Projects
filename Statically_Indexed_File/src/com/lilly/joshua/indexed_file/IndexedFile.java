@@ -47,13 +47,4 @@ public class IndexedFile
 	   return 0;
    }
    
-   public void createIndex(){
-	   
-   }
-   
-   
-   private class indexNode{
-	   
-   }
-   
 }
