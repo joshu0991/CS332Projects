@@ -40,7 +40,7 @@ public class Loader {
 		bufferDisk();
 	}
 	
-	private void loadData() throws DiskOverFlowError{
+	private void loadData() {
 		BufferedReader reader = null;
 		 try {
 			reader = new BufferedReader(new FileReader("/Users/sputnik-110/Documents/workspace/Statically_Indexed_File/src/com/lilly/joshua/indexed_file/mountainofdata.txt"));
@@ -86,6 +86,7 @@ public class Loader {
 			//with this design it is likely that the while loop will exit with data in
 			//the buffer that still needs to be written. So write it.
 			if(buffer[0] != 0){
+				++totalSectorsUsed;
 				disk.writeSector(location, buffer);
 			}
 			this.indexStart = firstAllocated + totalSectorsUsed + 1;
@@ -194,7 +195,7 @@ public class Loader {
 	private void buildIndex() throws DiskOverFlowError{
 		//inits to the size of the data sectors
 		int levelSize = totalSectorsUsed;
-		int start = firstAllocated;
+		int start = firstAllocated - 1;
 		
 		//until there is only one "node" continue this code
 		while(levelSize != 1){
@@ -202,7 +203,7 @@ public class Loader {
 			//build an entire level of "nodes" each level with
 			//fewer than the previous.
 			int end = start + levelSize;
-			levelSize = buildLevel(start, end);
+			levelSize = buildLevel(start + 1, end);
 			indexLevels++;
 			//new start is end of last section.
 			start = end; //----------------------need to check this------------------		
@@ -234,13 +235,11 @@ public class Loader {
 	//store those in another sector.
 	private int buildLevel(int begin, int end){
 		//number of "nodes" this level contains.
-		int levelSize = 1;
+		int levelSize = 0;
 		//have to read the entire sector at a time.
 		char[] readBuffer = new char[disk.getSectorSize()];
 		char[] writeBuffer = new char[disk.getSectorSize()];
 		int writeLocation = end + 1;
-		//initially we will automatically take up one sector.
-		indexSectors++;
 		//we initially have this many bits that we can fill up.
 		int remainingBits = disk.getSectorSize();
 		char[] indexListing = new char[indexFileSize];
@@ -252,6 +251,8 @@ public class Loader {
 			//build an indexed record
 			indexListing = buildIndexFile(readBuffer, i);
 			
+			//only write the index listing to the buffer if it has data to be written.
+			if(indexListing[0] != '\0'){
 			//if remaining bits is greater than indexFileSize write index to the same sector.
 			if(remainingBits >=  indexFileSize){
 				
@@ -261,19 +262,25 @@ public class Loader {
 			//we write so reset everything.
 			} else {
 				totalSectorsUsed++;
-				disk.writeSector(writeLocation, writeBuffer);
-				writeLocation = indexSectors + indexStart;
-				//incremented at the beginning so need to use that position.
 				indexSectors++;
+				disk.writeSector(writeLocation, writeBuffer);
+				writeLocation = indexSectors + indexStart - 1;
+				//incremented at the beginning so need to use that position.
+				//indexSectors++;
 				writeBuffer = new char[disk.getSectorSize()];
 				writeBuffer = buildBuffer(writeBuffer, indexListing, "index");
 				indexListing = new char[indexFileSize];
 				remainingBits = (disk.getSectorSize() - indexListing.length);
 				levelSize++;
 			}
+			}
 		}
 		if(writeBuffer[0] != '\0'){
+			totalSectorsUsed++;
+			indexSectors++;
 			disk.writeSector(writeLocation, writeBuffer);
+			writeLocation = indexSectors + indexStart;
+			levelSize++;
 		}
 		
 		//we have the root and it is equal to where we are writing.
