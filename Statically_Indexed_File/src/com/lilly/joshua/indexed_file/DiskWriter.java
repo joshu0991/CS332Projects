@@ -32,9 +32,9 @@ public class DiskWriter {
 		 
 		 
 		 //create a new indexed file. 
-		IndexedFile indexedFile = new IndexedFile(disk, loader.getRecordSize(),
-				loader.getKeySize(), loader.getFirstAllocated(), loader.getIndexStart(),
-				loader.getIndexSectors(), loader.getIndexRoot(), loader.getIndexLevels());
+	//	IndexedFile indexedFile = new IndexedFile(disk, loader.getRecordSize(),
+	//			loader.getKeySize(), loader.getFirstAllocated(), loader.getIndexStart(),
+	//			loader.getIndexSectors(), loader.getIndexRoot(), loader.getIndexLevels());
 		
 		Scanner scanner = new Scanner(System.in);
 		boolean finished = false;
