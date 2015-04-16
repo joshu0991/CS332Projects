@@ -265,8 +265,6 @@ public class Loader {
 				indexSectors++;
 				disk.writeSector(writeLocation, writeBuffer);
 				writeLocation = indexSectors + indexStart - 1;
-				//incremented at the beginning so need to use that position.
-				//indexSectors++;
 				writeBuffer = new char[disk.getSectorSize()];
 				writeBuffer = buildBuffer(writeBuffer, indexListing, "index");
 				indexListing = new char[indexFileSize];

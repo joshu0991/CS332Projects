@@ -6,12 +6,14 @@ public class IndexedFile
    private char[] buffer;         // disk buffer
    private int recordSize;        // in characters
    private int keySize;           // in characters
+   
    // fields describing data portion of file
    private int recordsPerSector;  // sectorSize/recordSize
    private int firstAllocated;    // sector number where data begins
    private int sectorsAllocated;  // sectors originally allocated for data
    private int overflowStart;     // sector number where overflow begins
    private int overflowSectors;   // count of overflow sectors in use
+   
    // fields describing index portion of file
    private int indexStart;        // sector number where index begins
    private int indexSectors;      // number of sectors allocated for index
@@ -31,6 +33,7 @@ public class IndexedFile
 	   this.indexSectors = indexSectors;
 	   this.indexLevels = indexLevels;
 	   buffer = new char[disk.getSectorSize()];
+	   this.overflowStart = indexRoot + 1;
 	   
    }
    public boolean insertRecord(char[] record)
@@ -39,12 +42,65 @@ public class IndexedFile
    }   
    public boolean findRecord(char[] record)
    {
+	   
 	   return true;
    }   
    // there is no delete operation
    private int getSector(String key)   // returns sector number indicated by key
    {
+	   
 	   return 0;
    }
    
+   private int checkTree(String key){
+	   int pointer = indexRoot;
+	   int nextNode = 
+	   return 0;
+   }
+   
+   private int checkOverflow(String key){
+	   return 0;
+   }
+   
+   //node - the sector to read. key - what were looking for.
+   private int findNextNode(String key, int node){
+	   disk.readSector(node, buffer);
+	   char[] k = key.toCharArray();
+	   for(int i = 0; i < buffer.length; i++){
+		   //the key letter is less than the letter from the buffer.
+		   //we want to follow that path.
+		  if (k[i] < buffer[i] ){
+			  //get the sector number from this portion of the buffer.
+		  } else if (k[i] > buffer[i]){
+			  //key is greater 
+		  } else {
+			  //characters are the same.
+			  continue;
+		  }
+		  
+	   }
+	   return 0;
+   }
+   
+   private String[] tokanize(char[] sector){
+	   int numRecordsInSec = numberOfRecords(sector);
+	   String[] records = new String[numRecordsInSec];
+	   //index records will always be 34 chars.
+	   for(int i = 0; i < records.length; i++){
+		   //get the key with the sector and put in an array
+	   }
+	   return records;
+   }
+   
+   // count the number of records a given file has.
+   private int numberOfRecords(char[] sector){
+	   int hops = 0, files = 0;
+	   
+	 //index records are always 34 chars.
+	   while(sector[hops] != '\0'){
+		   hops += 34;
+		   ++files;
+	   }
+	   return files;
+   }
 }

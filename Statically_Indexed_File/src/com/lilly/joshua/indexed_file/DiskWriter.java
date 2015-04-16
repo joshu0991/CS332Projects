@@ -32,9 +32,9 @@ public class DiskWriter {
 		 
 		 
 		 //create a new indexed file. 
-	//	IndexedFile indexedFile = new IndexedFile(disk, loader.getRecordSize(),
-	//			loader.getKeySize(), loader.getFirstAllocated(), loader.getIndexStart(),
-	//			loader.getIndexSectors(), loader.getIndexRoot(), loader.getIndexLevels());
+		IndexedFile indexedFile = new IndexedFile(disk, loader.getRecordSize(),
+				loader.getKeySize(), loader.getFirstAllocated(), loader.getIndexStart(),
+				loader.getIndexSectors(), loader.getIndexRoot(), loader.getIndexLevels());
 		
 		Scanner scanner = new Scanner(System.in);
 		boolean finished = false;
@@ -48,9 +48,11 @@ public class DiskWriter {
 			switch(input){
 			case "ir":
 				//insert record
+				indexedFile.insertRecord(input.toCharArray());
 				break;
 			case "fr":
 				//find record
+				indexedFile.findRecord(input.toCharArray());
 				break;
 			case "q":
 				finished = true;
