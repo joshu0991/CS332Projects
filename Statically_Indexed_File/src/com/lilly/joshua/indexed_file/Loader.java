@@ -20,7 +20,7 @@ public class Loader {
 	private int indexFileSize;
 	
 	//default for basic Loader class.
-	public Loader(Disk disk) throws DiskOverFlowError{
+	public Loader(Disk disk){
 		this.disk = disk;
 		this.recordSize = 60;
 		this.firstAllocated = 999;
@@ -31,12 +31,17 @@ public class Loader {
 	
 	//Compliance with the spec that the disk should be customizable.
 	public Loader(Disk disk, int recordSize, 
-			int firstAllocated, int keySize) throws DiskOverFlowError{
+			int firstAllocated, int keySize) throws KeyOutOfRangeException {
 		this.disk = disk;
 		this.recordSize = recordSize;
 		this.firstAllocated = firstAllocated;
 		this.keySize = keySize;
-		this.indexFileSize = (keySize + 7);
+		if(keySize <= 27){
+			this.indexFileSize = (keySize + (34 - keySize));
+		} else {
+			throw new KeyOutOfRangeException("The key be too large such that the "
+					+ "sector field may not be able to reference all sectors in the disk");
+		}
 		bufferDisk();
 	}
 	
@@ -192,7 +197,7 @@ public class Loader {
 		return buf;
 	}//breakUpRecord
 	
-	private void buildIndex() throws DiskOverFlowError{
+	private void buildIndex(){
 		//inits to the size of the data sectors
 		int levelSize = totalSectorsUsed;
 		int start = firstAllocated - 1;
@@ -224,8 +229,7 @@ public class Loader {
 		try {
 			loadData();
 			buildIndex();
-		} catch (DiskOverFlowError e) {
-			// TODO Auto-generated catch block
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}//bufferDisk

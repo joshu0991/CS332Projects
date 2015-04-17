@@ -40,9 +40,10 @@ public class IndexedFile
    {
 	   return true;
    }   
-   public boolean findRecord(char[] record)
+   public boolean findRecord(char[] record) throws UnsupportedOperationException
    {
 	   checkTree(String.valueOf(record));
+	   //checkOverflow(String.valueOf(record));
 	   return true;
    }   
    // there is no delete operation
@@ -52,11 +53,12 @@ public class IndexedFile
 	   return 0;
    }
    
-   private int checkTree(String key){
+   private int checkTree(String key) throws UnsupportedOperationException{
 	   int pointer = indexRoot;
 	   int i = indexLevels;
 	   while(i > 0){
 		   int nextNode = findNextNode(key, pointer);
+		   pointer = nextNode;
 		   i--;
 	   }
 	   return 0;
@@ -67,23 +69,51 @@ public class IndexedFile
    }
    
    //node - the sector to read. key - what were looking for.
-   private int findNextNode(String key, int node){
+   private int findNextNode(String key, int node) throws UnsupportedOperationException{
 	   disk.readSector(node, buffer);
 	   String[] records = tokanize(buffer);
-	   for(int i = 0; i < buffer.length; i++){
-		   //the key letter is less than the letter from the buffer.
-		   //we want to follow that path.
-		  //if (k[i] < buffer[i] ){
-			  //get the sector number from this portion of the buffer.
-		  //} else if (k[i] > buffer[i]){
-			  //key is greater 
-		  //} else {
-			  //characters are the same.
-			 // continue;
-		  //}
-		  
+	   int recordPos = 0;
+	   int i = 0;
+	   String sectorNumber = getSectorNumber(records[recordPos]);
+	   
+	   //if we get to the very last file in the list this will automatically return the 
+	   //last sector if we run out of keys to check.
+	   while(recordPos < records.length){
+		   
+		   String rec = records[recordPos];
+		   // if there is a character at the location we are still checking the key.
+			if (rec.charAt(i) != '\0' && key.charAt(i) != '\0') {
+				// the key letter is less than the letter from the buffer.
+				// we want to follow that path.
+				if (convertToUpper(rec.charAt(i)) < convertToUpper(key.charAt(i))) {
+					// get the sector number from this portion of the buffer.
+					sectorNumber = getSectorNumber(records[recordPos]);
+					i = 0;
+					recordPos++;
+				} else if (convertToUpper(rec.charAt(i)) > convertToUpper(key.charAt(i))) {
+					return Integer.parseInt(sectorNumber);
+				} else {
+					// characters are the same. 
+					i++;
+					continue;
+				}
+			// we have reached the end of a given key. Figure out 
+			// which was shorter if neither move on to the next record.
+			} else {
+			
+				if(key.length() < rec.length()){
+					return Integer.parseInt(sectorNumber);
+				//if the key was longer than the record gp to the right of
+				//the record and check that listing.
+				} else if (key.length() > rec.length()){
+					recordPos++;
+				//they are 100% the same. This should never happen if we are careful with inserts.
+				} else {
+					throw new UnsupportedOperationException();
+				}
+			}
 	   }
-	   return 0;
+	   return Integer.parseInt(sectorNumber);
    }
    
    //get the records and their associated sectors and store then in an array of string
@@ -118,5 +148,24 @@ public class IndexedFile
 		   ++files;
 	   }
 	   return files;
+   }
+  
+   private String getSectorNumber(String buffer){
+	   int i = keySize;
+	   String ret = new String();
+	   while(buffer.charAt(i) != '\0'){
+		   ret += buffer.charAt(i);
+		   i++;
+	   }
+	   return ret;
+   }
+   
+   //return the integer representation of an upper case character.
+   private int convertToUpper(char ch){
+	  int value = Character.valueOf(ch);
+	  if(value >= 97 && value <= 122){
+		  value -= 32;
+	  }
+	  return value;
    }
 }

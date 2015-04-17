@@ -10,7 +10,7 @@ public class DiskWriter {
 		 Disk disk = new Disk();
 		 try {
 			loader = new Loader(disk);
-		} catch (DiskOverFlowError e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		 
@@ -52,7 +52,9 @@ public class DiskWriter {
 				break;
 			case "fr":
 				//find record
-				indexedFile.findRecord(input.toCharArray());
+				System.out.println("Enter the key you would like to search for");
+				String search = scanner.next();
+				indexedFile.findRecord(search.toCharArray());
 				break;
 			case "q":
 				finished = true;
