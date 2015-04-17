@@ -277,7 +277,7 @@ public class Loader {
 			totalSectorsUsed++;
 			indexSectors++;
 			disk.writeSector(writeLocation, writeBuffer);
-			writeLocation = indexSectors + indexStart;
+			//writeLocation = indexSectors + indexStart;
 			levelSize++;
 		}
 		

@@ -42,7 +42,7 @@ public class IndexedFile
    }   
    public boolean findRecord(char[] record)
    {
-	   
+	   checkTree(String.valueOf(record));
 	   return true;
    }   
    // there is no delete operation
@@ -54,7 +54,11 @@ public class IndexedFile
    
    private int checkTree(String key){
 	   int pointer = indexRoot;
-	   int nextNode = 
+	   int i = indexLevels;
+	   while(i > 0){
+		   int nextNode = findNextNode(key, pointer);
+		   i--;
+	   }
 	   return 0;
    }
    
@@ -65,29 +69,41 @@ public class IndexedFile
    //node - the sector to read. key - what were looking for.
    private int findNextNode(String key, int node){
 	   disk.readSector(node, buffer);
-	   char[] k = key.toCharArray();
+	   String[] records = tokanize(buffer);
 	   for(int i = 0; i < buffer.length; i++){
 		   //the key letter is less than the letter from the buffer.
 		   //we want to follow that path.
-		  if (k[i] < buffer[i] ){
+		  //if (k[i] < buffer[i] ){
 			  //get the sector number from this portion of the buffer.
-		  } else if (k[i] > buffer[i]){
+		  //} else if (k[i] > buffer[i]){
 			  //key is greater 
-		  } else {
+		  //} else {
 			  //characters are the same.
-			  continue;
-		  }
+			 // continue;
+		  //}
 		  
 	   }
 	   return 0;
    }
    
+   //get the records and their associated sectors and store then in an array of string
+   //for easy pickins.
    private String[] tokanize(char[] sector){
 	   int numRecordsInSec = numberOfRecords(sector);
 	   String[] records = new String[numRecordsInSec];
+	   //records are always 34 in length
+	   int recordCounter = 34;
+	   int startCounter = 0;
 	   //index records will always be 34 chars.
 	   for(int i = 0; i < records.length; i++){
 		   //get the key with the sector and put in an array
+		   String record = new String();
+		   for(int j  = startCounter; j < recordCounter; j++){
+			   record += sector[j];
+		   }
+		   startCounter = recordCounter;
+		   records[i] = record;
+		   recordCounter += 34;
 	   }
 	   return records;
    }
