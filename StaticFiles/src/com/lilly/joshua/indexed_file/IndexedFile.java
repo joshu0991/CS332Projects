@@ -20,6 +20,9 @@ public class IndexedFile
    private int indexRoot;         // sector number of root of index
    private int indexLevels;       // number of levels of index
    
+   private int residingSector;    //if we find a sector with the appropriate data we will
+   								  //store it here.
+   
    public IndexedFile(Disk disk, int recordSize, int keySize,
                       int firstAllocated, int indexStart,
                       int indexSectors, int indexRoot, int indexLevels)
@@ -34,6 +37,7 @@ public class IndexedFile
 	   this.indexLevels = indexLevels;
 	   buffer = new char[disk.getSectorSize()];
 	   this.overflowStart = indexRoot + 1;
+	   this.residingSector = 0;
 	   
    }
    public boolean insertRecord(char[] record)
@@ -42,10 +46,12 @@ public class IndexedFile
    }   
    public boolean findRecord(char[] record) throws UnsupportedOperationException
    {
-	   checkTree(format(record));
-	   //checkOverflow(String.valueOf(record));
-	   return true;
+	   boolean found = false;
+	   found = checkTree(format(record));
+	   //found = checkOverflow(String.valueOf(record));
+	   return found;
    }   
+   
    // there is no delete operation
    private int getSector(String key)   // returns sector number indicated by key
    {
@@ -62,7 +68,7 @@ public class IndexedFile
 		   pointer = nextNode;
 		   i--;
 	   }
-	   System.out.println("Data sector is "  + nextNode);
+	   boolean found = checkDataSector(key, nextNode);
 	   return true;
    }
    
@@ -195,7 +201,7 @@ public class IndexedFile
 		   ret[i] = key[i];
 		   i++;
 	   }
-	   //the unused spaces should be padded out with null chars.
+	   //the unused spaces should be padded out with null chars by default.
 	   return ret;			   
    }
    
@@ -206,5 +212,17 @@ public class IndexedFile
 		   ret[i] = record[i];
 	   }
 	   return ret;
+   }
+   
+   private boolean checkDataSector(char[] key, int sectorNumber){
+	   //get the probable sector.
+	   disk.readSector(sectorNumber, buffer);
+	   
+	   //loop though the sector searching for the data.
+	   
+	   //if it's found print it, return true, store the sector number for easy retrieval.
+	   
+	   //else return false.
+	   return true;
    }
 }

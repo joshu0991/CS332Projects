@@ -57,7 +57,8 @@ public class DiskWriter {
 				if(search.length() < loader.getKeySize()){
 					indexedFile.findRecord(search.toCharArray());
 				} else {
-					System.out.println("The key you input is larger than the max expected key for this file. Try again.");
+					System.out.println("The key you input is larger than the max expected key for this file. Try"
+							+ "checking the input for null characters.");
 				}
 				break;
 			case "q":
