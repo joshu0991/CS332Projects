@@ -42,7 +42,7 @@ public class IndexedFile
    }   
    public boolean findRecord(char[] record) throws UnsupportedOperationException
    {
-	   checkTree(String.valueOf(record));
+	   checkTree(format(record));
 	   //checkOverflow(String.valueOf(record));
 	   return true;
    }   
@@ -53,7 +53,7 @@ public class IndexedFile
 	   return 0;
    }
    
-   private int checkTree(String key) throws UnsupportedOperationException{
+   private boolean checkTree(char[] key) throws UnsupportedOperationException{
 	   int pointer = indexRoot;
 	   int i = indexLevels;
 	   while(i > 0){
@@ -61,7 +61,7 @@ public class IndexedFile
 		   pointer = nextNode;
 		   i--;
 	   }
-	   return 0;
+	   return true;
    }
    
    private int checkOverflow(String key){
@@ -69,29 +69,36 @@ public class IndexedFile
    }
    
    //node - the sector to read. key - what were looking for.
-   private int findNextNode(String key, int node) throws UnsupportedOperationException{
+   private int findNextNode(char[] key, int node) throws UnsupportedOperationException{
 	   disk.readSector(node, buffer);
-	   String[] records = tokanize(buffer);
+	   char[][] records = tokanize(buffer);
 	   int recordPos = 0;
 	   int i = 0;
-	   String sectorNumber = getSectorNumber(records[recordPos]);
+	   char[] sectorNumber = getSectorNumber(records[recordPos]);
+	   char[] rec = null;
 	   
 	   //if we get to the very last file in the list this will automatically return the 
 	   //last sector if we run out of keys to check.
 	   while(recordPos < records.length){
-		   
-		   String rec = records[recordPos];
+		   //if it is zero we have verified the previous record was too small.
+		   //if this isn't the case we want to compare the next chars in the same string
+		   if(i == 0){
+			   rec = records[recordPos];
+		   }
 		   // if there is a character at the location we are still checking the key.
-			if (rec.charAt(i) != '\0' && key.charAt(i) != '\0') {
+		   System.out.println("Key Len  " + key.length);
+		   System.out.println("Record Len " + rec.length);
+		   
+			if (rec[i] != '\0' && key[i] != '\0') {
 				// the key letter is less than the letter from the buffer.
 				// we want to follow that path.
-				if (convertToUpper(rec.charAt(i)) < convertToUpper(key.charAt(i))) {
+				if (convertToUpper(rec[i]) < convertToUpper(key[i])) {
 					// get the sector number from this portion of the buffer.
 					sectorNumber = getSectorNumber(records[recordPos]);
 					i = 0;
 					recordPos++;
-				} else if (convertToUpper(rec.charAt(i)) > convertToUpper(key.charAt(i))) {
-					return Integer.parseInt(sectorNumber);
+				} else if (convertToUpper(rec[i]) > convertToUpper(key[i])) {
+					return buildInt((sectorNumber));
 				} else {
 					// characters are the same. 
 					i++;
@@ -101,11 +108,11 @@ public class IndexedFile
 			// which was shorter if neither move on to the next record.
 			} else {
 			
-				if(key.length() < rec.length()){
-					return Integer.parseInt(sectorNumber);
+				if(key.length < rec.length){
+					return buildInt((sectorNumber));
 				//if the key was longer than the record gp to the right of
 				//the record and check that listing.
-				} else if (key.length() > rec.length()){
+				} else if (key.length > rec.length){
 					recordPos++;
 				//they are 100% the same. This should never happen if we are careful with inserts.
 				} else {
@@ -113,26 +120,23 @@ public class IndexedFile
 				}
 			}
 	   }
-	   return Integer.parseInt(sectorNumber);
+	   return buildInt((sectorNumber));
    }
    
    //get the records and their associated sectors and store then in an array of string
    //for easy pickins.
-   private String[] tokanize(char[] sector){
-	   int numRecordsInSec = numberOfRecords(sector);
-	   String[] records = new String[numRecordsInSec];
-	   //records are always 34 in length
+   private char[][] tokanize(char[] sector){
 	   int recordCounter = 34;
 	   int startCounter = 0;
+	   int numRecordsInSec = numberOfRecords(sector);
+	   char[][] records = new char[numRecordsInSec][recordCounter];
+
 	   //index records will always be 34 chars.
 	   for(int i = 0; i < records.length; i++){
-		   //get the key with the sector and put in an array
-		   String record = new String();
-		   for(int j  = startCounter; j < recordCounter; j++){
-			   record += sector[j];
+		   for(int j  = startCounter, k = 0; j < recordCounter - 1; j++, k++){
+			   records[i][k] = sector[j];
 		   }
 		   startCounter = recordCounter;
-		   records[i] = record;
 		   recordCounter += 34;
 	   }
 	   return records;
@@ -150,12 +154,13 @@ public class IndexedFile
 	   return files;
    }
   
-   private String getSectorNumber(String buffer){
-	   int i = keySize;
-	   String ret = new String();
-	   while(buffer.charAt(i) != '\0'){
-		   ret += buffer.charAt(i);
+   private char[] getSectorNumber(char[] buffer){
+	   int i = keySize, ind = 0;
+	   char[] ret = new char[7];
+	   while(buffer[i] != '\0' && i < 34){
+		   ret[ind] = buffer[i];
 		   i++;
+		   ind++;
 	   }
 	   return ret;
    }
@@ -167,5 +172,26 @@ public class IndexedFile
 		  value -= 32;
 	  }
 	  return value;
+   }
+   
+   private int buildInt(char[] sec){
+	   int i = 0;
+	   String a = new String();
+	   while(sec[i] != '\0'){
+		   a += sec[i];
+		   i++;
+	   }
+	   return Integer.parseInt(a);
+   }
+   
+   private char[] format(char[] key){
+	   char[] ret = new char[keySize];
+	   int i = 0;
+	   while(i < key.length){
+		   ret[i] = key[i];
+		   i++;
+	   }
+	   //the unused spaces should be padded out with null chars.
+	   return ret;			   
    }
 }

@@ -76,7 +76,7 @@ public class Disk
    }
    //-------------------------test code --------------------------------------
    public void printEverything() throws IOException{
-	   BufferedWriter writer = new BufferedWriter(new FileWriter("/Users/sputnik-110/Documents/workspace/Statically_Indexed_File/src/com/lilly/joshua/indexed_file/out.txt", true));
+	   BufferedWriter writer = new BufferedWriter(new FileWriter("/Users/sputnik-110/Documents/out.txt", true));
 	   for(int i = 0; i < sectorCount; i++){
 		   char[] a = new char[sectorSize];
 		   for(int j = 0; j < sectorSize; j++){

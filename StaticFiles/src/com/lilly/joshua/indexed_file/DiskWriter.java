@@ -44,7 +44,7 @@ public class DiskWriter {
 			System.out.println("Find Record [fr] ");
 			System.out.println("Quit [q] ");
 			System.out.print("-> ");
-			String input = scanner.next();
+			String input = scanner.nextLine();
 			switch(input){
 			case "ir":
 				//insert record
@@ -53,7 +53,7 @@ public class DiskWriter {
 			case "fr":
 				//find record
 				System.out.println("Enter the key you would like to search for");
-				String search = scanner.next();
+				String search = scanner.nextLine();
 				indexedFile.findRecord(search.toCharArray());
 				break;
 			case "q":
