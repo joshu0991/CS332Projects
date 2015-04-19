@@ -56,11 +56,13 @@ public class IndexedFile
    private boolean checkTree(char[] key) throws UnsupportedOperationException{
 	   int pointer = indexRoot;
 	   int i = indexLevels;
+	   int nextNode = 0;
 	   while(i > 0){
-		   int nextNode = findNextNode(key, pointer);
+		   nextNode = findNextNode(key, pointer);
 		   pointer = nextNode;
 		   i--;
 	   }
+	   System.out.println("Data sector is "  + nextNode);
 	   return true;
    }
    
@@ -76,6 +78,7 @@ public class IndexedFile
 	   int i = 0;
 	   char[] sectorNumber = getSectorNumber(records[recordPos]);
 	   char[] rec = null;
+	   char[] recKey = null;
 	   
 	   //if we get to the very last file in the list this will automatically return the 
 	   //last sector if we run out of keys to check.
@@ -84,20 +87,19 @@ public class IndexedFile
 		   //if this isn't the case we want to compare the next chars in the same string
 		   if(i == 0){
 			   rec = records[recordPos];
+			   recKey = getKey(rec);
 		   }
-		   // if there is a character at the location we are still checking the key.
-		   System.out.println("Key Len  " + key.length);
-		   System.out.println("Record Len " + rec.length);
+		   // if there is a character at the location we are still checking the key
 		   
-			if (rec[i] != '\0' && key[i] != '\0') {
+			if (recKey[i] != '\0' && key[i] != '\0') {
 				// the key letter is less than the letter from the buffer.
 				// we want to follow that path.
-				if (convertToUpper(rec[i]) < convertToUpper(key[i])) {
+				if (convertToUpper(recKey[i]) < convertToUpper(key[i])) {
 					// get the sector number from this portion of the buffer.
-					sectorNumber = getSectorNumber(records[recordPos]);
+					sectorNumber = getSectorNumber(rec);
 					i = 0;
 					recordPos++;
-				} else if (convertToUpper(rec[i]) > convertToUpper(key[i])) {
+				} else if (convertToUpper(recKey[i]) > convertToUpper(key[i])) {
 					return buildInt((sectorNumber));
 				} else {
 					// characters are the same. 
@@ -108,12 +110,14 @@ public class IndexedFile
 			// which was shorter if neither move on to the next record.
 			} else {
 			
-				if(key.length < rec.length){
+				//need to check this -------------------------------------------------------
+				if(key[i] == '\0' && recKey[i] != '\0'){
 					return buildInt((sectorNumber));
-				//if the key was longer than the record gp to the right of
-				//the record and check that listing.
-				} else if (key.length > rec.length){
-					recordPos++;
+			
+				} else if(key[i] != '\0' && recKey[i] == '\0'){
+					return buildInt((sectorNumber));
+				} else if (String.valueOf(key).equals(String.valueOf(recKey))){
+					return buildInt(getSectorNumber(rec));
 				//they are 100% the same. This should never happen if we are careful with inserts.
 				} else {
 					throw new UnsupportedOperationException();
@@ -193,5 +197,14 @@ public class IndexedFile
 	   }
 	   //the unused spaces should be padded out with null chars.
 	   return ret;			   
+   }
+   
+   //record has sector and key.
+   private char[] getKey(char[] record){
+	   char[] ret = new char[keySize];
+	   for(int i = 0; i < keySize; i++){
+		   ret[i] = record[i];
+	   }
+	   return ret;
    }
 }

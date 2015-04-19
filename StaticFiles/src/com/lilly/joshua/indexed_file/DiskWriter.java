@@ -54,7 +54,11 @@ public class DiskWriter {
 				//find record
 				System.out.println("Enter the key you would like to search for");
 				String search = scanner.nextLine();
-				indexedFile.findRecord(search.toCharArray());
+				if(search.length() < loader.getKeySize()){
+					indexedFile.findRecord(search.toCharArray());
+				} else {
+					System.out.println("The key you input is larger than the max expected key for this file. Try again.");
+				}
 				break;
 			case "q":
 				finished = true;
