@@ -79,7 +79,7 @@ public class IndexedFile
    //node - the sector to read. key - what were looking for.
    private int findNextNode(char[] key, int node) throws UnsupportedOperationException{
 	   disk.readSector(node, buffer);
-	   char[][] records = tokanize(buffer);
+	   char[][] records = tokanize(buffer, "Index");
 	   int recordPos = 0;
 	   int i = 0;
 	   char[] sectorNumber = getSectorNumber(records[recordPos]);
@@ -115,19 +115,16 @@ public class IndexedFile
 			// we have reached the end of a given key. Figure out 
 			// which was shorter if neither move on to the next record.
 			} else {
-			
-				//need to check this -------------------------------------------------------
 				if(key[i] == '\0' && recKey[i] != '\0'){
 					return buildInt((sectorNumber));
 			
 				} else if(key[i] != '\0' && recKey[i] == '\0'){
 					return buildInt((sectorNumber));
-				} else if (String.valueOf(key).equals(String.valueOf(recKey))){
+				} else if (String.valueOf(key).equalsIgnoreCase(String.valueOf(recKey))){
 					return buildInt(getSectorNumber(rec));
-				//they are 100% the same. This should never happen if we are careful with inserts.
 				} else {
 					throw new UnsupportedOperationException();
-				}
+				} 
 			}
 	   }
 	   return buildInt((sectorNumber));
@@ -135,33 +132,60 @@ public class IndexedFile
    
    //get the records and their associated sectors and store then in an array of string
    //for easy pickins.
-   private char[][] tokanize(char[] sector){
-	   int recordCounter = 34;
-	   int startCounter = 0;
-	   int numRecordsInSec = numberOfRecords(sector);
-	   char[][] records = new char[numRecordsInSec][recordCounter];
+	private char[][] tokanize(char[] sector, String value){
+	   char[][] records = null;
+	   if(value == "Index"){
+		   int recordCounter = 34;
+		   int startCounter = 0;
+		   int numRecordsInSec = numberOfRecords(sector, value);
+		   records = new char[numRecordsInSec][recordCounter];
 
-	   //index records will always be 34 chars.
-	   for(int i = 0; i < records.length; i++){
-		   for(int j  = startCounter, k = 0; j < recordCounter - 1; j++, k++){
-			   records[i][k] = sector[j];
+		   //index records will always be 34 chars.
+		   for(int i = 0; i < records.length; i++){
+			   for(int j  = startCounter, k = 0; j < recordCounter - 1; j++, k++){
+				   records[i][k] = sector[j];
+			   }
+			   startCounter = recordCounter;
+			   recordCounter += 34;
 		   }
-		   startCounter = recordCounter;
-		   recordCounter += 34;
+	   } else if(value == "Data"){
+		   //data records are always 60 chars in length.
+		   int recordCounter = 60;
+		   int startCounter = 0;
+		   int numRecordsInSec = numberOfRecords(sector, value);
+		   records = new char[numRecordsInSec][recordCounter];
+		   for(int i = 0; i < records.length; i++){
+			   for(int j = startCounter, k = 0; j < recordCounter - 1; j++, k++){
+				   records[i][k] = sector[j];
+			   }
+			   startCounter = recordCounter;
+			   recordCounter += 60;
+		   }
+	   } else {
+		throw new UnsupportedOperationException();   
 	   }
 	   return records;
    }
    
    // count the number of records a given file has.
-   private int numberOfRecords(char[] sector){
-	   int hops = 0, files = 0;
+   private int numberOfRecords(char[] sector, String value){
+	   int hops = 0, files = 0;	
+	  if(value == "Index"){
 	   
-	 //index records are always 34 chars.
-	   while(sector[hops] != '\0'){
-		   hops += 34;
-		   ++files;
-	   }
-	   return files;
+		  //index records are always 34 chars.
+		  while(sector[hops] != '\0'){
+			  hops += 34;
+			  ++files;
+		  }
+	  } else if(value == "Data"){
+		  while(sector[hops] != '\0'){
+			  hops += 60;
+			  ++files;
+		  }
+	  } else {
+		  throw new UnsupportedOperationException();  
+	  }
+	  return files;
    }
   
    private char[] getSectorNumber(char[] buffer){
@@ -217,7 +241,7 @@ public class IndexedFile
    private boolean checkDataSector(char[] key, int sectorNumber){
 	   //get the probable sector.
 	   disk.readSector(sectorNumber, buffer);
-	   
+	   char[][] tokens = tokanize(buffer, "Data");
 	   //loop though the sector searching for the data.
 	   
 	   //if it's found print it, return true, store the sector number for easy retrieval.
