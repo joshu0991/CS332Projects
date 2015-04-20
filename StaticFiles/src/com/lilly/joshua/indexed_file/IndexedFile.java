@@ -22,6 +22,7 @@ public class IndexedFile
    
    private int residingSector;    //if we find a sector with the appropriate data we will
    								  //store it here.
+   private String data; 		  //This will store the data we were looking for if found.
    
    public IndexedFile(Disk disk, int recordSize, int keySize,
                       int firstAllocated, int indexStart,
@@ -48,7 +49,11 @@ public class IndexedFile
    {
 	   boolean found = false;
 	   found = checkTree(format(record));
-	   //found = checkOverflow(String.valueOf(record));
+	   if(found == true){
+		   System.out.println("Record found: " + data);
+	   } else {
+		   found = checkOverflow(String.valueOf(record));
+	   }
 	   return found;
    }   
    
@@ -69,11 +74,15 @@ public class IndexedFile
 		   i--;
 	   }
 	   boolean found = checkDataSector(key, nextNode);
+	   if(found){
+		   
+		   return true;
+	   }
 	   return true;
    }
    
-   private int checkOverflow(String key){
-	   return 0;
+   private boolean checkOverflow(String key){
+	   return true;
    }
    
    //node - the sector to read. key - what were looking for.
@@ -242,11 +251,39 @@ public class IndexedFile
 	   //get the probable sector.
 	   disk.readSector(sectorNumber, buffer);
 	   char[][] tokens = tokanize(buffer, "Data");
-	   //loop though the sector searching for the data.
 	   
-	   //if it's found print it, return true, store the sector number for easy retrieval.
+	   //loop though the sector searching for the data.
+	   for(int i = 0; i < tokens.length; i++){
+		   char[] checkKey = getKey(tokens[i]);
+		   //if it's found print it, return true, store the sector number for easy retrieval.
+		   if(String.valueOf(checkKey).equalsIgnoreCase(String.valueOf(key))){
+			   this.residingSector = sectorNumber;
+			   this.data = "Mountain Name: " + String.valueOf(key) + " Country: " + getCountry(tokens[i]) + " Height: "
+					   + getHeight(tokens[i]);
+			   return true;
+		   }
+		   
+	   }
 	   
 	   //else return false.
-	   return true;
+	   return false;
+   }
+   
+   private String getCountry(char[] segment){
+	   String c = new String();
+	   //the field will always be 27 chars.
+	   for(int i = keySize; i < 54; i++){
+		   c += segment[i];
+	   }
+	   return c;
+   }
+   
+   private String getHeight(char[] segment){
+	   String c = new String();
+	   //the field will always be 27 chars.
+	   for(int i = keySize + 27; i < recordSize - 1; i++){
+		   c += segment[i];
+	   }
+	   return c;
    }
 }

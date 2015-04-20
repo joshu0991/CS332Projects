@@ -21,15 +21,7 @@ public class DiskWriter {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		 System.out.println("first alloced " + loader.getFirstAllocated());
-		 System.out.println("Number of levels " + loader.getIndexLevels());
-		 System.out.println("Index sectos " + loader.getIndexSectors());
-		 System.out.println("Total used " + loader.getTotalSectorsUsed());
-		 System.out.println("Index start " + loader.getIndexStart());
-		 System.out.println("Root "  + loader.getIndexRoot());
-		 
-		 //----------------end test code ----------------------------------------------
-		 
+		//----------------------------endtestCODE--------------------------
 		 
 		 //create a new indexed file. 
 		IndexedFile indexedFile = new IndexedFile(disk, loader.getRecordSize(),
