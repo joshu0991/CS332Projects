@@ -41,10 +41,12 @@ public class IndexedFile
 	   this.residingSector = 0;
 	   
    }
+   
    public boolean insertRecord(char[] record)
    {
 	   return true;
    }   
+   
    public boolean findRecord(char[] record) throws UnsupportedOperationException
    {
 	   boolean found = false;
@@ -52,7 +54,7 @@ public class IndexedFile
 	   if(found == true){
 		   System.out.println("Record found: " + data);
 	   } else {
-		   found = checkOverflow(String.valueOf(record));
+		   found = checkOverflow(format(record));
 	   }
 	   return found;
    }   
@@ -60,8 +62,8 @@ public class IndexedFile
    // there is no delete operation
    private int getSector(String key)   // returns sector number indicated by key
    {
-	   
-	   return 0;
+	   findRecord(key.toCharArray());
+	   return residingSector;
    }
    
    private boolean checkTree(char[] key) throws UnsupportedOperationException{
@@ -81,8 +83,23 @@ public class IndexedFile
 	   return true;
    }
    
-   private boolean checkOverflow(String key){
-	   return true;
+   private boolean checkOverflow(char[] key){
+	   
+	   //loop over all of the sectors in overflow sectors.
+	   for(int i = 0; i < overflowSectors; i++){
+		   disk.readSector(overflowStart + i, buffer);
+		   char[][] tokens = tokanize(buffer, "Data");
+		   for(int j = 0; j < tokens.length; j++){
+			   char[] token = getKey(tokens[j]);
+			   if(String.valueOf(token).equalsIgnoreCase(String.valueOf(key))){
+				   this.residingSector = (overflowStart + i);
+				   this.data = "Mountain Name: " + String.valueOf(key) + " Country: " + getCountry(tokens[i]) + " Height: "
+						   + getHeight(tokens[i]);
+				   return true;
+			   }
+		   }
+	   }
+	   return false;
    }
    
    //node - the sector to read. key - what were looking for.
@@ -264,7 +281,6 @@ public class IndexedFile
 		   }
 		   
 	   }
-	   
 	   //else return false.
 	   return false;
    }
@@ -286,4 +302,6 @@ public class IndexedFile
 	   }
 	   return c;
    }
+   
+   
 }
