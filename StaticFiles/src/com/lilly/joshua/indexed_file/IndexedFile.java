@@ -39,11 +39,45 @@ public class IndexedFile
 	   buffer = new char[disk.getSectorSize()];
 	   this.overflowStart = indexRoot + 1;
 	   this.residingSector = 0;
-	   
+	   this.overflowSectors = 0;
    }
    
    public boolean insertRecord(char[] record)
    {
+	   String[] in = tokanizeInput(record);
+	   int sector = getSector(in[0]);
+
+	   //the sector will = -1 if the data exist. check to make sure this isn't the case.
+	   if(sector == -1){
+		   return false;
+	   }
+	   
+	   disk.readSector(sector, buffer);
+	   int numRecords = numberOfRecords(buffer, "Data");
+	   
+	   char[] rec = buildRecord(in);
+	   
+	   //check to see if the sector is full. If disk is full if the number of records
+	   //times the record size + the new record size is greater than the disk sector size.
+	   //if this is the case we need to store the new record in an overflow sector.
+	   if((numRecords * recordSize) + recordSize > disk.getSectorSize()){
+		  
+		   disk.readSector(overflowStart + overflowSectors, record);
+		   numRecords = numberOfRecords(buffer, "Data");
+		   //we need to check to see if the current overflow sector is full.
+		   //If it is we will just increment the pointer and buffer the next sector.
+		   if((numRecords * recordSize) + recordSize > disk.getSectorSize()){
+			   ++overflowSectors;
+			   disk.readSector(overflowStart + overflowSectors, buffer);
+		   }
+		   addRecordToBuffer(rec);
+		   disk.writeSector(overflowStart + overflowSectors, buffer);
+		  //else we will just store the record in the sector that was retrieved.
+	   } else {
+		   addRecordToBuffer(rec);
+		   disk.writeSector(sector, buffer);
+		   return true;
+	   }
 	   return true;
    }   
    
@@ -54,6 +88,7 @@ public class IndexedFile
 	   if(found == true){
 		   System.out.println("Record found: " + data);
 	   } else {
+		   System.out.println("Record Not found ");
 		   found = checkOverflow(format(record));
 	   }
 	   return found;
@@ -62,8 +97,30 @@ public class IndexedFile
    // there is no delete operation
    private int getSector(String key)   // returns sector number indicated by key
    {
-	   findRecord(key.toCharArray());
+	   boolean exist = findRecord(key.toCharArray());
+	   //if the data already exist in the disk we won't insert it again.
+	   if(exist == true){
+		   residingSector = -1;
+	   }
 	   return residingSector;
+   }
+   
+   //append the given record to the next available spot in the buffer.
+   //This is only invoked after we have guaranteed that there is space in the buffer.
+   private void addRecordToBuffer(char[] rec){
+	   int i = 0, j = 0;
+	   //find next location
+	   while(buffer[i] != '\0'){
+		   //data records are always 60 chars.
+		   i += 60;
+	   }
+	   ++i;
+	   //Using the location found above add the record to that location.
+	   while(j < rec.length){
+		   buffer[i] = rec[j];
+		   ++i;
+		   ++j;
+	   }
    }
    
    private boolean checkTree(char[] key) throws UnsupportedOperationException{
@@ -77,16 +134,17 @@ public class IndexedFile
 	   }
 	   boolean found = checkDataSector(key, nextNode);
 	   if(found){
-		   
 		   return true;
+	   } else {
+		   residingSector = nextNode;
+		   return false;
 	   }
-	   return true;
    }
    
    private boolean checkOverflow(char[] key){
-	   
+	   int i;
 	   //loop over all of the sectors in overflow sectors.
-	   for(int i = 0; i < overflowSectors; i++){
+	   for(i = 0; i < overflowSectors; i++){
 		   disk.readSector(overflowStart + i, buffer);
 		   char[][] tokens = tokanize(buffer, "Data");
 		   for(int j = 0; j < tokens.length; j++){
@@ -247,7 +305,7 @@ public class IndexedFile
    private char[] format(char[] key){
 	   char[] ret = new char[keySize];
 	   int i = 0;
-	   while(i < key.length){
+	   while(i < keySize && i < key.length){
 		   ret[i] = key[i];
 		   i++;
 	   }
@@ -303,5 +361,55 @@ public class IndexedFile
 	   return c;
    }
    
+   //break up the initial input and remove #
+	private String[] tokanizeInput(char[] input) {
+		String[] ret = new String[3];
+		int i = 0, j = 0;
+		while (i < 3 ) {
+			String temp = new String();
+			while (input[j] != '#') {
+				temp += input[j];
+				++j;
+				if(j >= input.length){
+					ret[i] = temp;
+					return ret;
+				}
+			}
+			ret[i] = temp;
+			++i;
+			++j;
+		}
+		return ret;
+   }
    
+	private char[] buildRecord(String[] input){
+		char[] record = new char[recordSize];
+		int i;
+		//add the key. The key can be customized.
+		for(i = 0; i < keySize; i++){
+			if(input[0].length() > i){
+				record[i] = input[0].charAt(i);
+			} else {
+				record[i] = '\0';
+			}
+		}
+		
+		//add the country. Always 27
+		for(int j = 0; j < 26; ++j, ++i){
+			if(input[1].length() > j){
+				record[i] = input[1].charAt(j);
+			} else {
+				record[i] = '\0';
+			} 
+		}
+		
+		for(int j = 0; j < 7; ++j, ++i){
+			if(input[2].length() > j){
+				record[i] = input[2].charAt(j);
+			} else {
+				record[i] = '\0';
+			} 
+		}
+		return record;
+	}
 }

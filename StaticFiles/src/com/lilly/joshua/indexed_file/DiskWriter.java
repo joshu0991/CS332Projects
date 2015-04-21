@@ -40,7 +40,26 @@ public class DiskWriter {
 			switch(input){
 			case "ir":
 				//insert record
-				indexedFile.insertRecord(input.toCharArray());
+				String record = new String();
+				System.out.println("Enter the mountain name (must be 27 chars or less) ");
+				record += scanner.nextLine() + "#";
+				System.out.println("Enter the mountain's country (must be 27 chars or less) ");
+				record += scanner.nextLine() + "#";
+				System.out.println("Enter the mountain's height (must be 6 chars or less) ");
+				record += scanner.nextLine();
+				//records are always 60 chars or less. The extra two are for the added hash symbols.
+				//which we will use to differentiate inputs.
+				System.out.println("Record is " + record);
+				if(record.length() <= 62){
+					boolean ret = indexedFile.insertRecord(record.toCharArray());
+					if(ret == true){
+						System.out.println("Successfully insert the record ");
+					} else {
+						System.out.println("Failed to insert the data. Are you sure the record doesn't already contain the data?");
+					}
+				} else {
+					System.out.println("The input was not the appropriate length try again.");
+				}
 				break;
 			case "fr":
 				//find record
