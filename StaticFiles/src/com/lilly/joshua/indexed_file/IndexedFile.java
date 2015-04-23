@@ -39,7 +39,7 @@ public class IndexedFile
 	   buffer = new char[disk.getSectorSize()];
 	   this.overflowStart = indexRoot + 1;
 	   this.residingSector = 0;
-	   this.overflowSectors = 0;
+	   this.overflowSectors = 1;
    }
    
    public boolean insertRecord(char[] record)
@@ -61,17 +61,17 @@ public class IndexedFile
 	   //times the record size + the new record size is greater than the disk sector size.
 	   //if this is the case we need to store the new record in an overflow sector.
 	   if((numRecords * recordSize) + recordSize > disk.getSectorSize()){
-		  
-		   disk.readSector(overflowStart + overflowSectors, record);
+		   disk.readSector(overflowStart + overflowSectors - 1, buffer);
 		   numRecords = numberOfRecords(buffer, "Data");
 		   //we need to check to see if the current overflow sector is full.
 		   //If it is we will just increment the pointer and buffer the next sector.
 		   if((numRecords * recordSize) + recordSize > disk.getSectorSize()){
 			   ++overflowSectors;
-			   disk.readSector(overflowStart + overflowSectors, buffer);
+			   disk.readSector(overflowStart + overflowSectors - 1, buffer);
 		   }
 		   addRecordToBuffer(rec);
-		   disk.writeSector(overflowStart + overflowSectors, buffer);
+		   System.out.println("Write to buffer");
+		   disk.writeSector(overflowStart + overflowSectors - 1, buffer);
 		  //else we will just store the record in the sector that was retrieved.
 	   } else {
 		   addRecordToBuffer(rec);
@@ -85,11 +85,14 @@ public class IndexedFile
    {
 	   boolean found = false;
 	   found = checkTree(format(record));
+	   //if not found in the tree check the overflow sectors.
+	   if(found == false){
+		   found = checkOverflow(format(record));
+	   } 
 	   if(found == true){
 		   System.out.println("Record found: " + data);
 	   } else {
-		   System.out.println("Record Not found ");
-		   found = checkOverflow(format(record));
+		   System.out.println("Record not located.");
 	   }
 	   return found;
    }   
@@ -114,7 +117,6 @@ public class IndexedFile
 		   //data records are always 60 chars.
 		   i += 60;
 	   }
-	   ++i;
 	   //Using the location found above add the record to that location.
 	   while(j < rec.length){
 		   buffer[i] = rec[j];
@@ -395,7 +397,7 @@ public class IndexedFile
 		}
 		
 		//add the country. Always 27
-		for(int j = 0; j < 26; ++j, ++i){
+		for(int j = 0; j < 27; ++j, ++i){
 			if(input[1].length() > j){
 				record[i] = input[1].charAt(j);
 			} else {
@@ -403,7 +405,7 @@ public class IndexedFile
 			} 
 		}
 		
-		for(int j = 0; j < 7; ++j, ++i){
+		for(int j = 0; j < 6; ++j, ++i){
 			if(input[2].length() > j){
 				record[i] = input[2].charAt(j);
 			} else {
