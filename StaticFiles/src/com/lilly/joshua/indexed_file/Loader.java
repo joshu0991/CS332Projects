@@ -18,6 +18,8 @@ public class Loader {
 	private int indexRoot; 
 	private int indexLevels;
 	private int indexFileSize;
+	private int sectorSize;
+	private int countrySize;
 	
 	//default for basic Loader class.
 	public Loader(Disk disk){
@@ -25,23 +27,21 @@ public class Loader {
 		this.recordSize = 60;
 		this.firstAllocated = 999;
 		this.keySize = 27;
-		this.indexFileSize = (keySize + 7);
+		this.sectorSize = 7;
+		this.countrySize = 27;
+		this.indexFileSize = (keySize + sectorSize);
 		bufferDisk();
 	}
 	
 	//Compliance with the spec that the disk should be customizable.
 	public Loader(Disk disk, int recordSize, 
-			int firstAllocated, int keySize) throws KeyOutOfRangeException {
+			int firstAllocated, int keySize) {
 		this.disk = disk;
 		this.recordSize = recordSize;
 		this.firstAllocated = firstAllocated;
 		this.keySize = keySize;
-		if(keySize <= 27){
-			this.indexFileSize = (keySize + (34 - keySize));
-		} else {
-			throw new KeyOutOfRangeException("The key be too large such that the "
-					+ "sector field may not be able to reference all sectors in the disk");
-		}
+		calculateSize();
+		this.indexFileSize = (keySize + sectorSize);
 		bufferDisk();
 	}
 	
@@ -103,6 +103,14 @@ public class Loader {
 	
 	//getters
 	
+	public int getCountrySize(){
+		return countrySize;
+	}
+	
+	public int getSectorSize(){
+		return sectorSize;
+	}
+	
 	public int getTotalSectorsUsed() {
 		return totalSectorsUsed;
 	}
@@ -154,7 +162,7 @@ public class Loader {
 		}
 		//write the country
 		String country = brokenRecord[1];
-		for(int j = 27; j < 54; j++, l++){
+		for(int j = countrySize; j < countrySize + keySize; j++, l++){
 			if((l) < country.length()){
 				buf[j] = country.charAt(l);
 			} else {
@@ -362,7 +370,7 @@ public class Loader {
 		   if(type.equals("data")){
 			   while(size < disk.getSectorSize()){
 				   if(sector[size] != 0){
-					   size+=60;
+					   size+=recordSize;
 				   } else {
 					   break;
 				   }
@@ -378,5 +386,12 @@ public class Loader {
 		   }
 		   return size;
 	   }//calculateSectorSize
+	
+	private void calculateSize(){
+		//number of bits we need to hold the sector. Plus one for null terminator.
+		sectorSize = String.valueOf(disk.getSectorCount()).length() + 1;
+		countrySize = recordSize - (keySize + sectorSize);
+		
+	}
 	
 }//loader.java

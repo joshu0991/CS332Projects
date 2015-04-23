@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class DiskWriter {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws KeyOutOfRangeException {
 		 Loader loader = null;
 		 Disk disk = new Disk();
 		 try {
@@ -64,7 +64,7 @@ public class DiskWriter {
 					ins = false;
 				}
 				if(ins != false){
-					record += ins;
+					record += temp;
 				}
 				//records are always 60 chars or less. The extra two are for the added hash symbols.
 				//which we will use to differentiate inputs.

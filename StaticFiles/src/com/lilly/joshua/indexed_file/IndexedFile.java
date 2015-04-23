@@ -24,9 +24,13 @@ public class IndexedFile
    								  //store it here.
    private String data; 		  //This will store the data we were looking for if found.
    
+   private int countrySize;
+   private int sectorSize;
+   private int indexRecordSize;
+   
    public IndexedFile(Disk disk, int recordSize, int keySize,
                       int firstAllocated, int indexStart,
-                      int indexSectors, int indexRoot, int indexLevels)
+                      int indexSectors, int indexRoot, int indexLevels) throws KeyOutOfRangeException
    {
 	   this.disk = disk;
 	   this.recordSize = recordSize;
@@ -40,6 +44,26 @@ public class IndexedFile
 	   this.overflowStart = indexRoot + 1;
 	   this.residingSector = 0;
 	   this.overflowSectors = 1;
+	   //We will keep the sector size as the default assuming that size
+	   //is large enough to reference all indices on the disk. Otherwise
+	   //we will get the size and init to that.
+	   if(this.disk.getSectorCount() <= 999999){
+	   this.sectorSize = 7;
+	   } else {
+		   //plus one for the null terminator
+		   this.sectorSize = String.valueOf(disk.getSectorCount()).length() + 1;
+	   }
+	   //since key size and disk size are given by the user the country size is the only
+	   //constant. We will however assert that the country size in the record is at least 10
+	   //since if we go smaller than that it would be impractical.
+	   this.countrySize = recordSize - (sectorSize + keySize);
+	   if(countrySize < 10){
+		   throw new KeyOutOfRangeException("The configuration you entered wouldn't allow for "
+		   		+ "a logically size country to be inserted. To fix either decrease the disk size"
+		   		+ "or key size or increase the record size");
+	   }
+	   indexRecordSize = keySize + sectorSize;
+	   
    }
    
    public boolean insertRecord(char[] record)
@@ -114,8 +138,7 @@ public class IndexedFile
 	   int i = 0, j = 0;
 	   //find next location
 	   while(buffer[i] != '\0'){
-		   //data records are always 60 chars.
-		   i += 60;
+		   i += recordSize;
 	   }
 	   //Using the location found above add the record to that location.
 	   while(j < rec.length){
@@ -221,22 +244,20 @@ public class IndexedFile
 	private char[][] tokanize(char[] sector, String value){
 	   char[][] records = null;
 	   if(value == "Index"){
-		   int recordCounter = 34;
+		   int recordCounter = indexRecordSize;
 		   int startCounter = 0;
 		   int numRecordsInSec = numberOfRecords(sector, value);
 		   records = new char[numRecordsInSec][recordCounter];
 
-		   //index records will always be 34 chars.
 		   for(int i = 0; i < records.length; i++){
 			   for(int j  = startCounter, k = 0; j < recordCounter - 1; j++, k++){
 				   records[i][k] = sector[j];
 			   }
 			   startCounter = recordCounter;
-			   recordCounter += 34;
+			   recordCounter += indexRecordSize;
 		   }
 	   } else if(value == "Data"){
-		   //data records are always 60 chars in length.
-		   int recordCounter = 60;
+		   int recordCounter = recordSize;
 		   int startCounter = 0;
 		   int numRecordsInSec = numberOfRecords(sector, value);
 		   records = new char[numRecordsInSec][recordCounter];
@@ -245,7 +266,7 @@ public class IndexedFile
 				   records[i][k] = sector[j];
 			   }
 			   startCounter = recordCounter;
-			   recordCounter += 60;
+			   recordCounter += recordSize;
 		   }
 	   } else {
 		throw new UnsupportedOperationException();   
@@ -258,14 +279,13 @@ public class IndexedFile
 	   int hops = 0, files = 0;	
 	  if(value == "Index"){
 	   
-		  //index records are always 34 chars.
 		  while(sector[hops] != '\0'){
-			  hops += 34;
+			  hops += indexRecordSize;
 			  ++files;
 		  }
 	  } else if(value == "Data"){
 		  while(sector[hops] != '\0'){
-			  hops += 60;
+			  hops += recordSize;
 			  ++files;
 		  }
 	  } else {
@@ -276,8 +296,8 @@ public class IndexedFile
   
    private char[] getSectorNumber(char[] buffer){
 	   int i = keySize, ind = 0;
-	   char[] ret = new char[7];
-	   while(buffer[i] != '\0' && i < 34){
+	   char[] ret = new char[sectorSize];
+	   while(buffer[i] != '\0' && i < indexRecordSize){
 		   ret[ind] = buffer[i];
 		   i++;
 		   ind++;
@@ -347,8 +367,8 @@ public class IndexedFile
    
    private String getCountry(char[] segment){
 	   String c = new String();
-	   //the field will always be 27 chars.
-	   for(int i = keySize; i < 54; i++){
+	   
+	   for(int i = keySize; i < (keySize + countrySize); i++){
 		   c += segment[i];
 	   }
 	   return c;
@@ -356,8 +376,8 @@ public class IndexedFile
    
    private String getHeight(char[] segment){
 	   String c = new String();
-	   //the field will always be 27 chars.
-	   for(int i = keySize + 27; i < recordSize - 1; i++){
+	 
+	   for(int i = keySize + countrySize; i < recordSize - 1; i++){
 		   c += segment[i];
 	   }
 	   return c;
@@ -396,8 +416,8 @@ public class IndexedFile
 			}
 		}
 		
-		//add the country. Always 27
-		for(int j = 0; j < 27; ++j, ++i){
+		//add the country.
+		for(int j = 0; j < countrySize; ++j, ++i){
 			if(input[1].length() > j){
 				record[i] = input[1].charAt(j);
 			} else {
