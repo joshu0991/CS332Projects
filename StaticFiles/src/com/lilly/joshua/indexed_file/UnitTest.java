@@ -1,14 +1,22 @@
 package com.lilly.joshua.indexed_file;
-
+//Disk disk, int recordSize, 
+//int firstAllocated, int keySize
 public class UnitTest {
 	public static void main(String[] args){
 		Disk disk = new Disk();
 		IndexedFile indexedFile = null;
+		IndexedFile indexedFile1 = null;
 		Loader loader = new Loader(disk);
+		Loader loader1 = new Loader(disk, 60, 800, 28);
 		try {
 			indexedFile = new IndexedFile(disk, loader.getRecordSize(),
 					loader.getKeySize(), loader.getFirstAllocated(), loader.getIndexStart(),
 					loader.getIndexSectors(), loader.getIndexRoot(), loader.getIndexLevels());
+			
+			indexedFile1 = new IndexedFile(disk, loader1.getRecordSize(),
+					loader1.getKeySize(), loader1.getFirstAllocated(), loader1.getIndexStart(),
+					loader1.getIndexSectors(), loader1.getIndexRoot(), loader1.getIndexLevels());
+			
 		} catch (KeyOutOfRangeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -18,6 +26,10 @@ public class UnitTest {
 		findDataInSingleOverFlow(indexedFile);
 		findDataInMultipleOverFlows(indexedFile);
 		findSimpleInsert(indexedFile);
+		
+		findDataInSingleOverFlow(indexedFile1);
+		findDataInMultipleOverFlows(indexedFile1);
+		findSimpleInsert(indexedFile1);
 		
 	}
 	
