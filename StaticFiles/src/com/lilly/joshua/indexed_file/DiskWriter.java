@@ -33,7 +33,7 @@ public class DiskWriter {
 				String temp = null;
 				//insert record
 				String record = new String();
-				System.out.println("Enter the mountain name (must be 27 chars or less) ");
+				System.out.println("Enter the mountain name ");
 				record += scanner.nextLine() + "#";
 				
 				//validate that the key is the appropriate size. will always be 27 or less
@@ -42,19 +42,19 @@ public class DiskWriter {
 					ins = false;
 				}
 				
-				System.out.println("Enter the mountain's country (must be 27 chars or less) ");
+				System.out.println("Enter the mountain's country ");
 				temp = scanner.nextLine() + "#";
 				
 				//the country field can't be changed so we expect the string will be key size + 29
 				//since the extra #
-				if(temp.length() > 28){
+				if(temp.length() > loader.getCountrySize()){
 					ins = false;
 				} else {
 					record += temp;
 					temp = null;
 				}
 
-				System.out.println("Enter the mountain's height in feet (must be 6 chars or less) ");
+				System.out.println("Enter the mountain's height in feet ");
 				temp = scanner.nextLine();
 				
 				//We will only except integers here. Make sure the input is a valid int
@@ -66,9 +66,9 @@ public class DiskWriter {
 				if(ins != false){
 					record += temp;
 				}
-				//records are always 60 chars or less. The extra two are for the added hash symbols.
+			    //The extra two are for the added hash symbols.
 				//which we will use to differentiate inputs.
-				if(record.length() <= 62 && ins != false){
+				if(record.length() <= loader.getRecordSize() + 2 && ins != false){
 						boolean ret = indexedFile.insertRecord(record.toCharArray());
 					if(ret == true){
 						System.out.println("Successfully inserted the record ");

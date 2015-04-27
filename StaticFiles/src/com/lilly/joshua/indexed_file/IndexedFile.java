@@ -75,7 +75,6 @@ public class IndexedFile
 	   if(sector == -1){
 		   return false;
 	   }
-	   
 	   disk.readSector(sector, buffer);
 	   int numRecords = numberOfRecords(buffer, "Data");
 	   
@@ -94,7 +93,6 @@ public class IndexedFile
 			   disk.readSector(overflowStart + overflowSectors - 1, buffer);
 		   }
 		   addRecordToBuffer(rec);
-		   System.out.println("Write to buffer");
 		   disk.writeSector(overflowStart + overflowSectors - 1, buffer);
 		  //else we will just store the record in the sector that was retrieved.
 	   } else {
@@ -176,8 +174,8 @@ public class IndexedFile
 			   char[] token = getKey(tokens[j]);
 			   if(String.valueOf(token).equalsIgnoreCase(String.valueOf(key))){
 				   this.residingSector = (overflowStart + i);
-				   this.data = "Mountain Name: " + String.valueOf(key) + " Country: " + getCountry(tokens[i]) + " Height: "
-						   + getHeight(tokens[i]);
+				   this.data = "Mountain Name: " + String.valueOf(key) + " Country: " + getCountry(tokens[j]) + " Height: "
+						   + getHeight(tokens[j]);
 				   return true;
 			   }
 		   }
