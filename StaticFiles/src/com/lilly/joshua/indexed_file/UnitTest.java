@@ -9,10 +9,12 @@ public class UnitTest {
 		Loader loader = new Loader(disk);
 		Loader loader1 = new Loader(disk, 60, 800, 28);
 		try {
+			//indexed file with conventional arguments.
 			indexedFile = new IndexedFile(disk, loader.getRecordSize(),
 					loader.getKeySize(), loader.getFirstAllocated(), loader.getIndexStart(),
 					loader.getIndexSectors(), loader.getIndexRoot(), loader.getIndexLevels());
 			
+			//indexed file with non-conventional arguments
 			indexedFile1 = new IndexedFile(disk, loader1.getRecordSize(),
 					loader1.getKeySize(), loader1.getFirstAllocated(), loader1.getIndexStart(),
 					loader1.getIndexSectors(), loader1.getIndexRoot(), loader1.getIndexLevels());
@@ -22,11 +24,12 @@ public class UnitTest {
 			e.printStackTrace();
 		}
 		
-		//call the unit test.
+		//call the unit test with the default set up.
 		findDataInSingleOverFlow(indexedFile);
 		findDataInMultipleOverFlows(indexedFile);
 		findSimpleInsert(indexedFile);
 		
+		//call the set up with a customized file size.
 		findDataInSingleOverFlow(indexedFile1);
 		findDataInMultipleOverFlows(indexedFile1);
 		findSimpleInsert(indexedFile1);

@@ -153,7 +153,7 @@ public class Loader {
 		String[] brokenRecord = breakUpRecord(dataLine);
 		//write the key/city to a record file.
 		String name = brokenRecord[0];
-		for(int i = 0; i < 26; i++){
+		for(int i = 0; i < keySize; i++){
 			if(i < name.length()){
 				buf[i] = name.charAt(i);
 			} else {
@@ -162,7 +162,7 @@ public class Loader {
 		}
 		//write the country
 		String country = brokenRecord[1];
-		for(int j = countrySize; j < countrySize + keySize; j++, l++){
+		for(int j = keySize; j < countrySize + keySize; j++, l++){
 			if((l) < country.length()){
 				buf[j] = country.charAt(l);
 			} else {
@@ -172,7 +172,7 @@ public class Loader {
 		l = 0;
 		//write the size
 		String size = brokenRecord[2];
-		for(int k = 54; k < recordSize; k++, l++){
+		for(int k = (countrySize + keySize); k < recordSize; k++, l++){
 			if((l) < size.length()){
 				buf[k] = size.charAt(l);
 			} else {
@@ -307,9 +307,9 @@ public class Loader {
 		int m;
 		char[] indexRecord = new char[indexFileSize];
 		String sectorInt = String.valueOf(fromSector);
-		char[] sectorNumber = new char[6];
-		//sector will always have length 6. Build a corresponding char[].
-		for(m = 0; m < 5; m++){
+		char[] sectorNumber = new char[sectorSize];
+		// Build a corresponding char[].
+		for(m = 0; m < sectorSize; m++){
 			if(m < sectorInt.length()){
 				sectorNumber[m] = sectorInt.charAt(m);
 			//out of numbers to write so pad with null
@@ -330,7 +330,7 @@ public class Loader {
 			//else we have the entire key filled in. So we need to write
 			// the sector value to the last six indices.
 			} else {
-				if(m < 6){
+				if(m < sectorSize){
 				indexRecord[i] = sectorNumber[m];
 				m++;
 				} else {

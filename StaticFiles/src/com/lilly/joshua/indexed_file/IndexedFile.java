@@ -48,7 +48,7 @@ public class IndexedFile
 	   //is large enough to reference all indices on the disk. Otherwise
 	   //we will get the size and init to that.
 	   if(this.disk.getSectorCount() <= 999999){
-	   this.sectorSize = 7;
+		   this.sectorSize = 7;
 	   } else {
 		   //plus one for the null terminator
 		   this.sectorSize = String.valueOf(disk.getSectorCount()).length() + 1;
@@ -251,8 +251,8 @@ public class IndexedFile
 			   for(int j  = startCounter, k = 0; j < recordCounter - 1; j++, k++){
 				   records[i][k] = sector[j];
 			   }
-			   startCounter = recordCounter;
-			   recordCounter += indexRecordSize;
+			   startCounter = recordCounter - 1;
+			   recordCounter += indexRecordSize - 1;
 		   }
 	   } else if(value == "Data"){
 		   int recordCounter = recordSize;
