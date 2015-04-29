@@ -389,7 +389,7 @@ public class Loader {
 	
 	private void calculateSize(){
 		//number of bits we need to hold the sector. Plus one for null terminator.
-		sectorSize = String.valueOf(disk.getSectorCount()).length() + 1;
+		sectorSize = String.valueOf(disk.getSectorCount()).length() + 2;
 		countrySize = recordSize - (keySize + sectorSize);
 		
 	}

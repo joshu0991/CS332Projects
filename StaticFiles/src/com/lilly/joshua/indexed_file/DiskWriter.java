@@ -20,6 +20,7 @@ public class DiskWriter {
 		
 		Scanner scanner = new Scanner(System.in);
 		boolean finished = false;
+		boolean success = false;
 		while(!finished){
 			System.out.println("Enter operation: ");
 			System.out.println("Insert Record [ir] ");
@@ -84,10 +85,13 @@ public class DiskWriter {
 				System.out.println("Enter the key you would like to search for");
 				String search = scanner.nextLine();
 				if(search.length() < loader.getKeySize()){
-					indexedFile.findRecord(search.toCharArray());
+					success = indexedFile.findRecord(search.toCharArray());
 				} else {
 					System.out.println("The key you input is larger than the max expected key for this file. Try"
 							+ "checking the input for null characters.");
+				}
+				if(!success){
+					System.out.println("Could not find the record ");
 				}
 				break;
 			case "q":

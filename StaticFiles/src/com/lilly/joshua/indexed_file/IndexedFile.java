@@ -113,8 +113,6 @@ public class IndexedFile
 	   } 
 	   if(found == true){
 		   System.out.println("Record found: " + data);
-	   } else {
-		   System.out.println("Record not located.");
 	   }
 	   return found;
    }   
@@ -251,8 +249,8 @@ public class IndexedFile
 			   for(int j  = startCounter, k = 0; j < recordCounter - 1; j++, k++){
 				   records[i][k] = sector[j];
 			   }
-			   startCounter = recordCounter - 1;
-			   recordCounter += indexRecordSize - 1;
+			   startCounter = recordCounter;
+			   recordCounter += indexRecordSize;
 		   }
 	   } else if(value == "Data"){
 		   int recordCounter = recordSize;
