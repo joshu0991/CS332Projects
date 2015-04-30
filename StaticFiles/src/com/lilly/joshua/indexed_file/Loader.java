@@ -5,8 +5,15 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+/**
+ * Class for loading files and building an index on a disk.
+ * @author Joshua Lilly
+ */
 public class Loader {
 
+	/**
+	 * Data members inited with constructor
+	 */
 	Disk disk;
 	//pointer to the last used sector
 	private int totalSectorsUsed = 0;
@@ -21,7 +28,10 @@ public class Loader {
 	private int sectorSize;
 	private int countrySize;
 	
-	//default for basic Loader class.
+	/**
+	 * Default constructor call use this to set up a default configuration.
+	 * @param disk - A disk object with with a given number of sectors and sector size.
+	 */
 	public Loader(Disk disk){
 		this.disk = disk;
 		this.recordSize = 60;
@@ -31,9 +41,15 @@ public class Loader {
 		this.countrySize = 27;
 		this.indexFileSize = (keySize + sectorSize);
 		bufferDisk();
-	}
+	}//loader
 	
-	//Compliance with the spec that the disk should be customizable.
+	/**
+	 * Non-default constructor for a custom configuration.
+	 * @param disk -  A disk object to represent an arbitrarily size hard drive
+	 * @param recordSize - The number of chars in a given data record
+	 * @param firstAllocated - The first sector in the disk allocated to hold files.
+	 * @param keySize - The size of the key which is used to uniquely identify a record.
+	 */
 	public Loader(Disk disk, int recordSize, 
 			int firstAllocated, int keySize) {
 		this.disk = disk;
@@ -43,8 +59,12 @@ public class Loader {
 		calculateSize();
 		this.indexFileSize = (keySize + sectorSize);
 		bufferDisk();
-	}
+	}//loader
 	
+	/**
+	 * Load the data from a file onto the disk using the input metrics.
+	 * @throws KeyOutOfRangeException - Exception if the configuration is not logical
+	 */
 	private void loadData() throws KeyOutOfRangeException {
 		BufferedReader reader = null;
 		 try {
@@ -105,51 +125,94 @@ public class Loader {
 		}
 	}//loadData
 	
-	//getters
 	
+	/**
+	 * 
+	 * @return countrySize for configuration.
+	 */
 	public int getCountrySize(){
 		return countrySize;
 	}
 	
+	/**
+	 * 
+	 * @return sectorSize for configuration.
+	 */
 	public int getSectorSize(){
 		return sectorSize;
 	}
 	
+	/**
+	 * 
+	 * @return total sectors used for configuration.
+	 */
 	public int getTotalSectorsUsed() {
 		return totalSectorsUsed;
 	}
 	
+	/**
+	 * 
+	 * @return recordSize for configuration.
+	 */
 	public int getRecordSize() {
 		return recordSize;
 	}
 
+	/**
+	 * 
+	 * @return Key size for configuration.
+	 */
 	public int getKeySize() {
 		return keySize;
 	}
 
+	/**
+	 * 
+	 * @return First alloced sector for configuration.
+	 */
 	public int getFirstAllocated() {
 		return firstAllocated;
 	}
 
+	/**
+	 * 
+	 * @return Start of the index for configuration.
+	 */
 	public int getIndexStart() {
 		return indexStart;
 	}
 
+	/**
+	 * 
+	 * @return Index sectors for configuration.
+	 */
 	public int getIndexSectors() {
 		return indexSectors;
 	}
 
+	/**
+	 * 
+	 * @return Where the indexed root is located (last sector) for configuration.
+	 */
 	public int getIndexRoot() {
 		return indexRoot;
 	}
 
+	/**
+	 * 
+	 * @return Number of levels in the tree for configuration.
+	 */
 	public int getIndexLevels() {
 		return indexLevels;
 	}
 	
-	//construct a record by removing unwanted characters and then inserting
-	//the data into a recordSize character long record. Truncates the data if it is larger
-	//than sizes in the character array.
+	/**
+	 * 	construct a record by removing unwanted characters and then inserting
+	 *	the data into a recordSize character long record. Truncates the data if it is larger
+	 *	than sizes in the character array.
+	 * @param dataLine - The line we want to format.
+	 * @return A formatted buffer.
+	 */
 	private char[] buildRecord(String dataLine){
 		//records are always recordSize chars long.
 		char[] buf = new char[recordSize];
@@ -186,6 +249,11 @@ public class Loader {
 		return buf;
 	}//buildRecord
 	
+	/**
+	 * Break up a record into it's separate components.
+	 * @param line - The line we want to break up.
+	 * @return A string[] consisting of the input data.
+	 */
 	private String[] breakUpRecord(String line){
 		int i = 0, j = 0;
 		// array with a location for each of the three data pieces.
@@ -209,6 +277,10 @@ public class Loader {
 		return buf;
 	}//breakUpRecord
 	
+	/**
+	 * Builds the index system for the stored data. Simply loops until we only build
+	 * a single node which is the root.
+	 */
 	private void buildIndex(){
 		//inits to the size of the data sectors
 		int levelSize = totalSectorsUsed;
@@ -223,20 +295,13 @@ public class Loader {
 			levelSize = buildLevel(start + 1, end);
 			indexLevels++;
 			//new start is end of last section.
-			start = end; //----------------------need to check this------------------		
+			start = end;		
 		}
-		
-		//get the first keySize chars and sector number
-		//construct indexFile with key and sector number
-		//check to see if current buffer is large enough
-		//if large enough write the buffer
-		//if not large enough increment sector and write.
-		//track the number of indexs written.
-		//track the levels of nodes in the "tree"
-		
 	}//build index.
 	
-	//Safe wrapper function.
+	/**
+	 * Buffer disk is a safe way to load the data and build the index.
+	 */
 	private void bufferDisk(){
 		try {
 			loadData();
@@ -246,9 +311,14 @@ public class Loader {
 		}
 	}//bufferDisk
 	
-	//build a tree level given a begin and end index
-	//loop over all given sectors get the first keys and sectors
-	//store those in another sector.
+	/**
+	 * build a tree level given a begin and end index
+	 * loop over all given sectors get the first keys and sectors
+	 * store those in another sector.
+	 * @param begin - The disk sector to star grabbing data and inserting into the next "node"
+	 * @param end - The last sector in a level 
+	 * @return The number of "nodes" that was constructed in the level.
+	 */
 	private int buildLevel(int begin, int end){
 		//number of "nodes" this level contains.
 		int levelSize = 0;
@@ -275,7 +345,7 @@ public class Loader {
 				//append the index to the buffer to be rewritten.
 				writeBuffer = buildBuffer(writeBuffer, indexListing, "index");
 				remainingBits -= indexListing.length;
-			//we write so reset everything.
+			//Else we write so reset everything.
 			} else {
 				totalSectorsUsed++;
 				indexSectors++;
@@ -289,11 +359,11 @@ public class Loader {
 			}
 			}
 		}
+		//Ensure the final buffer got written.
 		if(writeBuffer[0] != '\0'){
 			totalSectorsUsed++;
 			indexSectors++;
 			disk.writeSector(writeLocation, writeBuffer);
-			//writeLocation = indexSectors + indexStart;
 			levelSize++;
 		}
 		
@@ -305,8 +375,13 @@ public class Loader {
 		
 	}//buildLevel
 	
-	//buffer is the data read from a sector
-	//from sector is the sector it was read from
+	/**
+	 * Build a file in the format of an index record.
+	 * from sector is the sector it was read from
+	 * @param buffer - The data read from a given sector.
+	 * @param fromSector - The sector where the data was read from.
+	 * @return A new index record.
+	 */
 	private char[] buildIndexFile(char[] buffer, int fromSector){
 		int m;
 		char[] indexRecord = new char[indexFileSize];
@@ -345,9 +420,15 @@ public class Loader {
 		return indexRecord;
 	}//buildIndexFile
 	
-	//call this when reading a file and editing the contents. This can only be 
-	//called when we have previously checked that the buffer has the appropriate space.
-	//type can be data for data building or index for index files.
+	/**
+	 * Call this when reading a file and editing the contents. This can only be 
+	 * called when we have previously checked that the buffer has the appropriate space.
+	 * type can be data for data building or index for index files.
+	 * @param currentBuffer - The buffer that has all of the files except the one we are adding.
+	 * @param fileToAdd - to the buffer that will be written to the disk
+	 * @param type - can be data for data building data records or index for building index files.
+	 * @return A brand new buffer with the appropriate size and the new added file to be written.
+	 */
 	private char[] buildBuffer(char[] currentBuffer, char[] fileToAdd, String type){
 		//start position for new Data.
 		if(type.equals("data")){
@@ -367,7 +448,12 @@ public class Loader {
 		return currentBuffer;
 	}//buildBuffer
 	
-	//find out how many spaces are occupied on a disk.
+	/**
+	 * find out how many spaces are occupied on a disk.
+	 * @param sector - The sector to calculate how many records it contains.
+	 * @param type - Can be data for calculating the size of a data record or index for size of an index file
+	 * @return an integer which represents the number of records in a given sector.
+	 */
 	private int calculateSectorSize(char[] sector, String type){
 		   int size = 0;
 		   //loop over entire sector
@@ -391,11 +477,14 @@ public class Loader {
 		   return size;
 	   }//calculateSectorSize
 	
+	/**
+	 * Calculate the size of some stuff we may not know the size of at instance.
+	 */
 	private void calculateSize(){
 		//number of bits we need to hold the sector. Plus one for null terminator.
 		sectorSize = String.valueOf(disk.getSectorCount()).length() + 2;
 		countrySize = recordSize - (keySize + sectorSize);
 		
-	}
+	}//calculateSize
 	
 }//loader.java

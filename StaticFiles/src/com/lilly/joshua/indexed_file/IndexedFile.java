@@ -1,5 +1,9 @@
 package com.lilly.joshua.indexed_file;
 
+/**
+ * Class for managing the index file that we previously loaded onto the disk.
+ * @author Joshua Lilly
+ */
 public class IndexedFile
 {
    private Disk disk;             // disk on which the file will be written
@@ -24,10 +28,22 @@ public class IndexedFile
    								  //store it here.
    private String data; 		  //This will store the data we were looking for if found.
    
-   private int countrySize;
-   private int sectorSize;
-   private int indexRecordSize;
+   private int countrySize;       //The size of the country in the record.
+   private int sectorSize;        //The range of the sectors to 
+   private int indexRecordSize;   //The size of an index record.
    
+   /**
+    * Create a new Index file manager
+    * @param disk - The disk the data is stored in
+    * @param recordSize - The size of the records that are stored in the disk.
+    * @param keySize - The size of the key that we will store.
+    * @param firstAllocated - The first sector allocated on the disk.
+    * @param indexStart - First sector alloced for index files
+    * @param indexSectors - The number of index sectors
+    * @param indexRoot - The index of the root for index files.
+    * @param indexLevels - The number of index levels in the tree
+    * @throws KeyOutOfRangeException
+    */
    public IndexedFile(Disk disk, int recordSize, int keySize,
                       int firstAllocated, int indexStart,
                       int indexSectors, int indexRoot, int indexLevels) throws KeyOutOfRangeException
@@ -64,8 +80,13 @@ public class IndexedFile
 	   }
 	   indexRecordSize = keySize + sectorSize;
 	   
-   }
+   }//IndexedFile
    
+   /**
+    * Insert a new record into a the disk
+    * @param record - The record to insert
+    * @return True on success false on failure.
+    */
    public boolean insertRecord(char[] record)
    {
 	   String[] in = tokanizeInput(record);
@@ -101,8 +122,14 @@ public class IndexedFile
 		   return true;
 	   }
 	   return true;
-   }   
+   }//InsertRecord   
    
+   /**
+    * Find a record  
+    * @param record - char array of a record to find.
+    * @return True on success false on failure.
+    * @throws UnsupportedOperationException
+    */
    public boolean findRecord(char[] record) throws UnsupportedOperationException
    {
 	   boolean found = false;
@@ -115,9 +142,13 @@ public class IndexedFile
 		   System.out.println("Record found: " + data);
 	   }
 	   return found;
-   }   
+   }//findReocrd   
    
-   // there is no delete operation
+   /**
+    * Get a sector for a given key
+    * @param key The record we are looking for.
+    * @return the integer value of the residing sector
+    */
    private int getSector(String key)   // returns sector number indicated by key
    {
 	   boolean exist = findRecord(key.toCharArray());
@@ -126,10 +157,13 @@ public class IndexedFile
 		   residingSector = -1;
 	   }
 	   return residingSector;
-   }
+   }//getSector
    
-   //append the given record to the next available spot in the buffer.
-   //This is only invoked after we have guaranteed that there is space in the buffer.
+   /**
+    * append the given record to the next available spot in the buffer.
+    * This is only invoked after we have guaranteed that there is space in the buffer.
+    * @param rec The record to append to a buffer.
+    */
    private void addRecordToBuffer(char[] rec){
 	   int i = 0, j = 0;
 	   //find next location
@@ -142,8 +176,14 @@ public class IndexedFile
 		   ++i;
 		   ++j;
 	   }
-   }
+   }//addRecordToBuffer
    
+   /**
+    * Check to the tree to see if the value is already in the tree
+    * @param key - The key we are looking for.
+    * @return True on found false if not.
+    * @throws UnsupportedOperationException
+    */
    private boolean checkTree(char[] key) throws UnsupportedOperationException{
 	   int pointer = indexRoot;
 	   int i = indexLevels;
@@ -160,12 +200,18 @@ public class IndexedFile
 		   residingSector = nextNode;
 		   return false;
 	   }
-   }
+   }//checkTree
    
+   /**
+    * Check the overflow buffer to see if the key is already in the file.
+    * @param key - The key to search for
+    * @return True on found false otherwise.
+    */
    private boolean checkOverflow(char[] key){
 	   int i;
 	   //loop over all of the sectors in overflow sectors.
 	   for(i = 0; i < overflowSectors; i++){
+		   //Overflowstart + i gives us the current using buffer.
 		   disk.readSector(overflowStart + i, buffer);
 		   char[][] tokens = tokanize(buffer, "Data");
 		   for(int j = 0; j < tokens.length; j++){
@@ -179,9 +225,15 @@ public class IndexedFile
 		   }
 	   }
 	   return false;
-   }
+   }//checkOverFlow
    
-   //node - the sector to read. key - what were looking for.
+   /**
+    * Find the next node using the "pointer"
+    * @param key - The key we are looking for
+    * @param node - The node we are currently searching though.
+    * @return an integer representing the next sector.
+    * @throws UnsupportedOperationException
+    */
    private int findNextNode(char[] key, int node) throws UnsupportedOperationException{
 	   disk.readSector(node, buffer);
 	   char[][] records = tokanize(buffer, "Index");
@@ -233,12 +285,18 @@ public class IndexedFile
 			}
 	   }
 	   return buildInt((sectorNumber));
-   }
+   }//FindNextNode
    
-   //get the records and their associated sectors and store then in an array of string
-   //for easy pickins.
+   /**
+    * get the records and their associated sectors and store then in an array of string
+    * for easy pickins.
+    * @param sector THe sector to tokanize
+    * @param value - Can be index of data depending on which record we want to tokanize.
+    * @return Double dimension char array of our elements.
+    */
 	private char[][] tokanize(char[] sector, String value){
 	   char[][] records = null;
+	   //Get the tokens in an index file
 	   if(value == "Index"){
 		   int recordCounter = indexRecordSize;
 		   int startCounter = 0;
@@ -252,6 +310,7 @@ public class IndexedFile
 			   startCounter = recordCounter;
 			   recordCounter += indexRecordSize;
 		   }
+		 //Get the tokens in the data sector.
 	   } else if(value == "Data"){
 		   int recordCounter = recordSize;
 		   int startCounter = 0;
@@ -268,9 +327,14 @@ public class IndexedFile
 		throw new UnsupportedOperationException();   
 	   }
 	   return records;
-   }
+   }//tokanize
    
-   // count the number of records a given file has.
+	/**
+	 * Count the number of records a given file has.
+	 * @param sector - The sector to count records in
+	 * @param value - Can be data for counting data records or index for counting index files.
+	 * @return An int representing the number of data records.
+	 */
    private int numberOfRecords(char[] sector, String value){
 	   int hops = 0, files = 0;	
 	  if(value == "Index"){
@@ -291,7 +355,7 @@ public class IndexedFile
 		  throw new UnsupportedOperationException();  
 	  }
 	  return files;
-   }
+   }//numberofRecords
   
    private char[] getSectorNumber(char[] buffer){
 	   int i = keySize, ind = 0;
@@ -313,6 +377,11 @@ public class IndexedFile
 	  return value;
    }
    
+   /**
+    * Build an integer out of a char array representing the sector number
+    * @param sec the sector number
+    * @return An int representing the sector number or zero if not a valid int.
+    */
    private int buildInt(char[] sec){
 	   int i = 0;
 	   String a = new String();
@@ -320,9 +389,18 @@ public class IndexedFile
 		   a += sec[i];
 		   i++;
 	   }
-	   return Integer.parseInt(a);
-   }
+	   try{
+		   return Integer.parseInt(a);
+	   }catch(Exception e){
+		   return 0;  
+	   }
+   }//buildInt
    
+   /**
+    * Put the key into a predictable format.
+    * @param key - the key to format
+    * @return A newly properly formatted char array.
+    */
    private char[] format(char[] key){
 	   char[] ret = new char[keySize];
 	   int i = 0;
@@ -332,17 +410,27 @@ public class IndexedFile
 	   }
 	   //the unused spaces should be padded out with null chars by default.
 	   return ret;			   
-   }
+   }//format
    
-   //record has sector and key.
+   /**
+    * Get the key from a record.
+    * @param record has sector and key
+    * @return char array representing the key.
+    */
    private char[] getKey(char[] record){
 	   char[] ret = new char[keySize];
 	   for(int i = 0; i < keySize; i++){
 		   ret[i] = record[i];
 	   }
 	   return ret;
-   }
+   }//getKey
    
+   /**
+    * Check a data sector to see if the record is in it.
+    * @param key - The key we are looing for.
+    * @param sectorNumber - The sector number to check.
+    * @return True on cound false otherwise.
+    */
    private boolean checkDataSector(char[] key, int sectorNumber){
 	   //get the probable sector.
 	   disk.readSector(sectorNumber, buffer);
@@ -353,6 +441,7 @@ public class IndexedFile
 		   char[] checkKey = getKey(tokens[i]);
 		   //if it's found print it, return true, store the sector number for easy retrieval.
 		   if(String.valueOf(checkKey).equalsIgnoreCase(String.valueOf(key))){
+			   //We found the data so we will set the data member for convenience allowing us to return boolean
 			   this.residingSector = sectorNumber;
 			   this.data = "Mountain Name: " + String.valueOf(key) + " Country: " + getCountry(tokens[i]) + " Height: "
 					   + getHeight(tokens[i]);
@@ -362,8 +451,13 @@ public class IndexedFile
 	   }
 	   //else return false.
 	   return false;
-   }
+   }//checkDataSector
    
+   /**
+    * Get the country from a given record
+    * @param segment - The record we are getting the country from
+    * @return A string representing the country.
+    */
    private String getCountry(char[] segment){
 	   String c = new String();
 	   
@@ -371,8 +465,13 @@ public class IndexedFile
 		   c += segment[i];
 	   }
 	   return c;
-   }
+   }//getCountry
    
+   /**
+    * Get the height from the record
+    * @param segment - The record we are extracting the height from
+    * @return A string representing the height of the mountain
+    */
    private String getHeight(char[] segment){
 	   String c = new String();
 	 
@@ -380,9 +479,13 @@ public class IndexedFile
 		   c += segment[i];
 	   }
 	   return c;
-   }
+   }//getHeight
    
-   //break up the initial input and remove #
+   /**
+    * break up the initial input and remove #
+    * @param input - The input to remove # from
+    * @return A string array with the input broken up.
+    */
 	private String[] tokanizeInput(char[] input) {
 		String[] ret = new String[3];
 		int i = 0, j = 0;
@@ -401,8 +504,13 @@ public class IndexedFile
 			++j;
 		}
 		return ret;
-   }
+   }//tokanizeInput
    
+	/**
+	 * build a record file of the correct length
+	 * @param input - a string array that represents the input data of the record to construct
+	 * @return A char array containing the record we built
+	 */
 	private char[] buildRecord(String[] input){
 		char[] record = new char[recordSize];
 		int i;
@@ -423,8 +531,8 @@ public class IndexedFile
 				record[i] = '\0';
 			} 
 		}
-		
-		for(int j = 0; j < 6; ++j, ++i){
+		//Add the sector size.
+		for(int j = 0; j < sectorSize; ++j, ++i){
 			if(input[2].length() > j){
 				record[i] = input[2].charAt(j);
 			} else {
@@ -432,5 +540,5 @@ public class IndexedFile
 			} 
 		}
 		return record;
-	}
-}
+	}//buildRecord
+}//IndexFile.java

@@ -2,18 +2,25 @@ package com.lilly.joshua.indexed_file;
 
 import java.util.Scanner;
 
+/**
+ * Primary user application for the index file
+ * @author Joshua Lilly
+ *
+ */
 public class DiskWriter {
 
 	public static void main(String[] args) throws KeyOutOfRangeException {
 		 Loader loader = null;
+		 //default disk
 		 Disk disk = new Disk();
 		 try {
+			//default loader
 			loader = new Loader(disk);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		 
-		 //create a new indexed file. 
+		 //create a new indexed file after the data is loaded
 		IndexedFile indexedFile = new IndexedFile(disk, loader.getRecordSize(),
 				loader.getKeySize(), loader.getFirstAllocated(), loader.getIndexStart(),
 				loader.getIndexSectors(), loader.getIndexRoot(), loader.getIndexLevels());
@@ -29,6 +36,7 @@ public class DiskWriter {
 			System.out.print("-> ");
 			String input = scanner.nextLine();
 			switch(input){
+			//case insert record
 			case "ir":
 				boolean ins = true;
 				String temp = null;
@@ -80,6 +88,7 @@ public class DiskWriter {
 					System.out.println("The input was not the valid try again.");
 				}
 				break;
+			//case find record
 			case "fr":
 				//find record
 				System.out.println("Enter the key you would like to search for");
@@ -94,12 +103,13 @@ public class DiskWriter {
 					System.out.println("Could not find the record ");
 				}
 				break;
+			//case quit
 			case "q":
 				finished = true;
 				scanner.close();
 				break;
-			}
-		}
+			}//switch
+		}//while loop
 		
-	}
-}
+	}//main
+}//DiskWriter.java
