@@ -9,7 +9,7 @@ public class UnitTest {
 		Disk disk = new Disk();
 		
 		//Proves the disk was engineered such that it could be any size.
-		Disk disk1 = new Disk(5000, 1024);
+		Disk disk1 = new Disk(20000, 1024);
 		
 		IndexedFile indexedFile = null;
 		IndexedFile indexedFile1 = null;
@@ -35,7 +35,7 @@ public class UnitTest {
 			//indexed file with non-conventional arguments
 			indexedFile2 = new IndexedFile(disk1, loader2.getRecordSize(),
 					loader2.getKeySize(), loader2.getFirstAllocated(), loader2.getIndexStart(),
-					loader2.getIndexSectors(), loader2.getIndexRoot(), loader2.getIndexLevels());
+		 			loader2.getIndexSectors(), loader2.getIndexRoot(), loader2.getIndexLevels());
 			
 		} catch (KeyOutOfRangeException e) {
 			// TODO Auto-generated catch block
@@ -46,16 +46,19 @@ public class UnitTest {
 		test_findDataInSingleOverFlow(indexedFile);
 		test_findDataInMultipleOverFlows(indexedFile);
 		test_findSimpleInsert(indexedFile);
+		test_SimpleInsertAndFind(indexedFile);
 		
 		//call the set up with a customized file size.
 		test_findDataInSingleOverFlow(indexedFile1);
 		test_findDataInMultipleOverFlows(indexedFile1);
 		test_findSimpleInsert(indexedFile1);
+		test_SimpleInsertAndFind(indexedFile1);
 		
 		//call the set up with a customized file size and customized disk.
 		test_findDataInSingleOverFlow(indexedFile2);
 		test_findDataInMultipleOverFlows(indexedFile2);
 		test_findSimpleInsert(indexedFile2);
+		test_SimpleInsertAndFind(indexedFile2);
 		
 		System.out.println();
 		System.out.println("-------------------------------------------------");
@@ -66,7 +69,7 @@ public class UnitTest {
 		
 	}
 	
-	//this will only populate a single overflow sector.
+	//this will only populate a single overflow sector and ensure the data is accessible.
 	private static void test_findDataInSingleOverFlow(IndexedFile indexedFile){
 		++testRan;
 		boolean passed = true;
@@ -100,7 +103,7 @@ public class UnitTest {
 		}
 	}
 	
-	//This will populate multiple over flow sectors.
+	//This will populate multiple over flow sectors and check to make sure all the data is still accessible
 	private static void test_findDataInMultipleOverFlows(IndexedFile indexedFile){
 		++testRan;
 		boolean passed = true;
@@ -154,6 +157,7 @@ public class UnitTest {
 		}
 	}
 	
+	//THis will insert some data and then attempt to find that data.
 	private static void test_findSimpleInsert(IndexedFile indexedFile){
 		boolean passed = true;
 		++testRan;
@@ -167,4 +171,30 @@ public class UnitTest {
 			++numberOfFailingTest;
 		}
 	}
+	
+		//This will insert a mountain then search for a mountain that should already be in the file.
+		//Then will search for data that shouldn't be in the file.
+		private static void test_SimpleInsertAndFind(IndexedFile indexedFile){
+			++testRan;
+			boolean passed = true;
+			passed = indexedFile.insertRecord("Snargle, Mount#United States#237".toCharArray());
+			passed = indexedFile.findRecord("SnowShoe peak".toCharArray());
+			if(passed == true){
+				System.out.println("----------------------------Passed SimpleInsertAndFind-----------------------------");
+				++numberOfPassingTest;
+			} else {
+				System.out.println("----------------------------Failed SimpleInsertAndFind------------------------------");
+				++numberOfFailingTest;
+			}
+			++testRan;
+			passed = indexedFile.findRecord("Pizza".toCharArray());
+			if(passed == false){
+				System.out.println("Pizza is not in the list");
+				System.out.println("----------------------------Passed SimpleInsertAndFind#2-----------------------------");
+				++numberOfPassingTest;
+			} else {
+				System.out.println("----------------------------Failed SimpleInsertAndFind#2------------------------------");
+				++numberOfFailingTest;
+			}
+		}
 }

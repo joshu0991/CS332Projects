@@ -45,7 +45,7 @@ public class Loader {
 		bufferDisk();
 	}
 	
-	private void loadData() {
+	private void loadData() throws KeyOutOfRangeException {
 		BufferedReader reader = null;
 		 try {
 			reader = new BufferedReader(new FileReader("/Users/sputnik-110/Documents/workspace/Statically_Indexed_File/src/com/lilly/joshua/indexed_file/mountainofdata.txt"));
@@ -67,10 +67,14 @@ public class Loader {
 				//build a record with recordSize character size.
 				char[] record = buildRecord(data);
 				
-				//per spec only write 5 records to a sector initially, 
-				//resets counters. 
-				//We only write when there are 5 files in the buffer.
-				if(i == 5){
+				//we will ensure this value is greater than three since it would be pointless
+				//to only be able to store 3 records. And we will ensure that i > 1. This 
+				//Since storing a single record in a sector is... stupid.
+				int totalPossibleRecordsPerSector = (disk.getSectorSize() / recordSize);
+				if(totalPossibleRecordsPerSector - 3 <= 0){
+					throw new KeyOutOfRangeException("The configuration is not logical. Cannot store less than 3 records");
+				}
+				if(i == (totalPossibleRecordsPerSector - 3) && i > 1){
 					i = 1;
 					//write the records to the next open sector when the buffer is full.
 					disk.writeSector(location, buffer);

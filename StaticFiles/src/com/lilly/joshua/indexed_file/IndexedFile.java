@@ -262,7 +262,7 @@ public class IndexedFile
 				   records[i][k] = sector[j];
 			   }
 			   startCounter = recordCounter;
-			   recordCounter += recordSize;
+			   recordCounter += recordSize ;
 		   }
 	   } else {
 		throw new UnsupportedOperationException();   
@@ -278,6 +278,9 @@ public class IndexedFile
 		  while(sector[hops] != '\0'){
 			  hops += indexRecordSize;
 			  ++files;
+			  if(hops >= disk.getSectorSize()){
+				  return files;
+			  }
 		  }
 	  } else if(value == "Data"){
 		  while(sector[hops] != '\0'){
