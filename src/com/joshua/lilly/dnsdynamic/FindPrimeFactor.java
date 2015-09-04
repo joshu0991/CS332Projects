@@ -41,7 +41,7 @@ public class FindPrimeFactor {
         return false;
     }
     
-    public static int findPrimeFactor (List<Integer> a, List<Integer> b)
+    public static int findPrimeFactor (List<Integer> a, List<Integer> b) throws NoNumberFoundException
     {
         // If either lists are null we will need to throw a null pointer exception.
         if (a == null || b == null)
@@ -65,7 +65,8 @@ public class FindPrimeFactor {
             ++counter;
         }
         // if we didn't find a number we have broken our precondition lets throw an exception
-        return 423;
+        throw new NoNumberFoundException("List a did not contain any values divisible"
+                                        + "by any numbers in a or b contained no prime numbers");
     }
 	   
 	   

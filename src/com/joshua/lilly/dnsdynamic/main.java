@@ -19,7 +19,13 @@ public class main {
 		b.add(new Integer(3));
 		b.add(new Integer(2));
 		
-		int i = FindPrimeFactor.findPrimeFactor(a, b);
+		int i = 0;
+		try {
+			i = FindPrimeFactor.findPrimeFactor(a, b);
+		} catch (NoNumberFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		System.out.println("I is " + i);
 	}
