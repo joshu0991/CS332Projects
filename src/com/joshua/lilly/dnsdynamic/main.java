@@ -14,18 +14,13 @@ public class main {
 		a.add(new Integer(18));
 		a.add(new Integer(8));
 		
-		b.add(new Integer(6));
-		b.add(new Integer(2));
+		b.add(new Integer(5));
+		b.add(new Integer(5));
 		b.add(new Integer(3));
 		b.add(new Integer(2));
 		
 		int i = 0;
-		try {
-			i = FindPrimeFactor.findPrimeFactor(a, b);
-		} catch (NoNumberFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		i = FindPrimeFactor.findPrimeFactor(a, b);
 		
 		System.out.println("I is " + i);
 	}

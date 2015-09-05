@@ -4,7 +4,11 @@ import java.util.List;
 
 public class FindPrimeFactor {
 
-
+	/**
+	 * Method to determine if a value is prime
+	 * @param value the Integer object in question
+	 * @return True if the value is prime false otherwise.
+	 */
     private static boolean isPrime(Integer value)
     {
         // We will start at two because obviously we can't divide by zero
@@ -22,33 +26,33 @@ public class FindPrimeFactor {
         }
         return true;
     }
-    
-    // value the value we determined to be prime in list b, a is the list we are checking to see if
-    // divisible by.
-    private static boolean isDivisible(Integer value, List<Integer> a)
+
+    /**
+     * Method for finding if a value is divisible by another
+     * @param valuea The value to check to see if it divisible by the other
+     * @param valueb Integer object that is known to be prime for checking to see if an index is divisible by it
+     * @return True if the value is divisible by another false otherwise.
+     */
+    private static boolean isDivisible(Integer valuea, Integer valueb)
     {
-        int counter = 0;
-        // We will loop over list a
-        while(counter < a.size())
-        {
-            // This means we have found our value.
-            if ((a.get(counter) % value.intValue()) == 0)
+            if ((valuea.intValue() % valueb.intValue()) == 0)
             {
                 return true;
             }
-            ++counter;
-        }
+        // We didn't find a value that it is divisible by return false.
         return false;
     }
     
-    public static int findPrimeFactor (List<Integer> a, List<Integer> b) throws NoNumberFoundException
+    /**
+     * Finds the first prime factor in a list of Integers
+     * @param a The list to search to see if it contains a prime factor 
+     * @param b The list of integers to consider if they are prime factors
+     * @return An int representing an array index or -1 if the list doesn't contain a prime factor
+     *  * <dt><b>Preconditions: a not null; b not null; there exists an index in b
+     *   that is a prime factor of the same index in a</b><dd>
+     */
+    public static int findPrimeFactor (List<Integer> a, List<Integer> b)
     {
-        // If either lists are null we will need to throw a null pointer exception.
-        if (a == null || b == null)
-        {
-            throw new NullPointerException("A list was null");
-        }
-        
         // we will first loop over our list b looking for prime values 
         int counter = 0;
         while (counter < b.size())
@@ -56,7 +60,7 @@ public class FindPrimeFactor {
             // if the value in b is prime we will try to find a value divisible by it in list a.
         	// this will not evaluate is divisible if the number is not prime due to short circuit 
         	// evaluation of &&
-            if (isPrime(b.get(counter)) && isDivisible(b.get(counter), a))
+            if (isPrime(b.get(counter)) && isDivisible(a.get(counter), b.get(counter)))
             {
                 // We have a prime number and it is divisible we will just return our
             	// counter since this has to be the least index.
@@ -64,24 +68,6 @@ public class FindPrimeFactor {
             }
             ++counter;
         }
-        // if we didn't find a number we have broken our precondition lets throw an exception
-        throw new NoNumberFoundException("List a did not contain any values divisible"
-                                        + "by any numbers in a or b contained no prime numbers");
+        return -1;
     }
-	   
-	   
-	   // Requires: a not null; b not null; X
-	   //           there is some index i where b[i] is 
-	   //           both prime and a factor of a[i]
-	   //           
-	   // Effects: return the least index
-	   //          at which b[i] is a prime factor of a[i]
-	   // E.g. findPrimeFactor ([12, 25, 18, 8], [6, 2, 3, 2]) = 2
-	   // (Note: 6 is a factor of 12, but is not prime,
-	   //  and 2 is prime, but is not a factor of 25.  However,
-	   //  3 is a prime factor of 18. Hence, index "2" is the correct
-	   //  answer.  index "3" is not a possible answer, because the
-	   //  third index is not the least index with the desired property.)
-	   // Also note that a[] and b[] need not be of the same length.
-	
 }
