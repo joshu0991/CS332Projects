@@ -13,10 +13,10 @@ public class TestPrimes {
 	public void testEmptyList() {
 		List<Integer> a, b;
 		
-		a = new ArrayList();
-		b = new ArrayList();
+		a = new ArrayList<Integer>();
+		b = new ArrayList<Integer>();
 		
-		assertEquals(FindPrimeFactor.findPrimeFactor(a, b), -1);
+		assertEquals(FindPrimeFactor.findPrimeFactor(a, b), 0);
 	}
 
 	@Test
@@ -30,7 +30,7 @@ public class TestPrimes {
 		a.add(new Integer(18));
 		a.add(new Integer(8));
 		
-		assertEquals(FindPrimeFactor.findPrimeFactor(a, b), -1);
+		assertEquals(FindPrimeFactor.findPrimeFactor(a, b), 0);
 	}
 
 	@Test
@@ -49,7 +49,7 @@ public class TestPrimes {
 		b.add(new Integer(12));
 		b.add(new Integer(6));
 
-		assertEquals(FindPrimeFactor.findPrimeFactor(a, b), -1);
+		assertEquals(FindPrimeFactor.findPrimeFactor(a, b), 0);
 	}
 
 	@Test

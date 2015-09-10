@@ -2,6 +2,13 @@ package com.joshua.lilly.dnsdynamic;
 
 import java.util.List;
 
+/**
+ * \brief Program to compare two lists and return the index, i such that b[i] is a
+ * prime multiple of a[i]
+ * @author Joshua Lilly, G00561467
+ * 8/6/2015
+ */
+
 public class FindPrimeFactor {
 
 	/**
@@ -29,16 +36,16 @@ public class FindPrimeFactor {
 
     /**
      * Method for finding if a value is divisible by another
-     * @param valuea The value to check to see if it divisible by the other
-     * @param valueb Integer object that is known to be prime for checking to see if an index is divisible by it
+     * @param value a The Integer to check to see if it divisible by the other
+     * @param value b Integer object that is known to be prime for checking to see if an index is divisible by it
      * @return True if the value is divisible by another false otherwise.
      */
     private static boolean isDivisible(Integer valuea, Integer valueb)
     {
-            if ((valuea.intValue() % valueb.intValue()) == 0)
-            {
-                return true;
-            }
+        if ((valuea.intValue() % valueb.intValue()) == 0)
+        {
+            return true;
+        }
         // We didn't find a value that it is divisible by return false.
         return false;
     }
@@ -55,19 +62,21 @@ public class FindPrimeFactor {
     {
         // we will first loop over our list b looking for prime values 
         int counter = 0;
+        int value = 0;
         while (counter < b.size())
         {
             // if the value in b is prime we will try to find a value divisible by it in list a.
-        	// this will not evaluate is divisible if the number is not prime due to short circuit 
-        	// evaluation of &&
+            // this will not evaluate is divisible if the number is not prime due to short circuit 
+            // evaluation of &&
             if (isPrime(b.get(counter)) && isDivisible(a.get(counter), b.get(counter)))
             {
-                // We have a prime number and it is divisible we will just return our
-            	// counter since this has to be the least index.
-            	return counter;
+                // We have a prime number and it is divisible we will assign to a new variable
+            	// and break from the loop. Instead of just returning the value.
+                value = counter;
+                break;
             }
             ++counter;
         }
-        return -1;
+        return value;
     }
 }
