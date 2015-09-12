@@ -20,7 +20,12 @@ public class main {
 		b.add(new Integer(2));
 		
 		int i = 0;
-		i = FindPrimeFactor.findPrimeFactor(a, b);
+		try {
+			i = FindPrimeFactor.findPrimeFactor(a, b);
+		} catch (NoNumberFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		System.out.println("I is " + i);
 	}

@@ -9,18 +9,18 @@ import org.junit.Test;
 
 public class TestPrimes {
 	
-	@Test
-	public void testEmptyList() {
+	@Test(expected=NoNumberFoundException.class)
+	public void testEmptyList() throws NoNumberFoundException {
 		List<Integer> a, b;
 		
 		a = new ArrayList<Integer>();
 		b = new ArrayList<Integer>();
 		
-		assertEquals(FindPrimeFactor.findPrimeFactor(a, b), 0);
+		FindPrimeFactor.findPrimeFactor(a, b);
 	}
 
-	@Test
-	public void testOneEmptyList() {
+	@Test(expected=NoNumberFoundException.class)
+	public void testOneEmptyList() throws NoNumberFoundException {
 		List<Integer> a, b;
 		a = new ArrayList<Integer>();
 		b = new ArrayList<Integer>();
@@ -30,11 +30,11 @@ public class TestPrimes {
 		a.add(new Integer(18));
 		a.add(new Integer(8));
 		
-		assertEquals(FindPrimeFactor.findPrimeFactor(a, b), 0);
+		FindPrimeFactor.findPrimeFactor(a, b);
 	}
 
-	@Test
-	public void testNoPrimesSameSize() {
+	@Test(expected=NoNumberFoundException.class)
+	public void testNoPrimesSameSize() throws NoNumberFoundException {
 		List<Integer> a, b;
 		a = new ArrayList<Integer>();
 		b = new ArrayList<Integer>();
@@ -49,7 +49,7 @@ public class TestPrimes {
 		b.add(new Integer(12));
 		b.add(new Integer(6));
 
-		assertEquals(FindPrimeFactor.findPrimeFactor(a, b), 0);
+		FindPrimeFactor.findPrimeFactor(a, b);
 	}
 
 	@Test
@@ -68,7 +68,12 @@ public class TestPrimes {
 		b.add(new Integer(3));
 		b.add(new Integer(2));
 
-		assertEquals(FindPrimeFactor.findPrimeFactor(a, b), 2);
+		try {
+			assertEquals(FindPrimeFactor.findPrimeFactor(a, b), 2);
+		} catch (NoNumberFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	@Test
@@ -91,7 +96,12 @@ public class TestPrimes {
 		b.add(new Integer(3));
 		b.add(new Integer(2));
 
-		assertEquals(FindPrimeFactor.findPrimeFactor(a, b), 2);
+		try {
+			assertEquals(FindPrimeFactor.findPrimeFactor(a, b), 2);
+		} catch (NoNumberFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}	
 	
 	@Test
@@ -117,7 +127,12 @@ public class TestPrimes {
 		b.add(new Integer(2));
 		b.add(new Integer(2));
 		
-		assertEquals(FindPrimeFactor.findPrimeFactor(a, b), 2);
+		try {
+			assertEquals(FindPrimeFactor.findPrimeFactor(a, b), 2);
+		} catch (NoNumberFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}	
 	
 	@Test
@@ -130,14 +145,18 @@ public class TestPrimes {
 		a.add(new Integer(25));
 		a.add(new Integer(18));
 		a.add(new Integer(8));
-
 		
 		b.add(new Integer(2));
 		b.add(new Integer(2));
 		b.add(new Integer(3));
 		b.add(new Integer(2));
-
-		assertEquals(FindPrimeFactor.findPrimeFactor(a, b), 0);
+		
+		try {
+			FindPrimeFactor.findPrimeFactor(a, b);
+		} catch (NoNumberFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}	
 	
 	@Test
@@ -157,7 +176,12 @@ public class TestPrimes {
 		b.add(new Integer(4));
 		b.add(new Integer(2));
 
-		assertEquals(FindPrimeFactor.findPrimeFactor(a, b), 3);
+		try {
+			assertEquals(FindPrimeFactor.findPrimeFactor(a, b), 3);
+		} catch (NoNumberFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}	
 	
 	@Test
@@ -207,6 +231,39 @@ public class TestPrimes {
 		b.add(new Integer(2));
 		b.add(new Integer(2));
 
-		assertEquals(FindPrimeFactor.findPrimeFactor(a, b), 5);
+		try {
+			assertEquals(FindPrimeFactor.findPrimeFactor(a, b), 5);
+		} catch (NoNumberFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testNegativeList() {
+		List<Integer> a, b;
+		a = new ArrayList<Integer>();
+		b = new ArrayList<Integer>();
+
+		a.add(new Integer(-4));
+		a.add(new Integer(15));
+		
+		b.add(new Integer(-2));
+		b.add(new Integer(3));
+		b.add(new Integer(0));
+
+		try {
+			assertEquals(FindPrimeFactor.findPrimeFactor(a, b), 1);
+		} catch (NoNumberFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}	
+
+	@Test(expected=NullPointerException.class)
+	public void testNullPointers() throws NoNumberFoundException {
+		List<Integer> a = null, b = null;
+		
+		FindPrimeFactor.findPrimeFactor(a, b);
+	}
 }

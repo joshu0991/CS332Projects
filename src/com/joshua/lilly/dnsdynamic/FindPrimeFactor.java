@@ -11,13 +11,18 @@ import java.util.List;
 
 public class FindPrimeFactor {
 
-	/**
-	 * Method to determine if a value is prime
-	 * @param value the Integer object in question
-	 * @return True if the value is prime false otherwise.
-	 */
+    /**
+     * Method to determine if a value is prime
+     * @param value the Integer object in question
+     * @return True if the value is prime false otherwise.
+     */
     private static boolean isPrime(Integer value)
     {
+        // First we will make sure the number is positive since primes can't be negative
+        if (value.intValue() <= 1)
+        {
+            return false;
+        }
         // We will start at two because obviously we can't divide by zero
         // And of course it is divisible by one.
         int counter = 2;
@@ -55,14 +60,18 @@ public class FindPrimeFactor {
      * @param a The list to search to see if it contains a prime factor 
      * @param b The list of integers to consider if they are prime factors
      * @return An int representing an array index or -1 if the list doesn't contain a prime factor
-     *  * <dt><b>Preconditions: a not null; b not null; there exists an index in b
      *   that is a prime factor of the same index in a</b><dd>
+     * @throws NoNumberFoundException 
      */
-    public static int findPrimeFactor (List<Integer> a, List<Integer> b)
+    public static int findPrimeFactor (List<Integer> a, List<Integer> b) throws NoNumberFoundException
     {
+    
+        if (a == null || b == null)
+        {
+            throw new NullPointerException();
+        }
         // we will first loop over our list b looking for prime values 
         int counter = 0;
-        int value = 0;
         while (counter < b.size())
         {
             // if the value in b is prime we will try to find a value divisible by it in list a.
@@ -72,11 +81,10 @@ public class FindPrimeFactor {
             {
                 // We have a prime number and it is divisible we will assign to a new variable
             	// and break from the loop. Instead of just returning the value.
-                value = counter;
-                break;
+                return counter;
             }
             ++counter;
         }
-        return value;
+        throw new NoNumberFoundException("The list do not contain a common factor");
     }
 }
