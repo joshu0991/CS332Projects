@@ -9,9 +9,7 @@ public class Stack {
 
    private Object[] elements;
    private int size = 0;
-   // for the poped elements
-   private Object lastPoped = null; 
-   
+
    public Stack() {
      this.elements = new Object[0];
    }
@@ -30,29 +28,23 @@ public class Stack {
 
    // e object to add to stack
    public Stack push (Object e) {
+	   // We will use ensure capacity just to resize our array
      Object[] elements = ensureCapacity();
      return new Stack(elements, e);
    }
 
-   // Returns a new stack with one less elements how to return an instance of top?
+   // Returns a new stack with one less elements must call top to get a reference to top.
    public Stack pop () {
      if (size == 0) throw new IllegalStateException("Stack.pop");
-     Object poped = elements[size - 1];
      Object[] newArray = new Object[(size - 1)];
      System.arraycopy(elements, 0, newArray, 0, (size - 1));
-     Stack ns = new Stack(newArray);
-     ns.lastPoped = poped;
-     return ns;
-   }
-   
-   public Object getPoped() {
-	   return lastPoped;
+     return new Stack(newArray);
    }
 
+   // Observer function to look at what is on top of the stack
    public final Object top () {
-     if (size == 0) throw new IllegalStateException("Stack.top");
-     final Object r = elements[(size - 1)];
-     return r;
+       if (size == 0) throw new IllegalStateException("Stack.top");
+       return elements[(size - 1)];
    }
 
    // Returns a new array of a proper size
@@ -60,14 +52,13 @@ public class Stack {
       if (elements.length == size) {
           Object newElements[];
           Object oldElements[] = elements;
-    	  // We'll only make it one larger since we will have to create a new object next time anyway
+          // We'll only make it one larger since we will have to create a new object next time anyway
           newElements = new Object[size + 1];
           if (oldElements.length > 0) {
-              System.arraycopy(oldElements, 0, newElements, 0, (size + 1));
+              System.arraycopy(oldElements, 0, newElements, 0, (size));
          }
          return newElements;
       }
       return new Object[size];
    }
-
 }

@@ -14,8 +14,6 @@ public class ImmutableStackTests {
 		assertTrue(i.intValue() == 1);
 		// popable stack should be an empty stack
 		Stack popable = a.pop();
-		Integer popedValue = (Integer) popable.getPoped();
-		assertTrue(popedValue.intValue() == 1);
 		// a should still be exactly the same
 		i = (Integer) a.top();
 		// This will prove a wasn't modified
@@ -24,4 +22,16 @@ public class ImmutableStackTests {
 		popable.pop();
 	}
 
+	@Test
+	public void testAddingMultipleValues() {
+		Stack s = new Stack();
+		s = s.push(new Integer(7));
+		s = s.push(new Integer(8));
+		s = s.push(new Integer(9));
+		s = s.push(new Integer(10));
+		s = s.push(new Integer(11));
+		s = s.push(new Integer(12));
+		
+		assertTrue(((Integer) s.top()).intValue() == 12);
+	}
 }
