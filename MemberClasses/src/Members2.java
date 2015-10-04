@@ -1,22 +1,26 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class Members2 {
 
     // Members is a mutable record of organization membership
-    // AF: ??
-    // rep-inv: ??
+    // AF: member[i] is a member of the organization 
+    // rep-inv: Members contains no null values members is never null. No duplicates are in the list
+
 
     List<String> members;   // the representation
 
+    public Members2()
+    {
+        members = new ArrayList<String>();
+    }
+    
     /**
      * Adds a person to the group if the person is not in the group yet.
      * @param person to try to add to the group
      * Post conditions: person becomes a member if they are not already
-     * @return true on successful insertion false otherwise
-     * @throws IllegalArgumentException when trying to add a null element or a person is already
-     *         a member of the group. To avoid an exception being thrown here it is best to use 
-     *         the isMember function to verify the person doesn't exist in the list before join
-     *         is called.
+     * @return true on successful insertion false otherwise also returns false if 
+     *         the person is already in the list
      */
     public boolean join (String person)
     {
@@ -24,7 +28,7 @@ public class Members2 {
         {
             return members.add(person);
         }
-        throw new IllegalArgumentException("Nulls are not allowed so can not add it");
+        return false;
     }
     
     /**
@@ -53,6 +57,52 @@ public class Members2 {
         if (person != null)
             return members.contains(person);
         throw new IllegalArgumentException("Nulls are not allowed in the list so searching is futile");
+    }
+    
+    public boolean repOk1()
+    {
+        if (checkForDuplicates())
+        {
+            return false;
+        }
+        return true;
+    }
+    
+    public boolean repOk2()
+    {
+        if (checkForNulls())
+        {
+            return true;
+        }
+        return false;
+    }
+    
+    private boolean checkForNulls()
+    {
+        for (int i = 0; i < members.size(); i++)
+        {
+            if (members.get(i) == null)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    private boolean checkForDuplicates()
+    {
+        for (int i = 0; i < members.size(); i++)
+        {
+            String check = members.get(i);
+            for (int j = i + 1; j < members.size(); j++)
+            {
+                if (check.equalsIgnoreCase(members.get(j)))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
  }
 

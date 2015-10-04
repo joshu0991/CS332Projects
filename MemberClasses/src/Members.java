@@ -1,12 +1,18 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class Members {
 
     // Members is a mutable record of organization membership
-    // AF: ??
-    // rep-inv: ??
+    // AF: member[i] is a member of the organization 
+    // rep-inv: Members contains no null values members is never null. No duplicates are in the list
 
     List<String> members;   // the representation
+
+    public Members()
+    {
+        members = new ArrayList<String>();
+    }
 
     /**
      * Adds a person to the group
@@ -48,6 +54,52 @@ public class Members {
         if (person != null)
             return members.contains(person);
         throw new IllegalArgumentException("Nulls are not allowed in the list so searching is futile");
+    }
+    
+    public boolean repOk1()
+    {
+        if (checkForDuplicates())
+        {
+            return false;
+        }
+        return true;
+    }
+    
+    public boolean repOk2()
+    {
+        if (checkForNulls())
+        {
+            return true;
+        }
+        return false;
+    }
+    
+    private boolean checkForNulls()
+    {
+        for (int i = 0; i < members.size(); i++)
+        {
+            if (members.get(i) == null)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    private boolean checkForDuplicates()
+    {
+        for (int i = 0; i < members.size(); i++)
+        {
+            String check = members.get(i);
+            for (int j = i + 1; j < members.size(); j++)
+            {
+                if (check.equalsIgnoreCase(members.get(j)))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
  }
 
