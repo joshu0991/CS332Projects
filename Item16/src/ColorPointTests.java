@@ -3,21 +3,29 @@ import static org.junit.Assert.*;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.junit.Test;
 import org.junit.experimental.theories.DataPoints;
+import org.junit.experimental.theories.Theories;
+import org.junit.experimental.theories.Theory;
+import org.junit.runner.RunWith;
 
+@RunWith(Theories.class)
 public class ColorPointTests {
 
-	@DataPoints Point p1 = new Point(1, 2);
-	@DataPoints Point p2 = new Point(1, 2);
-	@DataPoints Point p3 = new Point(1, 2);
+	@DataPoints
+	public static Point[] point_vals() {
+		return new Point[] { new Point(1, 2), new Point(1, 2), new Point(1, 2)};
+	}
+	
+	@DataPoints
+	public static ColorPoint[] color_point_vals() {
+		return new ColorPoint[] { new ColorPoint(1, 2, ColorPoint.Color.RED), 
+								  new ColorPoint(1, 2, ColorPoint.Color.RED),
+								  new ColorPoint(1, 2, ColorPoint.Color.RED)};
+	}
+  
 
-	@DataPoints ColorPoint cp1 = new ColorPoint(1, 2, ColorPoint.Color.RED);
-	@DataPoints ColorPoint cp2 = new ColorPoint(1, 2, ColorPoint.Color.RED);
-	@DataPoints ColorPoint cp3 = new ColorPoint(1, 2, ColorPoint.Color.RED);
-
-	@Test
-	public void testSymmetry() {
+	@Theory
+	public void testSymmetry(ColorPoint cp1, ColorPoint cp2, Point p1, Point p2) {
 		assertTrue(cp1.equals(cp2));
 		assertTrue(cp2.equals(cp1));
 		
@@ -25,8 +33,9 @@ public class ColorPointTests {
 		assertTrue(p2.equals(p1));
 	}
 
-	@Test
-	public void testTransativity() {
+	@Theory
+	public void testTransativity(ColorPoint cp1, ColorPoint cp2, ColorPoint cp3, 
+			Point p1, Point p2, Point p3) {
 		assertTrue(cp1.equals(cp2));
 		assertTrue(cp2.equals(cp3));
 		assertTrue(cp1.equals(cp3));
@@ -37,8 +46,9 @@ public class ColorPointTests {
 
 	}
 	
-	@Test
-	public void testHascode() {
+	@Theory
+	public void testHascode(ColorPoint cp1, ColorPoint cp2, ColorPoint cp3, 
+			Point p1, Point p2, Point p3) {
 		Set<Point> h1 = new HashSet<Point>();
 		h1.add(p1);
 		h1.add(p2);
