@@ -1,5 +1,5 @@
 #include "copy_of.hpp"
-
+#include <iostream>
 #include <vector>
 
 int main()
@@ -17,7 +17,7 @@ int main()
     v.push_back(2);
     v.push_back(3);
     // This causes a seg fault but compiles a-ok w/o warnings!
-    std::vector<int>* q = copy_of::copyOf<std::vector<int> >(&v, 3, 6); 
+    //std::vector<int>* q = copy_of::copyOf<std::vector<int> >(&v, 3, 6); 
 
     std::cout << "New array is: " << std::endl;
     for (int i = 0; i < 10; ++i)
